@@ -1,4 +1,4 @@
-# cmpm-121-final-G2
+# CMPM121 Final Project: Group 2
 # Devlog Entry - [11/20/2023]
 
 ## Introducing the team
@@ -8,18 +8,18 @@
 ### Design Lead: Abel Goy
 ### Assistant Design Lead: Anthony Garcia
 
+
 ## Tools and materials
+### Engine: We intend to use Phaser, since everyone on our team took CMPM 120, so we already have experience with using Phaser. It’s also built for making web games, and quickly making prototypes, which is perfect for this project.
 
-With about one paragraph each...
+### Language: We are using JavaScript since it’s what we’ve used for our previous Phaser projects, and so we already have a lot of sample code we can reuse and rework to quickly implement the design requirements and focus on polishing and refactoring our code.
 
-Tell us about what engines, libraries, frameworks, and or platforms you intend to use, and give us a tiny bit of detail about why your team chose those.
-Tell us programming languages (e.g. TypeScript) and data languages (e.g. JSON) you team expects to use and why you chose them. Presumably you’ll just be using the languages expected by your previously chosen engine/platform.
-Tell us about which tools you expect to use in the process of authoring your project. You might name the IDE for writing code, the image editor for creating visual assets, or the 3D editor you will use for building your scene. Again, briefly tell us why you made these choices. Maybe one of your teammates feels especially skilled in that tool or it represents something you all want to learn about.
+### Tools: The tools we expect to use are VScode, GitHub, Prettier, and ChatGPT.  VScode is a simple choice due to it being very compatible with the Phaser engine, which we intend to use.  GitHub is also an easy choice, as it’s the best platform for code management and version control.  Prettier will be a useful tool to keep our code format consistent and easy to read.  ChatGPT, while likely not being the main crux of writing code for our project, will be used for debugging.  
+
 
 ## Outlook
+### Accomplishment Goals: Our team is hoping to accomplish the creation of a farming game that utilizes tilemaps and grid-based inventories for farming.  We also hope to accomplish a quality level of game feel by utilizing Phaser’s particle emitter system.  
 
-Give us a short section on your outlook on the project. You might cover one or more of these topics:
+### Hardest/Riskiest Part: We anticipate that the hardest part of the project will be having to change our implementation of core elements of our game due to the changing requirements. We also anticipate that maintaining a good design in order to easily add future design requirements may be difficult.
 
-What is your team hoping to accomplish that other teams might not attempt?
-What do you anticipate being the hardest or riskiest part of the project?
-What are you hoping to learn by approaching the project with the tools and materials you selected above?
+### Hoping to learn: We are hoping to learn how to quickly refactor our code to make future code changes easier to perform, which will be made significantly easier with the tools we chose, since we are already familiar with them. For us, the challenge won’t be learning the tools we use, but the actual core of the project and its changing requirements.
