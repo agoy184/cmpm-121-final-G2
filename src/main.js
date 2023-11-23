@@ -14,8 +14,9 @@ let config = {
             fps: 60
         }
     },
-    scene: [ ]
+    scene: [ Play ]
 }
 
 let game = new Phaser.Game(config);
     
+let keyW, keyA, keyS, keyD, keyR;
