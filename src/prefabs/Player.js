@@ -1,8 +1,9 @@
 class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame){
-        super(scene,x, y, texture, frame);
-        this.gridX = 2;
-        this.gridY = 2;
+        let gridPoint = scene.grid.getPoint(x,y);
+        super(scene, gridPoint[0], gridPoint[1], texture, frame);
+        this.gridX = x;
+        this.gridY = y;
         this.moving = false;
         scene.add.existing(this);
     }
@@ -16,8 +17,6 @@ class Player extends Phaser.GameObjects.Sprite {
             ease: 'Power1',
             onComplete: () => {
                 this.moving = false;
-                console.log(this.moving);
-                console.log(this.gridX, this.gridY);
             }
         });
     }
@@ -48,6 +47,16 @@ class Player extends Phaser.GameObjects.Sprite {
         }
         else if (keyD.isDown) {
             this.moveCharacter(1,0)
+        }
+        
+        if (this.scene.keyE.isDown) {
+            let plant = this.scene.grid.checkCellForPlant(this.gridX, this.gridY);
+            if (plant) {
+                alert(plant);
+            }
+            else {
+                alert("no plant");
+            }
         }
     }
 }

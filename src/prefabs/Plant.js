@@ -1,10 +1,16 @@
 class Plant extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame){
-        super(scene,x, y, texture, frame);
-        this.gridX = 0;
-        this.gridY = 1;
-        
+        let gridPoint = scene.grid.getPoint(x,y);
+        super(scene, gridPoint[0], gridPoint[1], texture, frame);
+        this.gridX = x;
+        this.gridY = y;
+        this.placeHolderRectangle = new Phaser.GameObjects.Rectangle(scene, this.x, this.y, 32, 60, 0xa0ffaa);
         scene.add.existing(this);
+        scene.add.existing(this.placeHolderRectangle);
+    }
+
+    toString() {
+        return "Plant at (" + this.gridX + ", " + this.gridY + ")" ;
     }
 
     update(){

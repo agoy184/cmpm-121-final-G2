@@ -2,8 +2,19 @@ class Grid extends Phaser.GameObjects.Grid {
     constructor(scene, x, y, width, height, dimension){
         super(scene, x, y, width, height, width/dimension, height/dimension, 0x000000, 1, 0xff0000);
         this.dimension = dimension;
-        this.plantGrid = [[]];
+        this.plantGrid = {};
         scene.add.existing(this);
+    }
+
+    addPlant(plant){
+        let key = plant.gridX + "," + plant.gridY;
+        this.plantGrid[key] = plant;
+        // console.log(this.plantGrid);
+    }
+
+    checkCellForPlant(x, y) {
+        let key = x + "," + y;
+        return this.plantGrid[key];
     }
 
     getPoint(x, y) {
