@@ -9,6 +9,10 @@ class Cell {
         this.waterLevel = level;
     }
 
+    addWaterLevel(level) {
+        this.waterLevel += level;
+    }
+
     setSunlightLevel(level) {
         this.sunlightLevel = level;
     }

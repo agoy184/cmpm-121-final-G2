@@ -4,12 +4,24 @@ class Grid extends Phaser.GameObjects.Grid {
         this.dimension = dimension;
         this.gridCells = {};
         this.initializeGrid();
+        scene.events.on("newDay", (event) => {
+            this.initializeGrid();
+            console.log("day " + event.day);
+        });
         scene.add.existing(this);
     }
 
     initializeCell(x,y) {
         let key = x + "," + y;
-        this.gridCells[key] = new Cell(0,0);
+        let randomWater = Math.floor(Math.random()*10-3);
+        let randomSunlight = Math.floor(Math.random()*10);
+        if (this.gridCells[key]) {
+            // modify the water level in a range of -3 to 7 (i think)
+            this.gridCells[key].addWaterLevel(randomWater);
+            this.gridCells[key].setSunlightLevel(randomSunlight);
+            return;
+        }
+        this.gridCells[key] = new Cell(randomWater,randomSunlight);
         // console.log(this.gridCells[key])
     }
 
