@@ -79,12 +79,12 @@ class PlantType2 extends Plant {
 
     /*
     plant 2 growing rules:
-    - if water level is negative
+    - if water level is greater than 25
     - and the sunlight level is greater than 4
     - and there is at least one nearby plant
     */
     growPlant(nearCells) {
-        if(nearCells[0].waterLevel < 0 && nearCells[0].sunlightLevel > 4) {
+        if(nearCells[0].waterLevel > 25 && nearCells[0].sunlightLevel > 4) {
             for(let i = 1; i < nearCells.length; i++) {
                 if(nearCells[i] instanceof Cell && nearCells[i].plant) {
                     if (this.growthLevel < 3) { 
@@ -103,12 +103,12 @@ class PlantType3 extends Plant {
 
     /*
     plant 3 growing rules:
-    - if water level is positive
+    - if water level is greater than 10
     - and the sunlight level is less than 5
     - and there are no nearby plants (except for plant 3)
     */
     growPlant(nearCells) {
-        if(nearCells[0].waterLevel > 0 && nearCells[0].sunlightLevel < 5) {
+        if(nearCells[0].waterLevel > 10 && nearCells[0].sunlightLevel < 5) {
             for(let i = 1; i < nearCells.length; i++) {
                 if(nearCells[i] instanceof Cell && (!nearCells[i].plant || !nearCells[i].plant instanceof PlantType3)) {
                     if (this.growthLevel < 3) { 

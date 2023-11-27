@@ -17,8 +17,7 @@ class Grid extends Phaser.GameObjects.Grid {
         let randomSunlight = Math.floor(Math.random()*10); // 0-9
         if (this.gridCells[key]) {
             // modify the water level in a range of -3 to 7 (i think) i think its 6 ngl but idk
-            //this.gridCells[key].addWaterLevel(randomWater); commenting this for for f0
-            this.gridCells[key].setWaterLevel(randomWater);
+            this.gridCells[key].addWaterLevel(randomWater);
             this.gridCells[key].setSunlightLevel(randomSunlight);
             return;
         }
