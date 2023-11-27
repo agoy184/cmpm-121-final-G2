@@ -13,11 +13,12 @@ class Grid extends Phaser.GameObjects.Grid {
 
     initializeCell(x,y) {
         let key = x + "," + y;
-        let randomWater = Math.floor(Math.random()*10-3);
-        let randomSunlight = Math.floor(Math.random()*10);
+        let randomWater = Math.floor(Math.random()*10-3); //-3-6
+        let randomSunlight = Math.floor(Math.random()*10); // 0-9
         if (this.gridCells[key]) {
-            // modify the water level in a range of -3 to 7 (i think)
-            this.gridCells[key].addWaterLevel(randomWater);
+            // modify the water level in a range of -3 to 7 (i think) i think its 6 ngl but idk
+            //this.gridCells[key].addWaterLevel(randomWater); commenting this for for f0
+            this.gridCells[key].setWaterLevel(randomWater);
             this.gridCells[key].setSunlightLevel(randomSunlight);
             return;
         }
@@ -31,6 +32,7 @@ class Grid extends Phaser.GameObjects.Grid {
                 this.initializeCell(i, j);
             }
         }
+        this.growCells();
     }
 
     addPlant(plant){
@@ -51,6 +53,31 @@ class Grid extends Phaser.GameObjects.Grid {
             return this.gridCells[key].plant + " has " + sunlight + " sunlight and " + water + " water";
         }
         return "empty plot has " + sunlight + " sunlight and " + water + " water";
+  }
+  
+    getNearCells(x, y) {
+        let nearCells = [];
+        //refactor later, just makes a list of the current cell and the 4 cells around it
+        let nearCellKey = x + "," + y;
+        nearCells.push(this.gridCells[nearCellKey]);
+        nearCellKey = x + "," + (y - 1);
+        nearCells.push(this.gridCells[nearCellKey]);
+        nearCellKey = x + "," + (y + 1);
+        nearCells.push(this.gridCells[nearCellKey]);
+        nearCellKey = x - 1 + "," + y;
+        nearCells.push(this.gridCells[nearCellKey]);
+        nearCellKey = x + 1 + "," + y;
+        nearCells.push(this.gridCells[nearCellKey]);
+        return nearCells;
+    }
+
+    growCells() { //this function is kinda ugly but we can refactor later
+        for(let key in this.gridCells) {
+            if (this.gridCells[key].plant) {
+                let [plantX, plantY] = key.split(",").map(Number);
+                this.gridCells[key].plant.growPlant(this.getNearCells(plantX, plantY));
+            }
+        }
     }
 
     getPoint(x, y) {

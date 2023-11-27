@@ -7,6 +7,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.moving = false;
         this.removingPlantAlready = false;
         this.plantInventory = {};
+        this.growthThreePlants = 0;
         scene.add.existing(this);
     }
 
@@ -58,9 +59,15 @@ class Player extends Phaser.GameObjects.Sprite {
         if (!this.removingPlantAlready && keyQ.isDown) {
             this.removingPlantAlready = true;
             let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
-            console.log(plant)
+            console.log(plant);
             if (!plant) {
                 return;
+            }
+            if (plant[1] == 3) {
+                this.growthThreePlants += 1;
+                if (this.growthThreePlants == 5) {
+                    alert("You collecteed 5 level 3 plants! You win!");
+                }
             }
             this.plantInventory[plant] = (this.plantInventory[plant] || 0) + 1;
         }

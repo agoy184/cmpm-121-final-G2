@@ -26,7 +26,7 @@ class Cell {
         if (!this.plant) {
             return null;
         }
-        let removedPlantData = this.plant.name;
+        let removedPlantData = [this.plant.name, this.plant.growthLevel];
         this.plant.deletePlant();
         this.plant = null;
         return removedPlantData;

@@ -38,6 +38,10 @@ class Plant extends Phaser.GameObjects.Sprite {
         this.destroy();
     }
 
+    growPlant(nearCells) {
+        //implementation written in subclasses
+    }
+
     update(){
 
     }
@@ -47,16 +51,71 @@ class PlantType1 extends Plant {
     constructor(scene, x, y){
         super(scene, x, y, "plant1Image", 0, "plant1Name");
     }
+
+    /*
+    plant 1 growing rules:
+    - if water level is positive
+    - and the sunlight level is greater than 0
+    - and there are no nearby plants
+    */
+    growPlant(nearCells) {
+        if(nearCells[0].waterLevel > 0 && nearCells[0].sunlightLevel > 0) {
+            for (let i = 1; i < nearCells.length; i++) {
+                if(nearCells[i] instanceof Cell && nearCells[i].plant) {
+                    return;
+                }
+            }
+            if (this.growthLevel < 3) { 
+                this.growthLevel += 1;
+            }
+        }
+    }
 }
 
 class PlantType2 extends Plant {
     constructor(scene, x, y){
         super(scene, x, y, "plant2Image", 0, "plant2Name");
     }
+
+    /*
+    plant 2 growing rules:
+    - if water level is negative
+    - and the sunlight level is greater than 4
+    - and there is at least one nearby plant
+    */
+    growPlant(nearCells) {
+        if(nearCells[0].waterLevel < 0 && nearCells[0].sunlightLevel > 4) {
+            for(let i = 1; i < nearCells.length; i++) {
+                if(nearCells[i] instanceof Cell && nearCells[i].plant) {
+                    if (this.growthLevel < 3) { 
+                        this.growthLevel += 1;
+                    }
+                }
+            }
+        }
+    }
 }
 
 class PlantType3 extends Plant {
     constructor(scene, x, y){
         super(scene, x, y, "plant3Image", 0, "plant3Name");
+    }
+
+    /*
+    plant 3 growing rules:
+    - if water level is positive
+    - and the sunlight level is less than 5
+    - and there are no nearby plants (except for plant 3)
+    */
+    growPlant(nearCells) {
+        if(nearCells[0].waterLevel > 0 && nearCells[0].sunlightLevel < 5) {
+            for(let i = 1; i < nearCells.length; i++) {
+                if(nearCells[i] instanceof Cell && (!nearCells[i].plant || !nearCells[i].plant instanceof PlantType3)) {
+                    if (this.growthLevel < 3) { 
+                        this.growthLevel += 1;
+                    }
+                }
+            }
+        }
     }
 }

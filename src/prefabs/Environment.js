@@ -26,7 +26,7 @@ class Environment extends Phaser.GameObjects.Sprite {
             if (this.currentTime >= 100) {
                 this.currentTime = 0;
                 this.day += 1;
-                this.scene.events.emit('newDay', {day:this.day});
+                this.scene.events.emit('newDay', { day: this.day });
             }
         }
         this.displayPlayerInventory(this.scene.player.plantInventory);
