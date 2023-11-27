@@ -10,7 +10,6 @@ class Environment extends Phaser.GameObjects.Sprite {
     }
 
     displayPlayerInventory(inventory) {
-        // display a counter for each key in the dictionary
         let displayString = "Inventory:\n";
         for (let key in inventory) {
             displayString += key + ": " + inventory[key] + "\n";

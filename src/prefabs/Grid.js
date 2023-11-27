@@ -12,7 +12,7 @@ class Grid extends Phaser.GameObjects.Grid {
     }
 
     initializeCell(x,y) {
-        let key = x + "," + y;
+        let key = this.getKey(x, y);
         let randomWater = Math.floor(Math.random()*10-3); //-3-6
         let randomSunlight = Math.floor(Math.random()*10); // 0-9
         if (this.gridCells[key]) {
@@ -22,7 +22,6 @@ class Grid extends Phaser.GameObjects.Grid {
             return;
         }
         this.gridCells[key] = new Cell(randomWater,randomSunlight);
-        // console.log(this.gridCells[key])
     }
 
     initializeGrid() {
@@ -35,38 +34,32 @@ class Grid extends Phaser.GameObjects.Grid {
     }
 
     addPlant(plant){
-        let key = plant.gridX + "," + plant.gridY;
+        let key = this.getKey(plant.gridX, plant.gridY);
         this.gridCells[key].addPlant(plant);
     }
 
     removePlant(x,y){
-        let key = x + "," + y;
+        let key = this.getKey(x, y);
         return this.gridCells[key].removePlant();
     }
 
     getCellInfo(x, y) {
-        let key = x + "," + y;
-        let sunlight = this.gridCells[key].sunlightLevel;
-        let water = this.gridCells[key].waterLevel;
-        if (this.gridCells[key].plant) {
-            return this.gridCells[key].plant + " has " + sunlight + " sunlight and " + water + " water";
+        let key = this.getKey(x, y);
+        let cell = this.gridCells[key];
+        let sunlight = cell.sunlightLevel;
+        let water = cell.waterLevel;
+        if (cell.plant) {
+            return cell.plant + " has " + sunlight + " sunlight and " + water + " water";
         }
         return "empty plot has " + sunlight + " sunlight and " + water + " water";
   }
   
     getNearCells(x, y) {
         let nearCells = [];
-        //refactor later, just makes a list of the current cell and the 4 cells around it
-        let nearCellKey = x + "," + y;
-        nearCells.push(this.gridCells[nearCellKey]);
-        nearCellKey = x + "," + (y - 1);
-        nearCells.push(this.gridCells[nearCellKey]);
-        nearCellKey = x + "," + (y + 1);
-        nearCells.push(this.gridCells[nearCellKey]);
-        nearCellKey = x - 1 + "," + y;
-        nearCells.push(this.gridCells[nearCellKey]);
-        nearCellKey = x + 1 + "," + y;
-        nearCells.push(this.gridCells[nearCellKey]);
+        const nearCellKeys = this.getNearCellKeys(x, y);
+        nearCellKeys.forEach(key => {
+            nearCells.push(this.gridCells[key]);
+        })
         return nearCells;
     }
 
@@ -84,6 +77,19 @@ class Grid extends Phaser.GameObjects.Grid {
         let leftMostX = this.x - (this.cellWidth*Math.floor(this.dimension/2)) + (this.dimension%2==0)*this.cellWidth/2;
         let topMostY = this.y - (this.cellHeight*Math.floor(this.dimension/2)) + (this.dimension%2==0)*this.cellHeight/2;
         return [leftMostX + (x * this.cellWidth), topMostY + (y * this.cellHeight)];
+    }
+
+    getKey(x, y) {
+        return x + "," + y;
+    }
+
+    getNearCellKeys(x, y) {
+        const points = [{x: x, y: y}, {x: x, y: y - 1}, {x: x, y: y + 1}, {x: x - 1, y: y}, {x: x + 1, y: y}];
+        const keys = [];
+        points.forEach(point => {
+            keys.push(this.getKey(point.x, point.y));
+        })
+        return keys;
     }
 
     pointInBounds(x, y) {
