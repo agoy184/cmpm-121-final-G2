@@ -2,19 +2,38 @@ class Grid extends Phaser.GameObjects.Grid {
     constructor(scene, x, y, width, height, dimension){
         super(scene, x, y, width, height, width/dimension, height/dimension, 0x000000, 1, 0xff0000);
         this.dimension = dimension;
-        this.plantGrid = {};
+        this.gridCells = {};
+        this.initializeGrid();
         scene.add.existing(this);
+    }
+
+    initializeCell(x,y) {
+        let key = x + "," + y;
+        this.gridCells[key] = new Cell(0,0);
+        // console.log(this.gridCells[key])
+    }
+
+    initializeGrid() {
+        for (let i = 0; i < this.dimension; i++) {
+            for (let j = 0; j < this.dimension; j++) {
+                this.initializeCell(i, j);
+            }
+        }
     }
 
     addPlant(plant){
         let key = plant.gridX + "," + plant.gridY;
-        this.plantGrid[key] = plant;
-        // console.log(this.plantGrid);
+        this.gridCells[key].addPlant(plant);
     }
 
-    checkCellForPlant(x, y) {
+    getCellInfo(x, y) {
         let key = x + "," + y;
-        return this.plantGrid[key];
+        let sunlight = this.gridCells[key].sunlightLevel;
+        let water = this.gridCells[key].waterLevel;
+        if (this.gridCells[key].plant) {
+            return this.gridCells[key].plant + " has " + sunlight + " sunlight and " + water + " water";
+        }
+        return "empty plot has " + sunlight + " sunlight and " + water + " water";
     }
 
     getPoint(x, y) {

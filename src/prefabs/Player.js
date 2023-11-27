@@ -13,7 +13,7 @@ class Player extends Phaser.GameObjects.Sprite {
             targets: this,
             x: x,
             y: y,
-            duration: 200,
+            duration: 175,
             ease: 'Power1',
             onComplete: () => {
                 this.moving = false;
@@ -50,13 +50,18 @@ class Player extends Phaser.GameObjects.Sprite {
         }
         
         if (this.scene.keyE.isDown) {
-            let plant = this.scene.grid.checkCellForPlant(this.gridX, this.gridY);
-            if (plant) {
-                alert(plant);
-            }
-            else {
-                alert("no plant");
-            }
+            let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
+            alert(info);
+        }
+        // gotta refactor this later
+        if (this.scene.key1.isDown) {
+            this.scene.grid.addPlant(new PlantType1(this.scene, this.gridX, this.gridY).setScale(0.5));
+        }
+        if (this.scene.key2.isDown) {
+            this.scene.grid.addPlant(new PlantType2(this.scene, this.gridX, this.gridY).setScale(0.5));
+        }
+        if (this.scene.key3.isDown) {
+            this.scene.grid.addPlant(new PlantType3(this.scene, this.gridX, this.gridY).setScale(0.5));
         }
     }
 }
