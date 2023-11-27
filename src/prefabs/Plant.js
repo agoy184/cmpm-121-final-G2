@@ -8,8 +8,8 @@ class Plant extends Phaser.GameObjects.Sprite {
         this.growthLevel = 1;
         let color = this.stringToHash(this.name)
         this.placeHolderRectangle = new Phaser.GameObjects.Rectangle(scene, this.x, this.y, 32, 60, color);
-        scene.add.existing(this);
         scene.add.existing(this.placeHolderRectangle);
+        scene.add.existing(this);
     }
 
     // https://www.geeksforgeeks.org/how-to-create-hash-from-string-in-javascript/#
@@ -31,6 +31,11 @@ class Plant extends Phaser.GameObjects.Sprite {
 
     toString() {
         return this.name + " at (" + this.gridX + ", " + this.gridY + ")" ;
+    }
+
+    deletePlant() {
+        this.placeHolderRectangle.destroy();
+        this.destroy();
     }
 
     update(){

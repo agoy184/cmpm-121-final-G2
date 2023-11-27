@@ -5,6 +5,8 @@ class Player extends Phaser.GameObjects.Sprite {
         this.gridX = x;
         this.gridY = y;
         this.moving = false;
+        this.removingPlantAlready = false;
+        this.plantInventory = {};
         scene.add.existing(this);
     }
 
@@ -52,6 +54,18 @@ class Player extends Phaser.GameObjects.Sprite {
         if (this.scene.keyE.isDown) {
             let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
             alert(info);
+        }
+        if (!this.removingPlantAlready && keyQ.isDown) {
+            this.removingPlantAlready = true;
+            let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
+            console.log(plant)
+            if (!plant) {
+                return;
+            }
+            this.plantInventory[plant] = (this.plantInventory[plant] || 0) + 1;
+        }
+        else if (this.removingPlantAlready && keyQ.isUp) {
+            this.removingPlantAlready = false;
         }
         // gotta refactor this later
         if (this.scene.key1.isDown) {

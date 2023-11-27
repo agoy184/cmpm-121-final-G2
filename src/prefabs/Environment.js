@@ -5,7 +5,17 @@ class Environment extends Phaser.GameObjects.Sprite {
         this.day = 0;
         this.timerDisplay = scene.add.text(10, 10, "Press 'T' to advance time: " + this.currentTime);
         this.dayDisplay = scene.add.text(10, 30, "Day: " + this.day);
+        this.plantDisplay = scene.add.text(10, 50, this.scene.player.plantInventory);
         scene.add.existing(this);
+    }
+
+    displayPlayerInventory(inventory) {
+        // display a counter for each key in the dictionary
+        let displayString = "Inventory:\n";
+        for (let key in inventory) {
+            displayString += key + ": " + inventory[key] + "\n";
+        }
+        this.plantDisplay.setText(displayString);    
     }
 
     update(){
@@ -19,5 +29,6 @@ class Environment extends Phaser.GameObjects.Sprite {
                 this.scene.events.emit('newDay', {day:this.day});
             }
         }
+        this.displayPlayerInventory(this.scene.player.plantInventory);
     }
 }

@@ -18,6 +18,17 @@ class Cell {
     }
 
     addPlant(plant){
+        this.removePlant();
         this.plant = plant;
+    }
+
+    removePlant(){
+        if (!this.plant) {
+            return null;
+        }
+        let removedPlantData = this.plant.name;
+        this.plant.deletePlant();
+        this.plant = null;
+        return removedPlantData;
     }
 }

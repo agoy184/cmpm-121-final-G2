@@ -38,6 +38,11 @@ class Grid extends Phaser.GameObjects.Grid {
         this.gridCells[key].addPlant(plant);
     }
 
+    removePlant(x,y){
+        let key = x + "," + y;
+        return this.gridCells[key].removePlant();
+    }
+
     getCellInfo(x, y) {
         let key = x + "," + y;
         let sunlight = this.gridCells[key].sunlightLevel;
