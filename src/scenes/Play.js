@@ -4,10 +4,10 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        this.bgGrid = this.add.image(game.config.width/2, game.config.height/2, 'grassbg').setScale(1);
         this.grid = new Grid(this, game.config.width/2, game.config.height/2, 320*2, 268*2, 5);
         this.player = new Player(this, 2, 2, 'farmer').setOrigin(0.5).setScale(0.2).setDepth(2);
         this.environment = new Environment(this,game.config.width/2, game.config.height/2);
-        // this.bgGrid = this.add.image(game.config.width/2, game.config.height/2, 'grid').setScale(2);
         this.grid.addPlant(new Carrot(this, 0, 1));
         this.grid.addPlant(new Tomato(this, 4, 3));
         this.grid.addPlant(new Potato(this, 1, 4));

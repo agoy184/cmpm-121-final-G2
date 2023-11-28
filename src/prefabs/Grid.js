@@ -1,6 +1,6 @@
 class Grid extends Phaser.GameObjects.Grid {
     constructor(scene, x, y, width, height, dimension){
-        super(scene, x, y, width, height, width/dimension, height/dimension, 0x000000, 1, 0xff0000);
+        super(scene, x, y, width, height, width/dimension, height/dimension, 0xaa11aa, 0.1, 0xffffff, 0.5);
         this.dimension = dimension;
         this.gridCells = {};
         this.initializeGrid();

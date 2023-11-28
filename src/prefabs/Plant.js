@@ -33,7 +33,7 @@ class Carrot extends Plant {
     }
 
     /*
-    plant 1 growing rules:
+    Carrot growing rules:
     - if water level is positive
     - and the sunlight level is greater than 0
     - and there are no nearby plants
@@ -60,7 +60,7 @@ class Tomato extends Plant {
     }
 
     /*
-    plant 2 growing rules:
+    Tomato growing rules:
     - if water level is greater than 25
     - and the sunlight level is greater than 4
     - and there is at least one nearby plant
@@ -86,10 +86,10 @@ class Potato extends Plant {
     }
 
     /*
-    plant 3 growing rules:
+    Potato growing rules:
     - if water level is greater than 10
     - and the sunlight level is less than 5
-    - and there are no nearby plants (except for plant 3)
+    - and there are no nearby plants (except for Potato)
     */
     growPlant(nearCells) {
         if(nearCells[0].waterLevel > 10 && nearCells[0].sunlightLevel < 5) {
