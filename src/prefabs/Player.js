@@ -66,7 +66,7 @@ class Player extends Phaser.GameObjects.Sprite {
             if (plant[1] == 3) {
                 this.growthThreePlants += 1;
                 if (this.growthThreePlants == 5) {
-                    alert("You collecteed 5 level 3 plants! You win!");
+                    alert("You collected 5 level 3 plants! You win!");
                 }
             }
             this.plantInventory[plant] = (this.plantInventory[plant] || 0) + 1;
