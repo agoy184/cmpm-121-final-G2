@@ -18,7 +18,7 @@ class Environment extends Phaser.GameObjects.GameObject {
     }
 
     update(){
-        if (this.scene.keyT.isDown) {
+        if (keys.T.isDown) {
             this.currentTime += 1;
             this.timerDisplay.setText("Time: " + this.currentTime);
             this.dayDisplay.setText("Day: " + this.day);

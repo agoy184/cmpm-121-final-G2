@@ -6,6 +6,7 @@ class Plant extends Phaser.GameObjects.Sprite {
         this.gridY = y;
         this.name = name;
         this.growthLevel = 1;
+        this.rules = "";
         scene.add.existing(this);
     }
 
@@ -30,6 +31,7 @@ class Carrot extends Plant {
     constructor(scene, x, y){
         super(scene, x, y, "carrot", 0, "Carrot");
         this.setScale(0.05);
+        this.rules = "Carrot growing rules:\n- if water level is positive\n- and the sunlight level is greater than 0\n- and there are no nearby plants";
     }
 
     /*
@@ -57,6 +59,7 @@ class Tomato extends Plant {
     constructor(scene, x, y){
         super(scene, x, y, "tomato", 0, "Tomato");
         this.setScale(0.05);
+        this.rules = "Tomato growing rules:\n- if water level is greater than 25\n- and the sunlight level is greater than 4\n- and there is at least one nearby plant";
     }
 
     /*
@@ -83,6 +86,7 @@ class Potato extends Plant {
     constructor(scene, x, y){
         super(scene, x, y, "potato", 0, "Potato");
         this.setScale(0.1);
+        this.rules = "Potato growing rules:\n- if water level is greater than 10\n- and the sunlight level is less than 5\n- and there are no nearby plants (except for Potato)";
     }
 
     /*

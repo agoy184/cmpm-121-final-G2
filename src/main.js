@@ -18,8 +18,8 @@ let config = {
 }
 
 let game = new Phaser.Game(config);
-    
-let keyW, keyA, keyS, keyD, keyR, keyQ;
+
+let keys = {};
 
 let w = game.config.width;
 let h = game.config.height;

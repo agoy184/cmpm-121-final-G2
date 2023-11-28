@@ -38,25 +38,30 @@ class Player extends Phaser.GameObjects.Sprite {
         this.gridX += dX;
     }
 
-    update(){
-        if (keyW.isDown) {
+    update() {
+        if (keys.W.isDown) {
             this.moveCharacter(0,-1)
         } 
-        else if (keyA.isDown) {
+        else if (keys.A.isDown) {
             this.moveCharacter(-1,0)
         }
-        else if (keyS.isDown) {
+        else if (keys.S.isDown) {
             this.moveCharacter(0,1)
         }
-        else if (keyD.isDown) {
+        else if (keys.D.isDown) {
             this.moveCharacter(1,0)
         }
+
+        if (keys.R.isDown) {
+            let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
+            alert(plant.rules);
+        }
         
-        if (this.scene.keyE.isDown) {
+        if (keys.E.isDown) {
             let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
             alert(info);
         }
-        if (!this.removingPlantAlready && keyQ.isDown) {
+        if (!this.removingPlantAlready && keys.Q.isDown) {
             this.removingPlantAlready = true;
             let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
             console.log(plant);
@@ -71,17 +76,18 @@ class Player extends Phaser.GameObjects.Sprite {
             }
             this.plantInventory[plant] = (this.plantInventory[plant] || 0) + 1;
         }
-        else if (this.removingPlantAlready && keyQ.isUp) {
+        else if (this.removingPlantAlready && keys.Q.isUp) {
             this.removingPlantAlready = false;
         }
+
         // gotta refactor this later
-        if (this.scene.key1.isDown) {
+        if (keys.ONE.isDown) {
             this.scene.grid.addPlant(new Carrot(this.scene, this.gridX, this.gridY));
         }
-        if (this.scene.key2.isDown) {
+        if (keys.TWO.isDown) {
             this.scene.grid.addPlant(new Tomato(this.scene, this.gridX, this.gridY));
         }
-        if (this.scene.key3.isDown) {
+        if (keys.THREE.isDown) {
             this.scene.grid.addPlant(new Potato(this.scene, this.gridX, this.gridY));
         }
     }
