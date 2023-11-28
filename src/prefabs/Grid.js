@@ -49,7 +49,7 @@ class Grid extends Phaser.GameObjects.Grid {
         let sunlight = cell.sunlightLevel;
         let water = cell.waterLevel;
         if (cell.plant) {
-            return cell.plant + " has " + sunlight + " sunlight and " + water + " water";
+            return "Level " + cell.plant.growthLevel + " " + cell.plant + " has " + sunlight + " sunlight and " + water + " water";
         }
         return "empty plot has " + sunlight + " sunlight and " + water + " water";
   }

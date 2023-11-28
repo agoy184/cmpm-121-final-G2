@@ -6,27 +6,7 @@ class Plant extends Phaser.GameObjects.Sprite {
         this.gridY = y;
         this.name = name;
         this.growthLevel = 1;
-        let color = this.stringToHash(this.name)
-        this.placeHolderRectangle = new Phaser.GameObjects.Rectangle(scene, this.x, this.y, 32, 60, color);
-        scene.add.existing(this.placeHolderRectangle);
         scene.add.existing(this);
-    }
-
-    // https://www.geeksforgeeks.org/how-to-create-hash-from-string-in-javascript/#
-    // to temporarily add a unique color to each plant type until we have images for them
-    stringToHash(string) {
-             
-        let hash = 0;
-         
-        if (string.length == 0) return hash;
-         
-        for (let i = 0; i < string.length; i++) {
-            let char = string.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-         
-        return hash;
     }
 
     toString() {
@@ -34,7 +14,6 @@ class Plant extends Phaser.GameObjects.Sprite {
     }
 
     deletePlant() {
-        this.placeHolderRectangle.destroy();
         this.destroy();
     }
 
@@ -47,9 +26,10 @@ class Plant extends Phaser.GameObjects.Sprite {
     }
 }
 
-class PlantType1 extends Plant {
+class Carrot extends Plant {
     constructor(scene, x, y){
-        super(scene, x, y, "plant1Image", 0, "plant1Name");
+        super(scene, x, y, "carrot", 0, "Carrot");
+        this.setScale(0.05);
     }
 
     /*
@@ -67,14 +47,16 @@ class PlantType1 extends Plant {
             }
             if (this.growthLevel < 3) { 
                 this.growthLevel += 1;
+                this.setScale(this.growthLevel * 0.05);
             }
         }
     }
 }
 
-class PlantType2 extends Plant {
+class Tomato extends Plant {
     constructor(scene, x, y){
-        super(scene, x, y, "plant2Image", 0, "plant2Name");
+        super(scene, x, y, "tomato", 0, "Tomato");
+        this.setScale(0.05);
     }
 
     /*
@@ -89,6 +71,7 @@ class PlantType2 extends Plant {
                 if(nearCells[i] instanceof Cell && nearCells[i].plant) {
                     if (this.growthLevel < 3) { 
                         this.growthLevel += 1;
+                        this.setScale(this.growthLevel * 0.05);
                     }
                 }
             }
@@ -96,9 +79,10 @@ class PlantType2 extends Plant {
     }
 }
 
-class PlantType3 extends Plant {
+class Potato extends Plant {
     constructor(scene, x, y){
-        super(scene, x, y, "plant3Image", 0, "plant3Name");
+        super(scene, x, y, "potato", 0, "Potato");
+        this.setScale(0.1);
     }
 
     /*
@@ -110,9 +94,10 @@ class PlantType3 extends Plant {
     growPlant(nearCells) {
         if(nearCells[0].waterLevel > 10 && nearCells[0].sunlightLevel < 5) {
             for(let i = 1; i < nearCells.length; i++) {
-                if(nearCells[i] instanceof Cell && (!nearCells[i].plant || !nearCells[i].plant instanceof PlantType3)) {
+                if(nearCells[i] instanceof Cell && (!nearCells[i].plant || !nearCells[i].plant instanceof Potato)) {
                     if (this.growthLevel < 3) { 
                         this.growthLevel += 1;
+                        this.setScale(this.growthLevel * 0.07);
                     }
                 }
             }

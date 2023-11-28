@@ -8,6 +8,9 @@ class Load extends Phaser.Scene {
         this.load.path = 'assets/';
         this.load.image('farmer', 'farmer.png');
         this.load.image('grid', 'redGrid.png');
+        this.load.image('carrot', 'carrot.png');
+        this.load.image('potato', 'potato.png');
+        this.load.image('tomato', 'tomato.png');
 
         // loading bar
         // See: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/loader/

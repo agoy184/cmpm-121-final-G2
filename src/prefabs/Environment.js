@@ -1,6 +1,6 @@
-class Environment extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, frame){
-        super(scene,x, y, texture, frame);
+class Environment extends Phaser.GameObjects.GameObject {
+    constructor(scene, x, y){
+        super(scene,x, y);
         this.currentTime = 0;
         this.day = 0;
         this.timerDisplay = scene.add.text(10, 10, "Press 'T' to advance time: " + this.currentTime);

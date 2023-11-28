@@ -76,13 +76,13 @@ class Player extends Phaser.GameObjects.Sprite {
         }
         // gotta refactor this later
         if (this.scene.key1.isDown) {
-            this.scene.grid.addPlant(new PlantType1(this.scene, this.gridX, this.gridY).setScale(0.5));
+            this.scene.grid.addPlant(new Carrot(this.scene, this.gridX, this.gridY));
         }
         if (this.scene.key2.isDown) {
-            this.scene.grid.addPlant(new PlantType2(this.scene, this.gridX, this.gridY).setScale(0.5));
+            this.scene.grid.addPlant(new Tomato(this.scene, this.gridX, this.gridY));
         }
         if (this.scene.key3.isDown) {
-            this.scene.grid.addPlant(new PlantType3(this.scene, this.gridX, this.gridY).setScale(0.5));
+            this.scene.grid.addPlant(new Potato(this.scene, this.gridX, this.gridY));
         }
     }
 }
