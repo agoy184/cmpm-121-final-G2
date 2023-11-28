@@ -19,7 +19,7 @@ class Environment extends Phaser.GameObjects.Sprite {
 
     update(){
         if (this.scene.keyT.isDown) {
-            this.currentTime += 5;
+            this.currentTime += 1;
             this.timerDisplay.setText("Time: " + this.currentTime);
             this.dayDisplay.setText("Day: " + this.day);
             if (this.currentTime >= 100) {

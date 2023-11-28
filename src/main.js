@@ -14,9 +14,12 @@ let config = {
             fps: 60
         }
     },
-    scene: [ Play ]
+    scene: [ Load, Play ]
 }
 
 let game = new Phaser.Game(config);
     
 let keyW, keyA, keyS, keyD, keyR, keyQ;
+
+let w = game.config.width;
+let h = game.config.height;
