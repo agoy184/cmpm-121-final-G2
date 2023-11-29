@@ -6,6 +6,7 @@ class Environment extends Phaser.GameObjects.GameObject {
         this.timerDisplay = scene.add.text(10, 10, "Press 'T' to advance time: " + this.currentTime);
         this.dayDisplay = scene.add.text(10, 30, "Day: " + this.day);
         this.plantDisplay = scene.add.text(10, 50, this.scene.player.plantInventory);
+        this.controlsDisplay = scene.add.text(w - 140, 10, "Press 'R'\nfor controls");
         scene.add.existing(this);
     }
 
@@ -17,7 +18,7 @@ class Environment extends Phaser.GameObjects.GameObject {
         this.plantDisplay.setText(displayString);    
     }
 
-    update(){
+    update() {
         if (keys.T.isDown) {
             this.currentTime += 1;
             this.timerDisplay.setText("Time: " + this.currentTime);

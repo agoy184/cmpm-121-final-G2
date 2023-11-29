@@ -14,6 +14,15 @@ class Play extends Phaser.Scene {
         this.grid.addPlant(new Potato(this, 1, 4));
         
         keys = this.input.keyboard.addKeys('W, A, S, D, Q, E, R, T, ONE, TWO, THREE');
+        controls = "Keys:\n" +
+                "1: Plant Carrot\n" +
+                "2: Plant Tomato\n" +
+                "3: Plant Potato\n" +
+                "Q: Pick Up Plant\n" +
+                "WASD: Move\n" +
+                "E: Get Cell Info\n" +
+                "R (on a plant): Get Plant Rules\n" +
+                "T: Advance Time\n";
     }
 
     update() {

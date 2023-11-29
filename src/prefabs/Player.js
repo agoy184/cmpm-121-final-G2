@@ -40,21 +40,25 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update() {
         if (keys.W.isDown) {
-            this.moveCharacter(0,-1)
+            this.moveCharacter(0, -1)
         } 
         else if (keys.A.isDown) {
-            this.moveCharacter(-1,0)
+            this.moveCharacter(-1, 0)
         }
         else if (keys.S.isDown) {
-            this.moveCharacter(0,1)
+            this.moveCharacter(0, 1)
         }
         else if (keys.D.isDown) {
-            this.moveCharacter(1,0)
+            this.moveCharacter(1, 0)
         }
 
         if (keys.R.isDown) {
             let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
-            alert(plant.rules);
+            if (plant) {
+                alert(plant.rules);
+            } else {
+                alert(controls);
+            }
         }
         
         if (keys.E.isDown) {
@@ -64,7 +68,6 @@ class Player extends Phaser.GameObjects.Sprite {
         if (!this.removingPlantAlready && keys.Q.isDown) {
             this.removingPlantAlready = true;
             let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
-            console.log(plant);
             if (!plant) {
                 return;
             }

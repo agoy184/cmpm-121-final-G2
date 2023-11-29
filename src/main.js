@@ -20,6 +20,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 let keys = {};
+let controls = "";
 
 let w = game.config.width;
 let h = game.config.height;
