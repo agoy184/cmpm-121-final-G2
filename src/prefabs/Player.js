@@ -17,7 +17,7 @@ class Player extends Phaser.GameObjects.Sprite {
             x: x,
             y: y,
             duration: 175,
-            ease: 'Power1',
+            ease: "Power1",
             onComplete: () => {
                 this.moving = false;
             }
