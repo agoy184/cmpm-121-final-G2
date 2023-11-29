@@ -16,9 +16,9 @@
 
 ## Reflection
 
-# How has the team’s plan changed?
+### How has the team’s plan changed?
 So far the team's plan hasn't necessarily changed, as we are laying a base foundation for our game's mechanics. We have not yet reached a point where our team has had to change course for what our finished game will look like.
 
-# Did you reconsider any of the choices you previously described for Tools and Materials or your Roles?
+### Did you reconsider any of the choices you previously described for Tools and Materials or your Roles?
 We have not reconsidered our choices regarding tools or materials, as all of the currently established tools and materials are satisfactory with all of the current requirements.
 
