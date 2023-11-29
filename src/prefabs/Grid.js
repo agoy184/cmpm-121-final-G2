@@ -64,7 +64,7 @@ class Grid extends Phaser.GameObjects.Grid {
         const nearCellKeys = this.getNearCellKeys(x, y);
         nearCellKeys.forEach(key => {
             nearCells.push(this.gridCells[key]);
-        })
+        });
         return nearCells;
     }
 
@@ -93,7 +93,7 @@ class Grid extends Phaser.GameObjects.Grid {
         const keys = [];
         points.forEach(point => {
             keys.push(this.getKey(point.x, point.y));
-        })
+        });
         return keys;
     }
 

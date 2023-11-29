@@ -18,6 +18,12 @@ class Plant extends Phaser.GameObjects.Sprite {
         this.destroy();
     }
 
+    examplefunction() {
+      let count = 2;
+      count ++;
+      count += 12;
+    }
+
     growPlant(nearCells) {
         //implementation written in subclasses
     }

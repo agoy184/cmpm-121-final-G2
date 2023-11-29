@@ -17,7 +17,7 @@ class Player extends Phaser.GameObjects.Sprite {
             x: x,
             y: y,
             duration: 175,
-            ease: 'Power1',
+            ease: "Power1",
             onComplete: () => {
                 this.moving = false;
             }
@@ -40,16 +40,16 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update() {
         if (keys.W.isDown) {
-            this.moveCharacter(0,-1)
+            this.moveCharacter(0,-1);
         } 
         else if (keys.A.isDown) {
-            this.moveCharacter(-1,0)
+            this.moveCharacter(-1,0);
         }
         else if (keys.S.isDown) {
-            this.moveCharacter(0,1)
+            this.moveCharacter(0,1);
         }
         else if (keys.D.isDown) {
-            this.moveCharacter(1,0)
+            this.moveCharacter(1,0);
         }
 
         if (keys.R.isDown) {

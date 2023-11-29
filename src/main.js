@@ -8,14 +8,14 @@ let config = {
         autoCenter: Phaser.Scale.CENTER
     },
     physics: {
-        default: 'arcade',
+        default: "arcade",
         arcade: {
             debug: false,
             fps: 60
         }
     },
     scene: [ Load, Play ]
-}
+};
 
 let game = new Phaser.Game(config);
 
