@@ -24,35 +24,42 @@ class Player extends Phaser.GameObjects.Sprite {
         });
     }
 
-    moveCharacter(dX, dY) {
+    moveCharacter(dX, dY, undo = false, redo = false) {
         if (this.moving) {
             return;
         }
         if (!this.scene.grid.pointInBounds(this.gridX + dX, this.gridY + dY)) {
             return;
         }
+        if (redo) {
+            dX = dX * -1;
+            dY = dY * -1;
+        }
         this.moving = true;
         let newPoint = this.scene.grid.getPoint(this.gridX + dX, this.gridY + dY);
         this.tweenToPoint(newPoint[0], newPoint[1]);
+        if (!undo) this.scene.events.emit(ACTION, {action: new MoveAction(dX * -1, dY * -1)});
+        if (!undo && !redo) this.scene.events.emit(REFRESH_REDO);
         this.gridY += dY;
         this.gridX += dX;
+
     }
 
     update() {
-        if (keys.W.isDown) {
-            this.moveCharacter(0, -1)
+        if (KEYBOARD.JustDown(keys.W)) {
+            this.moveCharacter(0, -1);
         } 
-        else if (keys.A.isDown) {
-            this.moveCharacter(-1, 0)
+        else if (KEYBOARD.JustDown(keys.A)) {
+            this.moveCharacter(-1, 0);
         }
-        else if (keys.S.isDown) {
-            this.moveCharacter(0, 1)
+        else if (KEYBOARD.JustDown(keys.S)) {
+            this.moveCharacter(0, 1);
         }
-        else if (keys.D.isDown) {
-            this.moveCharacter(1, 0)
+        else if (KEYBOARD.JustDown(keys.D)) {
+            this.moveCharacter(1, 0);
         }
 
-        if (keys.R.isDown) {
+        if (KEYBOARD.JustDown(keys.R)) {
             let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
             if (plant) {
                 alert(plant.rules);
@@ -61,16 +68,18 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         }
         
-        if (keys.E.isDown) {
+        if (KEYBOARD.JustDown(keys.E)) {
             let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
             alert(info);
         }
-        if (!this.removingPlantAlready && keys.Q.isDown) {
+        if (!this.removingPlantAlready && KEYBOARD.JustDown(keys.Q)) {
             this.removingPlantAlready = true;
             let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
             if (!plant) {
                 return;
             }
+            this.scene.events.emit(ACTION, {action: new PlantAction(REMOVE, plant, this.gridX, this.gridY)});
+            this.scene.events.emit(REFRESH_REDO);
             if (plant[1] == 3) {
                 this.growthThreePlants += 1;
                 if (this.growthThreePlants == 5) {
@@ -84,13 +93,13 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         // gotta refactor this later
-        if (keys.ONE.isDown) {
+        if (KEYBOARD.JustDown(keys.ONE)) {
             this.scene.grid.addPlant(new Carrot(this.scene, this.gridX, this.gridY));
         }
-        if (keys.TWO.isDown) {
+        if (KEYBOARD.JustDown(keys.TWO)) {
             this.scene.grid.addPlant(new Tomato(this.scene, this.gridX, this.gridY));
         }
-        if (keys.THREE.isDown) {
+        if (KEYBOARD.JustDown(keys.THREE)) {
             this.scene.grid.addPlant(new Potato(this.scene, this.gridX, this.gridY));
         }
     }

@@ -1,6 +1,73 @@
+const KEYBOARD = Phaser.Input.Keyboard;
+// --- cases for undo ---
+const MOVE = "move";
+const TIME = "time";
+const LEVEL = "level";
+const REMOVE = "remove";
+const PLANT = "plant";
+const ACTION = "action";
+const REFRESH_REDO = "refresh_redo";
+
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+    }
+
+    undo() {
+        if (this.undoStack.length < 1) return;
+        const action = this.undoStack.pop();
+        this.redoStack.push(action);
+        switch (action.type) {
+            case MOVE:
+                console.log(MOVE);
+                this.player.moveCharacter(action.x, action.y, true);
+                break;
+        
+            case TIME:
+                console.log(TIME);
+                if (action.dayChange) {
+                    this.environment.currentTime = 100;
+                    this.environment.day -= 1;
+                } else this.environment.currentTime -= 1;
+                this.environment.updateTimeDisplay();
+                break;
+
+            case LEVEL:
+
+                break;
+
+            case REMOVE:
+                break;
+            case PLANT:
+                break;
+        }
+    }
+
+    redo() {
+        if (this.redoStack.length < 1) return;
+        const action = this.redoStack.pop();
+        switch (action.type) {
+            case MOVE:
+                console.log(MOVE);
+                this.player.moveCharacter(action.x, action.y, false, true);
+                break;
+            
+            case TIME:
+                console.log(TIME);
+                if (action.dayChange) {
+                    this.environment.currentTime = 0;
+                    this.environment.day += 1;
+                } else this.environment.currentTime += 1;
+                this.environment.updateTimeDisplay();
+                break;
+            
+            case LEVEL:
+                break;
+            case REMOVE:
+                break;
+            case PLANT:
+                break;
+        }
     }
 
     create() {
@@ -8,12 +75,47 @@ class Play extends Phaser.Scene {
         this.grid = new Grid(this, w/2, h/2, 320*2, 268*2, 5);
         this.player = new Player(this, 2, 2, "farmer").setOrigin(0.5).setScale(0.2).setDepth(2);
         this.environment = new Environment(this, w/2, h/2);
+        this.undoStack = [];
+        let undoProc = false;
+        this.redoStack = [];
+        let redoProc = false;
+
+        this.undoBtn = this.add.text(w - 110, 70, "⬅️")
+            .setStyle({ fontSize: "25px" })
+            .setInteractive({ useHandCursor: true })
+            .on("pointerdown", () => {
+                if(undoProc) return;
+                undoProc = true;
+                this.undo();
+                setTimeout(function() {
+                    undoProc = false;
+                }, 175);
+            });
+
+        this.redoBtn = this.add.text(w - 80, 70, "➡️")
+            .setStyle({ fontSize: "25px" })
+            .setInteractive({ useHandCursor: true })
+            .on("pointerdown", () => {
+                if(redoProc) return;
+                redoProc = true;
+                this.redo();
+                setTimeout(function() {
+                    redoProc = false;
+                }, 175);
+            });
+
+        this.events.on(ACTION, (event) => {
+            this.undoStack.push(event.action);
+            console.log(event.action);
+        });
+
+        this.events.on(REFRESH_REDO, () => this.redoStack = []);
 
         this.grid.addPlant(new Carrot(this, 0, 1));
         this.grid.addPlant(new Tomato(this, 4, 3));
         this.grid.addPlant(new Potato(this, 1, 4));
         
-        keys = this.input.keyboard.addKeys('W, A, S, D, Q, E, R, T, ONE, TWO, THREE');
+        keys = this.input.keyboard.addKeys("W, A, S, D, Q, E, R, T, ONE, TWO, THREE");
         controls = "Keys:\n" +
                 "1: Plant Carrot\n" +
                 "2: Plant Tomato\n" +

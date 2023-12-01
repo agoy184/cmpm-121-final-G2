@@ -18,16 +18,22 @@ class Environment extends Phaser.GameObjects.GameObject {
         this.plantDisplay.setText(displayString);    
     }
 
+    updateTimeDisplay() {
+        this.timerDisplay.setText("Time: " + this.currentTime);
+        this.dayDisplay.setText("Day: " + this.day);
+    }
+
     update() {
-        if (keys.T.isDown) {
+        if (KEYBOARD.JustDown(keys.T)) {
             this.currentTime += 1;
-            this.timerDisplay.setText("Time: " + this.currentTime);
-            this.dayDisplay.setText("Day: " + this.day);
+            this.updateTimeDisplay();
+            this.scene.events.emit(REFRESH_REDO);
             if (this.currentTime >= 100) {
                 this.currentTime = 0;
                 this.day += 1;
+                this.scene.events.emit(ACTION, {action: new TimeAction(true)})
                 this.scene.events.emit("newDay", { day: this.day });
-            }
+            } else this.scene.events.emit(ACTION, {action: new TimeAction()})
         }
         this.displayPlayerInventory(this.scene.player.plantInventory);
     }
