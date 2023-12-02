@@ -11,6 +11,31 @@ class Grid extends Phaser.GameObjects.Grid {
         scene.add.existing(this);
     }
 
+    saveData() {
+        let data = {};
+        for (let key in this.gridCells) {
+            data[key] = this.gridCells[key].saveData();
+        }
+        return data;
+    }
+
+    loadData(data) {
+        for (let key in data) {
+            const cell = this.gridCells[key];
+            const plantData = data[key].plant;
+
+            cell.loadData(data[key]);
+
+            if (plantData) {
+                const loadedPlant = this.createPlant(plantData.x, plantData.y, plantData.name);
+                loadedPlant.loadData(plantData);
+                this.addPlant(loadedPlant);
+            } else if (cell.plant) { // if there's no plant, but there used to be one, remove it from the scene
+                this.removePlant(cell.plant.gridX, cell.plant.gridY);
+            }
+        }
+    }
+
     initializeCell(x,y) {
         let key = this.getKey(x, y);
         let randomWater = Math.floor(Math.random()*10-3); //-3-6
@@ -21,7 +46,7 @@ class Grid extends Phaser.GameObjects.Grid {
             this.gridCells[key].setSunlightLevel(randomSunlight);
             return;
         }
-        this.gridCells[key] = new Cell(randomWater,randomSunlight);
+        this.gridCells[key] = new Cell(randomWater, randomSunlight);
     }
 
     initializeGrid() {
@@ -31,6 +56,19 @@ class Grid extends Phaser.GameObjects.Grid {
             }
         }
         this.growCells();
+    }
+
+    createPlant(x, y, name) {
+        switch(name) {
+            case "Tomato":
+                return new Tomato(this.scene, x, y);
+            case "Potato":
+                return new Potato(this.scene, x, y);
+            case "Carrot":
+                return new Carrot(this.scene, x, y);
+            default:
+                return null;
+        }
     }
 
     addPlant(plant){

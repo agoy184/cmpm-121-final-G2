@@ -11,6 +11,25 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
     }
 
+    saveData() {
+        return {
+            x: this.gridX,
+            y: this.gridY,
+            inventory: this.plantInventory,
+            growthThreePlants: this.growthThreePlants
+        }
+    }
+
+    loadData(data) {
+        this.gridX = data.x;
+        this.gridY = data.y;
+        this.plantInventory = data.inventory;
+        this.growthThreePlants = data.growthThreePlants;
+        let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
+        this.x = gridPoint[0];
+        this.y = gridPoint[1];
+    }
+
     tweenToPoint(x, y) {
         this.scene.tweens.add({
             targets: this,

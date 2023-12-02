@@ -10,6 +10,28 @@ class Plant extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);
     }
 
+    saveData() {
+        return {
+            x: this.gridX,
+            y: this.gridY,
+            name: this.name,
+            growthLevel: this.growthLevel
+        }
+    }
+
+    loadData(data) {
+        this.gridX = data.x;
+        this.gridY = data.y;
+        this.name = data.name;
+        this.growthLevel = data.growthLevel;
+        if (this.name != "Potato") this.setScale(this.growthLevel * 0.05);
+        else if (this.growthLevel == 1) this.setScale(0.1);
+        else this.setScale(this.growthLevel * 0.07);
+        let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
+        this.x = gridPoint[0];
+        this.y = gridPoint[1];
+    }
+
     toString() {
         return this.name + " at (" + this.gridX + ", " + this.gridY + ")" ;
     }

@@ -33,9 +33,7 @@ class Play extends Phaser.Scene {
                 break;
 
             case LEVEL:
-
                 break;
-
             case REMOVE:
                 break;
             case PLANT:
@@ -111,11 +109,17 @@ class Play extends Phaser.Scene {
 
         this.events.on(REFRESH_REDO, () => this.redoStack = []);
 
+        // Add save/load buttons
+
+        this.saveBtn1 = new SaveFile(this, w - 100, 120, "Save 1", { fontSize: "15px", color: "#FFFFFF" }, "save1");
+        this.saveBtn2 = new SaveFile(this, w - 100, 150, "Save 2", { fontSize: "15px", color: "#FFFFFF" }, "save2");
+        this.saveBtn3 = new SaveFile(this, w - 100, 180, "Save 3", { fontSize: "15px", color: "#FFFFFF" }, "save3");
+
         this.grid.addPlant(new Carrot(this, 0, 1));
         this.grid.addPlant(new Tomato(this, 4, 3));
         this.grid.addPlant(new Potato(this, 1, 4));
         
-        keys = this.input.keyboard.addKeys("W, A, S, D, Q, E, R, T, ONE, TWO, THREE");
+        keys = this.input.keyboard.addKeys("W, A, S, D, Q, E, R, T, ONE, TWO, THREE, L");
         controls = "Keys:\n" +
                 "1: Plant Carrot\n" +
                 "2: Plant Tomato\n" +
@@ -130,6 +134,32 @@ class Play extends Phaser.Scene {
     update() {
         this.player.update();
         this.environment.update();
+
+        if (KEYBOARD.JustDown(keys.L)) {
+            this.bruhmoment("save1");
+        }
+    }
+
+    saveFile(label) {
+        let save = {
+            player: this.player.saveData(),
+            environment: this.environment.saveData(),
+            grid: this.grid.saveData(),
+            undoStack: this.undoStack,
+            redoStack: this.redoStack
+        };
+        console.log(save.undoStack);
+        localStorage.setItem(label, JSON.stringify(save));
+    }
+
+    loadFile(label) {
+        let save = JSON.parse(localStorage.getItem(label));
+        this.player.loadData(save.player);
+        this.environment.loadData(save.environment);
+        this.grid.loadData(save.grid);
+        this.undoStack = save.undoStack;
+        this.redoStack = save.redoStack;
+        console.log(this.undoStack);
     }
 
 }

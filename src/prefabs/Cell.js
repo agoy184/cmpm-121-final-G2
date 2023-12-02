@@ -5,6 +5,21 @@ class Cell {
         this.plant = plant;
     }
 
+    saveData() {
+        let data = {};
+        if (this.plant) {
+            data.plant = this.plant.saveData();
+        }
+        data.waterLevel = this.waterLevel;
+        data.sunlightLevel = this.sunlightLevel;
+        return data;
+    }
+
+    loadData(data) {
+        this.waterLevel = data.waterLevel;
+        this.sunlightLevel = data.sunlightLevel;
+    }
+
     setWaterLevel(level) {
         this.waterLevel = level;
     }

@@ -10,6 +10,19 @@ class Environment extends Phaser.GameObjects.GameObject {
         scene.add.existing(this);
     }
 
+    saveData() {
+        return {
+            time: this.currentTime,
+            day: this.day
+        }
+    }
+
+    loadData(data) {
+        this.currentTime = data.time;
+        this.day = data.day;
+        this.updateTimeDisplay();
+    }
+
     displayPlayerInventory(inventory) {
         let displayString = "Inventory:\n";
         for (let key in inventory) {
@@ -28,7 +41,7 @@ class Environment extends Phaser.GameObjects.GameObject {
             this.currentTime += 1;
             this.updateTimeDisplay();
             this.scene.events.emit(REFRESH_REDO);
-            if (this.currentTime >= 100) {
+            if (this.currentTime >= 3) {
                 this.currentTime = 0;
                 this.day += 1;
                 this.scene.events.emit(ACTION, {action: new TimeAction(true)})
