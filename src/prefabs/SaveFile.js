@@ -19,10 +19,11 @@ class SaveFile {
         this.pointerOut();
         if (!this.saved) {
             // prompt user for file name
-            this.fileName = prompt("Enter save file name: ", this.fileName);
+            let promptName = prompt("Enter save file name: ", this.fileName);
+
             this.scene.saveFile(this.fileName);
             this.saved = true;
-            this.button.setText("Load " + this.fileName);
+            this.button.setText("Load " + promptName);
         } else {
             this.scene.loadFile(this.fileName);
         }

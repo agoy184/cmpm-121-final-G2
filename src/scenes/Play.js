@@ -148,7 +148,6 @@ class Play extends Phaser.Scene {
             undoStack: this.undoStack,
             redoStack: this.redoStack
         };
-        console.log(save.undoStack);
         localStorage.setItem(label, JSON.stringify(save));
     }
 
