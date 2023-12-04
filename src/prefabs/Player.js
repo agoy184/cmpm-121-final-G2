@@ -43,22 +43,21 @@ class Player extends Phaser.GameObjects.Sprite {
         });
     }
 
-    moveCharacter(dX, dY, undo = false, redo = false) {
+    moveCharacter(dX, dY, undo = false) {
+        if(undo) {
+            dX = dX * -1;
+            dY = dY * -1;
+        }
         if (this.moving) {
             return;
         }
         if (!this.scene.grid.pointInBounds(this.gridX + dX, this.gridY + dY)) {
             return;
         }
-        if (redo) {
-            dX = dX * -1;
-            dY = dY * -1;
-        }
         this.moving = true;
         let newPoint = this.scene.grid.getPoint(this.gridX + dX, this.gridY + dY);
         this.tweenToPoint(newPoint[0], newPoint[1]);
-        if (!undo) this.scene.events.emit(ACTION, {action: new MoveAction(dX * -1, dY * -1)});
-        if (!undo && !redo) this.scene.events.emit(REFRESH_REDO);
+        if (!undo) this.scene.events.emit(ACTION, {action: new MoveAction(dX, dY)});
         this.gridY += dY;
         this.gridX += dX;
 
@@ -92,13 +91,13 @@ class Player extends Phaser.GameObjects.Sprite {
             alert(info);
         }
         if (!this.removingPlantAlready && KEYBOARD.JustDown(keys.Q)) {
+            this.scene.events.emit(ACTION, {action: new PlantAction(this, this.scene.grid)});
+            this.scene.events.emit(REFRESH_REDO);
             this.removingPlantAlready = true;
             let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
             if (!plant) {
                 return;
             }
-            this.scene.events.emit(ACTION, {action: new PlantAction(REMOVE, plant, this.gridX, this.gridY)});
-            this.scene.events.emit(REFRESH_REDO);
             if (plant[1] == 3) {
                 this.growthThreePlants += 1;
                 if (this.growthThreePlants == 5) {

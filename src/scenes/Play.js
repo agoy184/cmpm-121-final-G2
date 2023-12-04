@@ -1,12 +1,10 @@
 const KEYBOARD = Phaser.Input.Keyboard;
-// --- cases for undo ---
 const MOVE = "move";
 const TIME = "time";
-const LEVEL = "level";
-const REMOVE = "remove";
 const PLANT = "plant";
 const ACTION = "action";
 const REFRESH_REDO = "refresh_redo";
+const MAX_TIME = 3;
 
 class Play extends Phaser.Scene {
     constructor() {
@@ -16,29 +14,31 @@ class Play extends Phaser.Scene {
     undo() {
         if (this.undoStack.length < 1) return;
         const action = this.undoStack.pop();
-        this.redoStack.push(action);
         switch (action.type) {
             case MOVE:
                 console.log(MOVE);
                 this.player.moveCharacter(action.x, action.y, true);
+                this.redoStack.push(new MoveAction(action.x, action.y));
                 break;
         
             case TIME:
                 console.log(TIME);
                 if (action.dayChange) {
-                    this.environment.currentTime = 100;
+                    this.environment.currentTime = MAX_TIME;
                     this.environment.day -= 1;
                 } else this.environment.currentTime -= 1;
                 this.environment.updateTimeDisplay();
+                this.redoStack.push(action);
                 break;
 
-            case LEVEL:
-                break;
-            case REMOVE:
-                break;
             case PLANT:
+                console.log(PLANT);
+                this.redoStack.push(new PlantAction(this.player, this.grid));
+                this.player.loadData(action.playerData);
+                this.environment.displayPlayerInventory(action.playerData.inventory)
+                this.grid.loadData(action.gridData);
                 break;
-        }
+            }
     }
 
     redo() {
@@ -47,7 +47,7 @@ class Play extends Phaser.Scene {
         switch (action.type) {
             case MOVE:
                 console.log(MOVE);
-                this.player.moveCharacter(action.x, action.y, false, true);
+                this.player.moveCharacter(action.x, action.y);
                 break;
             
             case TIME:
@@ -58,12 +58,13 @@ class Play extends Phaser.Scene {
                 } else this.environment.currentTime += 1;
                 this.environment.updateTimeDisplay();
                 break;
-            
-            case LEVEL:
-                break;
-            case REMOVE:
-                break;
+
             case PLANT:
+                console.log(PLANT);
+                this.undoStack.push(new PlantAction(this.player, this.grid));
+                this.player.loadData(action.playerData);
+                this.environment.displayPlayerInventory(action.playerData.inventory);
+                this.grid.loadData(action.gridData);
                 break;
         }
     }
@@ -102,11 +103,7 @@ class Play extends Phaser.Scene {
                 }, 175);
             });
 
-        this.events.on(ACTION, (event) => {
-            this.undoStack.push(event.action);
-            console.log(event.action);
-        });
-
+        this.events.on(ACTION, (event) => this.undoStack.push(event.action));
         this.events.on(REFRESH_REDO, () => this.redoStack = []);
 
         // Add save/load buttons
