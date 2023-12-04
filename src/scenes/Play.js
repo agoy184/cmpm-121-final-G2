@@ -112,6 +112,8 @@ class Play extends Phaser.Scene {
         this.saveBtn2 = new SaveFile(this, w - 100, 150, "Save 2", { fontSize: "15px", color: "#FFFFFF" }, "save2");
         this.saveBtn3 = new SaveFile(this, w - 100, 180, "Save 3", { fontSize: "15px", color: "#FFFFFF" }, "save3");
 
+        // this.saveButtons = [this.saveBtn1, this.saveBtn2, this.saveBtn3];
+
         this.grid.addPlant(new Carrot(this, 0, 1));
         this.grid.addPlant(new Tomato(this, 4, 3));
         this.grid.addPlant(new Potato(this, 1, 4));
@@ -126,7 +128,36 @@ class Play extends Phaser.Scene {
                 "E: Get Cell Info\n" +
                 "R (on a plant): Get Plant Rules\n" +
                 "T: Advance Time\n";
+        
+        this.startTime = this.time.now;
+        if (localStorage.getItem("autosave")) {
+            // question box that checks whether player wants to load autosave
+            let loadAutosave = confirm("Do you want to load autosave?");
+            if (loadAutosave) {
+                this.loadFile("autosave");
+            }
+            else {
+                // remove autosave from local storage so that if player refreshes, they dont get an old autosave
+                localStorage.removeItem("autosave");
+            }
+        }
+        // autosave when window is closed and every 5 mins below
+        window.onbeforeunload = () => {            
+            this.autosave();
+        } 
+        // this.createSaveButtons();
     }
+
+    // had this for making the autosave button, maybe someone could use this if we allow the player to make more than 3 save buttons
+    // only creates the buttons, doesn't correctly load them from local storage rn
+    // createSaveButtons() {
+    //     // get saves from local storage and make savefiles for each
+    //     let saves = Object.keys(localStorage);
+    //     saves.forEach((save, index) => {
+    //         let saveFile = new SaveFile(this, w - 100, 120 + index * 30, save, { fontSize: "15px", color: "#FFFFFF" }, save);
+    //         this.saveButtons.push(saveFile);
+    //     });
+    // }   
 
     update() {
         this.player.update();
@@ -134,6 +165,22 @@ class Play extends Phaser.Scene {
 
         if (KEYBOARD.JustDown(keys.L)) {
             this.bruhmoment("save1");
+        }
+        let elapsed = this.time.now - this.startTime;
+        // console.log(elapsed);
+        // 300000 ms = 5 mins
+        if(elapsed > 10000) {
+            this.startTime = this.time.now;
+            this.autosave();
+        }
+    }
+
+    autosave() {
+        // if statement so there is no autosave if the player does nothing at all
+        if (this.undoStack.length > 0) {
+            console.log("Autosaved");
+            // autosave with current date and time
+            this.saveFile("autosave"); // + new Date().toISOString());
         }
     }
 
