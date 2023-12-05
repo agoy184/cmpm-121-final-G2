@@ -70,11 +70,17 @@ We have not reconsidered our choices regarding tools or materials, as all of the
 ## (F1) How we satisfied the software requirements
 ### [F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.
 
+
 ### [F1.b] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
+We satisfied this requirement by creating two stacks: one for undone actions and one for redone actions. Any time an action is made, that action is pushed onto the undo stack. Actions can be defined through a player's movement, time passing, plant sowing and reaping. Whenever an action is undone, that action is popped from the undo stack and pushed onto the redo stack. 
+The redo stack ONLY keeps tracks of actions that have been undone. If the player chooses to redo, the latest action is popped off of the redo stack and the game's state is changed accordingly. 
 
 ### [F1.c] The player must be able to manually save their progress in the game in a way that allows them to load that save and continue play another day. The player must be able to manage multiple save files (allowing save scumming).
+We satisfied this requirement by creating a save file prefab, which retains the water and sun levels of each of the cells, the day and time that the player saves at, which plants are on each of the cells in the grid and what level each plant is currently at. 
+The save file also retains what the plants are stocked in the inventory, as well as the undo and redo stacks. All of this is stored locally in a stringified JSON, which is parsed upon loading.
 
 ### [F1.d] The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.c.)
+We satisfied this requirement by setting a time interval of about 50 seconds, as to which the state of the game is stored locally and will be automatically loaded upon reopening the window (on the condition that the user chooses to load the autosave via text prompt button).
 
 ## Reflection
 
