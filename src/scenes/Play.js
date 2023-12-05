@@ -118,7 +118,7 @@ class Play extends Phaser.Scene {
         this.grid.addPlant(new Tomato(this, 4, 3));
         this.grid.addPlant(new Potato(this, 1, 4));
         
-        keys = this.input.keyboard.addKeys("W, A, S, D, Q, E, R, T, ONE, TWO, THREE, L");
+        keys = this.input.keyboard.addKeys("W, A, S, D, Q, E, R, T, ONE, TWO, THREE");
         controls = "Keys:\n" +
                 "1: Plant Carrot\n" +
                 "2: Plant Tomato\n" +
@@ -163,9 +163,6 @@ class Play extends Phaser.Scene {
         this.player.update();
         this.environment.update();
 
-        if (KEYBOARD.JustDown(keys.L)) {
-            this.bruhmoment("save1");
-        }
         let elapsed = this.time.now - this.startTime;
         // console.log(elapsed);
         // 300000 ms = 5 mins
