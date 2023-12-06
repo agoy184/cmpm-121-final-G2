@@ -69,7 +69,8 @@ We have not reconsidered our choices regarding tools or materials, as all of the
 # Devlog Entry - [12/04/2023]
 ## (F1) How we satisfied the software requirements
 ### [F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.
-
+We satisfied this requirement by making the grid a byte array using the Array of Structures format. The grid is split up between all 25 cells. Within each cell, it's split up between the data about the cell and the actual plant data. However, it is all accessible and theoretically capable of being changed from anywhere. 
+![F1.a data structure diagram](./f1_a_diagram.png)
 
 ### [F1.b] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
 We satisfied this requirement by creating two stacks: one for undone actions and one for redone actions. Any time an action is made, that action is pushed onto the undo stack. Actions can be defined through a player's movement, time passing, plant sowing and reaping. Whenever an action is undone, that action is popped from the undo stack and pushed onto the redo stack. 
