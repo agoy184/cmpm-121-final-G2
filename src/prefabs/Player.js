@@ -91,7 +91,8 @@ class Player extends Phaser.GameObjects.Sprite {
             alert(info);
         }
         if (!this.removingPlantAlready && KEYBOARD.JustDown(keys.Q)) {
-            this.scene.events.emit(ACTION, {action: new PlantAction(this, this.scene.grid)});
+            console.log(this.plantInventory);
+            this.scene.events.emit(ACTION, {action: new PlantAction(this.plantInventory, this.scene.grid)});
             this.scene.events.emit(REFRESH_REDO);
             this.removingPlantAlready = true;
             let plant = this.scene.grid.removePlant(this.gridX, this.gridY);
@@ -112,12 +113,18 @@ class Player extends Phaser.GameObjects.Sprite {
 
         // gotta refactor this later
         if (KEYBOARD.JustDown(keys.ONE)) {
+            this.scene.events.emit(ACTION, {action: new PlantAction(this.plantInventory, this.scene.grid)});
+            this.scene.events.emit(REFRESH_REDO);
             this.scene.grid.addPlant(new Carrot(this.scene, this.gridX, this.gridY));
         }
         if (KEYBOARD.JustDown(keys.TWO)) {
+            this.scene.events.emit(ACTION, {action: new PlantAction(this.plantInventory, this.scene.grid)});
+            this.scene.events.emit(REFRESH_REDO);
             this.scene.grid.addPlant(new Tomato(this.scene, this.gridX, this.gridY));
         }
         if (KEYBOARD.JustDown(keys.THREE)) {
+            this.scene.events.emit(ACTION, {action: new PlantAction(this.plantInventory, this.scene.grid)});
+            this.scene.events.emit(REFRESH_REDO);
             this.scene.grid.addPlant(new Potato(this.scene, this.gridX, this.gridY));
         }
     }

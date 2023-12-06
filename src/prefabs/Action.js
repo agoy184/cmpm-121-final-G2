@@ -22,10 +22,10 @@ class TimeAction extends Action {
 }
 
 class PlantAction extends Action {
-    constructor(player, grid) {
+    constructor(inventory, grid) {
         super();
         this.type = PLANT;
-        this.playerData = player.saveData();
+        this.inventoryData = inventory;
         this.gridData = grid.saveData();
     }
 }
