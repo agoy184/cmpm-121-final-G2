@@ -33,9 +33,9 @@ class Play extends Phaser.Scene {
 
             case PLANT:
                 console.log(PLANT);
-                this.redoStack.push(new PlantAction(this.player, this.grid));
-                this.player.loadData(action.playerData);
-                this.environment.displayPlayerInventory(action.playerData.inventory)
+                this.redoStack.push(new PlantAction(this.player.copyInventory(), this.grid));
+                this.player.plantInventory = action.inventory;
+                this.environment.displayPlayerInventory(action.inventory)
                 this.grid.loadData(action.gridData);
                 break;
             }
@@ -61,9 +61,9 @@ class Play extends Phaser.Scene {
 
             case PLANT:
                 console.log(PLANT);
-                this.undoStack.push(new PlantAction(this.player, this.grid));
-                this.player.loadData(action.playerData);
-                this.environment.displayPlayerInventory(action.playerData.inventory);
+                this.undoStack.push(new PlantAction(this.player.copyInventory(), this.grid));
+                this.player.plantInventory = action.inventory;
+                this.environment.displayPlayerInventory(action.inventory)
                 this.grid.loadData(action.gridData);
                 break;
         }
