@@ -1,31 +1,31 @@
 class Action {
-	constructor() {
-		this.type;
-	}
+    constructor() {
+        this.type;
+    }
 }
 
 class MoveAction extends Action {
-	constructor(x, y) {
-		super();
-		this.type = MOVE;
-		this.x = x;
-		this.y = y;
-	}
+    constructor(x, y) {
+        super();
+        this.type = MOVE;
+        this.x = x;
+        this.y = y;
+    }
 }
 
 class TimeAction extends Action {
-	constructor(dayChange = false) {
-		super();
-		this.type = TIME;
-		this.dayChange = dayChange;
-	}
+    constructor(dayChange = false) {
+        super();
+        this.type = TIME;
+        this.dayChange = dayChange;
+    }
 }
 
 class PlantAction extends Action {
-	constructor(inventory, grid) {
-		super();
-		this.type = PLANT;
-		this.inventory = inventory;
-		this.gridData = grid.saveData();
-	}
+    constructor(inventory, grid) {
+        super();
+        this.type = PLANT;
+        this.inventoryData = inventory;
+        this.gridData = grid.saveData();
+    }
 }

@@ -1,143 +1,162 @@
 class Plant extends Phaser.GameObjects.Sprite {
-	constructor(scene, x, y, texture, frame, name) {
-		let gridPoint = scene.grid.getPoint(x, y);
-		super(scene, gridPoint[0], gridPoint[1], texture, frame);
-		this.gridX = x;
-		this.gridY = y;
-		this.name = name;
-		this.growthLevel = 1;
-		this.rules = "";
-		scene.add.existing(this);
-	}
+    numBytes = 4;
+    constructor(scene, x, y, dataView){
+        let gridPoint = scene.grid.getPoint(x,y);
+        super(scene, gridPoint[0], gridPoint[1], textures[0], 0, names[0]);
+        this.dataView = dataView;
+        scene.add.existing(this);
+    }
+    
+    //Plant Byte Map
+    /*
+    * First byte is the plant type: 0 = Carrot, 1 = Tomato, 2 = Potato
+    * Next byte is the X position: 0-4
+    * Next byte is the Y position: 0-4
+    * Next byte is the growth level: 1-3
+    * */
 
-	saveData() {
-		return {
-			x: this.gridX,
-			y: this.gridY,
-			name: this.name,
-			growthLevel: this.growthLevel,
-		};
-	}
+    get type() {
+        return this.dataView.getUint8(0);
+    }
+    
+    set type(i) {
+        if (this.dataView) {
+            this.dataView.setUint8(0, i);
+            if (i < 2) {
+                this.setScale(0.05);
+            } else {
+                this.setScale(0.1);
+            }
+            this.setTexture(textures[i]);
+            this.setName(names[i]);
+        }
+    }
+    
+    get x() {
+        return this.dataView.getUint8(1);
+    }
+    
+    set x(i) {
+        if (this.dataView) {
+            this.dataView.setUint8(1, i);
+        }
+    }
+    
+    get y() {
+        return this.dataView.getUint8(2);
+    }
+    
+    set y(i) {
+        if (this.dataView) {
+            this.dataView.setUint8(2, i);
+        }
+    }
+    
+    get growthLevel() {
+        return this.dataView.getUint8(3);
+    }
+    
+    set growthLevel(i) {
+        if (this.dataView) {
+            this.dataView.setUint8(3, i);
+        }
+    }
 
-	loadData(data) {
-		this.gridX = data.x;
-		this.gridY = data.y;
-		this.name = data.name;
-		this.growthLevel = data.growthLevel;
-		if (this.name != "Potato") this.setScale(this.growthLevel * 0.05);
-		else if (this.growthLevel == 1) this.setScale(0.1);
-		else this.setScale(this.growthLevel * 0.07);
-		let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
-		this.x = gridPoint[0];
-		this.y = gridPoint[1];
-	}
+    toString() {
+        return this.scene.names[this.type] + " at (" + this.x + ", " + this.y + ")" ;
+    }
 
-	toString() {
-		return this.name + " at (" + this.gridX + ", " + this.gridY + ")";
-	}
+    deletePlant() {
+        this.type = 0;
+        this.x = 0;
+        this.y = 0;
+        this.growthLevel = 0;
+        console.log("bruh");
+        this.destroy();
+    }
 
-	deletePlant() {
-		this.destroy();
-	}
+    growPlant(nearCells) {
+        if (this.dataView) {
+            if (this.type == 0) { //carrot
+                if (nearCells[0].waterLevel > 0 && nearCells[0].sunlightLevel > 0) {
+                    for (let i = 1; i < nearCells.length; i++) {
+                        if (nearCells[i] instanceof Cell && nearCells[i].plant) {
+                            return;
+                        }
+                    }
+                    if (this.growthLevel < 3) {
+                        this.growthLevel += 1;
+                        this.setScale(this.growthLevel * 0.05);
+                    }
+                }
+            } else if (this.type == 1) { //tomato
+                if (nearCells[0].waterLevel > 25 && nearCells[0].sunlightLevel > 4) {
+                    for (let i = 1; i < nearCells.length; i++) {
+                        if (nearCells[i] instanceof Cell && nearCells[i].plant) {
+                            if (this.growthLevel < 3) {
+                                this.growthLevel += 1;
+                                this.setScale(this.growthLevel * 0.05);
+                            }
+                        }
+                    }
+                }
+            } else if (this.type == 2) { //potato
+                if (nearCells[0].waterLevel > 10 && nearCells[0].sunlightLevel < 5) {
+                    for (let i = 1; i < nearCells.length; i++) {
+                        if (nearCells[i] instanceof Cell && (!nearCells[i].plant || !nearCells[i].plant instanceof Potato)) {
+                            if (this.growthLevel < 3) {
+                                this.growthLevel += 1;
+                                this.setScale(this.growthLevel * 0.07);
+                            }
+                        }
+                    }
+                }
+            } else {
+                //invalid or null, if this happens there is probably something i overlooked
+                console.log("bruh");
+            }
+        }
+    }
 
-	examplefunction() {
-		let count = 2;
-		count++;
-		count += 12;
-	}
+    saveData() {
+        return { x: this.x, y: this.y, type: this.type, growthLevel: this.growthLevel };
+    }
 
-	growPlant(nearCells) {
-		//implementation written in subclasses
-	}
+    loadData(data) {
+        this.x = data.x;
+        this.y = data.y;
+        this.type = data.type;
+        this.growthLevel = data.growthLevel;
+        this.gridPoint = this.scene.getPoint(this.x, this.y);
 
-	update() {}
-}
+        if (this.type != 2) {
+            this.setScale(this.growthLevel * 0.05);
+        } else if (this.growthLevel == 1) {
+            this.setScale(0.1);
+        } else {
+            this.setScale(this.growthLevel * 0.07);
+        }
+    }
 
-class Carrot extends Plant {
-	constructor(scene, x, y) {
-		super(scene, x, y, "carrot", 0, "Carrot");
-		this.setScale(0.05);
-		this.rules =
-			"Carrot growing rules:\n- if water level is positive\n- and the sunlight level is greater than 0\n- and there are no nearby plants";
-	}
+    update() {
+        
+        console.log("bruh");
+        if (this.type != 2) {
+            this.setScale(this.growthLevel * 0.05);
+        } else if (this.growthLevel == 1) {
+            this.setScale(0.1);
+        } else {
+            this.setScale(this.growthLevel * 0.07);
+        }
 
-	/*
-    Carrot growing rules:
-    - if water level is positive
-    - and the sunlight level is greater than 0
-    - and there are no nearby plants
-    */
-	growPlant(nearCells) {
-		if (nearCells[0].waterLevel > 0 && nearCells[0].sunlightLevel > 0) {
-			for (let i = 1; i < nearCells.length; i++) {
-				if (nearCells[i] instanceof Cell && nearCells[i].plant) {
-					return;
-				}
-			}
-			if (this.growthLevel < 3) {
-				this.growthLevel += 1;
-				this.setScale(this.growthLevel * 0.05);
-			}
-		}
-	}
-}
+        if (this.plantType == 3) {
+            this.scene.grid.removePlant(this.x, this.y);
+            this.destroy();
+        }
+        if (this.growthLevel > 3) {
+            this.growthLevel = 3;
+        }
 
-class Tomato extends Plant {
-	constructor(scene, x, y) {
-		super(scene, x, y, "tomato", 0, "Tomato");
-		this.setScale(0.05);
-		this.rules =
-			"Tomato growing rules:\n- if water level is greater than 25\n- and the sunlight level is greater than 4\n- and there is at least one nearby plant";
-	}
-
-	/*
-    Tomato growing rules:
-    - if water level is greater than 25
-    - and the sunlight level is greater than 4
-    - and there is at least one nearby plant
-    */
-	growPlant(nearCells) {
-		if (nearCells[0].waterLevel > 25 && nearCells[0].sunlightLevel > 4) {
-			for (let i = 1; i < nearCells.length; i++) {
-				if (nearCells[i] instanceof Cell && nearCells[i].plant) {
-					if (this.growthLevel < 3) {
-						this.growthLevel += 1;
-						this.setScale(this.growthLevel * 0.05);
-					}
-				}
-			}
-		}
-	}
-}
-
-class Potato extends Plant {
-	constructor(scene, x, y) {
-		super(scene, x, y, "potato", 0, "Potato");
-		this.setScale(0.1);
-		this.rules =
-			"Potato growing rules:\n- if water level is greater than 10\n- and the sunlight level is less than 5\n- and there are no nearby plants (except for Potato)";
-	}
-
-	/*
-    Potato growing rules:
-    - if water level is greater than 10
-    - and the sunlight level is less than 5
-    - and there are no nearby plants (except for Potato)
-    */
-	growPlant(nearCells) {
-		if (nearCells[0].waterLevel > 10 && nearCells[0].sunlightLevel < 5) {
-			for (let i = 1; i < nearCells.length; i++) {
-				if (
-					nearCells[i] instanceof Cell &&
-					(!nearCells[i].plant ||
-						!nearCells[i].plant instanceof Potato)
-				) {
-					if (this.growthLevel < 3) {
-						this.growthLevel += 1;
-						this.setScale(this.growthLevel * 0.07);
-					}
-				}
-			}
-		}
-	}
+        console.log(this.growthLevel + " " + this.x + " " + this.y + " " + this.type);
+    }
 }
