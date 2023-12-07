@@ -165,16 +165,6 @@ class Play extends Phaser.Scene {
         // this.createSaveButtons();
     }
 
-    // had this for making the autosave button, maybe someone could use this if we allow the player to make more than 3 save buttons
-    // only creates the buttons, doesn't correctly load them from local storage rn
-    // createSaveButtons() {
-    //     // get saves from local storage and make savefiles for each
-    //     let saves = Object.keys(localStorage);
-    //     saves.forEach((save, index) => {
-    //         let saveFile = new SaveFile(this, w - 100, 120 + index * 30, save, { fontSize: "15px", color: "#FFFFFF" }, save);
-    //         this.saveButtons.push(saveFile);
-    //     });
-    // }   
 
     update() {
         this.player.update();
