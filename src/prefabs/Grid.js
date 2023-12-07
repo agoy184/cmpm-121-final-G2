@@ -14,7 +14,11 @@ class Grid extends Phaser.GameObjects.Grid {
 			0.5
 		);
 		this.dimension = dimension;
-		this.gridCells = {};
+		// this.gridCells = {};
+		const arraySize = dimension * dimension * Cell.numBytes;
+		const plantGridCells = new ArrayBuffer(arraySize);
+		this.dataView = new DataView(plantGridCells);
+
 		this.initializeGrid();
 		scene.events.on("newDay", (event) => {
 			this.initializeGrid();
@@ -24,14 +28,28 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	saveData() {
-		let data = {};
+		return this.plantGridCells; //or maybe the dataview im not too sure
+		/*let data = {};
 		for (let key in this.gridCells) {
 			data[key] = this.gridCells[key].saveData();
 		}
-		return data;
+		return data;*/
 	}
 
 	loadData(data) {
+		for (let i = 0; i < this.dimension; i++) {
+			for (let j = 0; j < this.dimension; j++) {
+				//load back all the values from each cell in the dataview (use math to determine the right index)
+				/*if (plantType !== 3) {
+                    const loadedPlant = this.createPlant(i, j, plantType);
+                    loadedPlant.growthLevel = this.dataView.getUint8(index + 1);
+                    this.addPlant(loadedPlant);
+                } else if (cell.plant) {
+                    this.removePlant(i, j);
+                }*/
+			}
+		}
+
 		for (let key in data) {
 			const cell = this.gridCells[key];
 			const plantData = data[key].plant;
@@ -54,16 +72,18 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	initializeCell(x, y) {
-		let key = this.getKey(x, y);
 		let randomWater = Math.floor(Math.random() * 10 - 3); //-3-6
 		let randomSunlight = Math.floor(Math.random() * 10); // 0-9
-		if (this.gridCells[key]) {
-			// modify the water level in a range of -3 to 7 (i think) i think its 6 ngl but idk
-			this.gridCells[key].addWaterLevel(randomWater);
-			this.gridCells[key].setSunlightLevel(randomSunlight);
-			return;
+		if (this.pointInBounds(x, y)) {
+			this.dataView.setUint8(
+				(x * this.dimension + y) * Cell.numBytes,
+				randomWater
+			);
+			this.dataView.setUint8(
+				(x * this.dimension + y) * Cell.numBytes + 1,
+				randomSunlight
+			);
 		}
-		this.gridCells[key] = new Cell(randomWater, randomSunlight);
 	}
 
 	initializeGrid() {
@@ -89,16 +109,20 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	addPlant(plant) {
-		let key = this.getKey(plant.gridX, plant.gridY);
-		this.gridCells[key].addPlant(plant);
+		const index = (plant.x * this.dimension + plant.y) * Cell.numBytes + 2;
+		this.dataView.setUint8(index, plant.type);
+		this.dataView.setUint8(index + 1, plant.x);
+		this.dataView.setUint8(index + 2, plant.y);
+		this.dataView.setUint8(index + 3, plant.growthLevel);
+
 	}
 
-	removePlant(x, y) {
+	removePlant(x, y) { //similar idea to add plant in terms of the dataview
 		let key = this.getKey(x, y);
 		return this.gridCells[key].removePlant();
 	}
 
-	getPlant(x, y) {
+	getPlant(x, y) { 
 		let key = this.getKey(x, y);
 		return this.gridCells[key].plant;
 	}

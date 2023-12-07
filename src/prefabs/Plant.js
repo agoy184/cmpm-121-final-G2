@@ -1,5 +1,42 @@
+class PlantData {
+	numBytes = 4;
+	constructor(scene, dataView) {}
+
+	get plantType() {
+		return this.dataView.getUint8(0);
+	}
+
+	set plantType(plantType) {
+		this.dataView.setUint8(0, plantType);
+	}
+
+	get x() {
+		return this.dataView.getUint8(1);
+	}
+
+	set x(x) {
+		this.dataView.setUint8(1, x);
+	}
+
+	get y() {
+		return this.dataView.getUint8(2);
+	}
+
+	set y(y) {
+		this.dataView.setUint8(2, y);
+	}
+
+	get growthLevel() {
+		return this.dataView.getUint8(3);
+	}
+
+	set growthLevel(growthLevel) {
+		this.dataView.setUint8(3, growthLevel);
+	}
+}
+
 class Plant extends Phaser.GameObjects.Sprite {
-	constructor(scene, x, y, texture, frame, name) {
+	constructor(scene, x, y, texture, frame, name, plantData) {
 		let gridPoint = scene.grid.getPoint(x, y);
 		super(scene, gridPoint[0], gridPoint[1], texture, frame);
 		this.gridX = x;
@@ -7,6 +44,7 @@ class Plant extends Phaser.GameObjects.Sprite {
 		this.name = name;
 		this.growthLevel = 1;
 		this.rules = "";
+		this.plantData = plantData;
 		scene.add.existing(this);
 	}
 
@@ -46,15 +84,13 @@ class Plant extends Phaser.GameObjects.Sprite {
 		count += 12;
 	}
 
-	growPlant(nearCells) {
-		//implementation written in subclasses
-	}
+	growPlant(nearCells) {}
 
 	update() {}
 }
 
 class Carrot extends Plant {
-	constructor(scene, x, y) {
+	constructor(scene, x, y, plantData) {
 		super(scene, x, y, "carrot", 0, "Carrot");
 		this.setScale(0.05);
 		this.rules =
@@ -83,7 +119,7 @@ class Carrot extends Plant {
 }
 
 class Tomato extends Plant {
-	constructor(scene, x, y) {
+	constructor(scene, x, y, plantData) {
 		super(scene, x, y, "tomato", 0, "Tomato");
 		this.setScale(0.05);
 		this.rules =
