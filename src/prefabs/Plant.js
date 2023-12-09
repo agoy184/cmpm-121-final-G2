@@ -2,11 +2,11 @@ class PlantData {
 	numBytes = 4;
 	constructor(scene, dataView) {}
 
-	get plantType() {
+	get type() {
 		return this.dataView.getUint8(0);
 	}
 
-	set plantType(plantType) {
+	set type(plantType) {
 		this.dataView.setUint8(0, plantType);
 	}
 
@@ -36,15 +36,21 @@ class PlantData {
 }
 
 class Plant extends Phaser.GameObjects.Sprite {
-	constructor(scene, x, y, texture, frame, name, plantData) {
+	constructor(scene, x, y, name) {
 		let gridPoint = scene.grid.getPoint(x, y);
-		super(scene, gridPoint[0], gridPoint[1], texture, frame);
+		const nameIndex = names.indexOf(name) + 1;
+		super(scene, gridPoint[0], gridPoint[1], textures[nameIndex - 1]);
 		this.gridX = x;
 		this.gridY = y;
 		this.name = name;
+		this.type = nameIndex;
 		this.growthLevel = 1;
 		this.rules = "";
-		this.plantData = plantData;
+		if (nameIndex < 3) {
+			this.setScale(0.05);
+		} else {
+			this.setScale(0.1);
+		}
 		scene.add.existing(this);
 	}
 
@@ -76,12 +82,6 @@ class Plant extends Phaser.GameObjects.Sprite {
 
 	deletePlant() {
 		this.destroy();
-	}
-
-	examplefunction() {
-		let count = 2;
-		count++;
-		count += 12;
 	}
 
 	growPlant(nearCells) {}

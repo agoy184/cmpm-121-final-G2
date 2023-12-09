@@ -36,11 +36,11 @@ class Cell {
 		}
 	}
 
-	get plantType() {
+	get type() {
 		return this.dataView.getUint8(2);
 	}
 
-	set plantType(i) {
+	set type(i) {
 		if (this.dataView) {
 			this.dataView.setUint8(2, i);
 		}
@@ -97,7 +97,7 @@ class Cell {
 
 	removePlant() {
 		if (this.dataView) {
-			if (this.plantType == 3) {
+			if (this.plantType == 0) {
 				//no plant
 				return null;
 			}
@@ -105,7 +105,7 @@ class Cell {
 			this.plantX = 0;
 			this.plantY = 0;
 			this.plantGrowthLevel = 0;
-			this.plantType = 3;
+			this.plantType = 0;
 			return removedPlantData;
 		}
 	}
@@ -113,7 +113,7 @@ class Cell {
 	saveData() {
 		if (this.dataView) {
 			let data = {};
-			if (this.plantGrowthLevel != 3) {
+			if (this.plantGrowthLevel != 0) {
 				//not null
 				//data.plant = this.plant.saveData(); does not work since it cant actually call the plant
 				data.plant = {

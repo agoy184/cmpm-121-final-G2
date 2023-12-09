@@ -75,14 +75,17 @@ class Grid extends Phaser.GameObjects.Grid {
 		let randomWater = Math.floor(Math.random() * 10 - 3); //-3-6
 		let randomSunlight = Math.floor(Math.random() * 10); // 0-9
 		if (this.pointInBounds(x, y)) {
-			this.dataView.setUint8(
-				(x * this.dimension + y) * Cell.numBytes,
-				randomWater
-			);
-			this.dataView.setUint8(
-				(x * this.dimension + y) * Cell.numBytes + 1,
-				randomSunlight
-			);
+			console.log(x, y);
+			const index = (x * this.dimension + y) * Cell.numBytes;
+			const currentWater = this.dataView.getUint8(index);
+			// since waterlevel is an unsigned int, subtracting values that would normally make a negative number wraps around to 255
+			// guess we can't have negative water values unless we change the data type
+			if (currentWater + randomWater < 0) {
+				randomWater = 0;
+			}
+			this.dataView.setUint8(index, randomWater);
+
+			this.dataView.setUint8(index + 1, randomSunlight);
 		}
 	}
 
@@ -109,35 +112,74 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	addPlant(plant) {
-		const index = (plant.x * this.dimension + plant.y) * Cell.numBytes + 2;
-		this.dataView.setUint8(index, plant.type);
-		this.dataView.setUint8(index + 1, plant.x);
-		this.dataView.setUint8(index + 2, plant.y);
-		this.dataView.setUint8(index + 3, plant.growthLevel);
-
+		console.log(plant);
+		// get the index of the cell in the dataview
+		console.log(plant.type, plant.gridX, plant.gridY);
+		const index =
+			(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes;
+		console.log(index);
+		this.dataView.setUint8(index + 2, plant.type);
+		this.dataView.setUint8(index + 3, plant.gridX);
+		this.dataView.setUint8(index + 4, plant.gridY);
+		this.dataView.setUint8(index + 5, plant.growthLevel);
+		this.scene.plantSpriteArray[
+			`${(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes}`
+		] = plant;
 	}
 
-	removePlant(x, y) { //similar idea to add plant in terms of the dataview
-		let key = this.getKey(x, y);
-		return this.gridCells[key].removePlant();
+	removePlant(x, y) {
+		const index = (x * this.dimension + y) * Cell.numBytes;
+		const plantType = this.dataView.getUint8(index + 2);
+		const growthLevel = this.dataView.getUint8(index + 5);
+		if (plantType == 0) {
+			return null;
+		}
+		// console.log(this.dataView);
+		if (this.plantType == 0) {
+			//no plant
+			return null;
+		}
+		let removedPlantData = [names[plantType - 1], growthLevel];
+		this.dataView.getUint8(index + 2, 0);
+		this.dataView.setUint8(index + 3, 0);
+		this.dataView.setUint8(index + 4, 0);
+		this.dataView.getUint8(index + 5, 0);
+		this.scene.plantSpriteArray[
+			`${(x * this.dimension + y) * Cell.numBytes}`
+		].deletePlant();
+		this.scene.plantSpriteArray[
+			`${(x * this.dimension + y) * Cell.numBytes}`
+		] = null;
+		return removedPlantData;
 	}
 
-	getPlant(x, y) { 
+	getPlant(x, y) {
 		let key = this.getKey(x, y);
 		return this.gridCells[key].plant;
 	}
 
 	getCellInfo(x, y) {
-		let key = this.getKey(x, y);
-		let cell = this.gridCells[key];
-		let sunlight = cell.sunlightLevel;
-		let water = cell.waterLevel;
-		if (cell.plant) {
+		// console.log(x, y);
+		const index = (x * this.dimension + y) * Cell.numBytes;
+		// console.log("index " + index);
+		const water = this.dataView.getUint8(index);
+		// console.log("water " + water);
+		const sunlight = this.dataView.getUint8(index + 1);
+		// console.log("sun " + sunlight);
+		const pX = this.dataView.getUint8(index + 3);
+		// console.log("pX " + pX);
+		const pY = this.dataView.getUint8(index + 4);
+		// console.log("pY " + pY);
+		const plantType = this.dataView.getUint8(index + 2);
+		// console.log("plant " + plantType);
+		const growthLevel = this.dataView.getUint8(index + 5);
+		// console.log("growth " + growthLevel);
+		if (growthLevel !== 0) {
 			return (
 				"Level " +
-				cell.plant.growthLevel +
+				growthLevel +
 				" " +
-				cell.plant +
+				plantType +
 				" has " +
 				sunlight +
 				" sunlight and " +
@@ -146,7 +188,7 @@ class Grid extends Phaser.GameObjects.Grid {
 			);
 		}
 		return (
-			"empty plot has " + sunlight + " sunlight and " + water + " water"
+			"Empty plot has " + sunlight + " sunlight and " + water + " water"
 		);
 	}
 
