@@ -1,3 +1,10 @@
+const GRID_WATER_OFFSET = 0;
+const GRID_SUN_OFFSET = 1;
+const GRID_TYPE_OFFSET = 2;
+const GRID_X_OFFSET = 3;
+const GRID_Y_OFFSET = 4;
+const GRID_GROWTH_OFFSET = 5;
+
 class Grid extends Phaser.GameObjects.Grid {
 	constructor(scene, x, y, width, height, dimension) {
 		super(
@@ -14,10 +21,10 @@ class Grid extends Phaser.GameObjects.Grid {
 			0.5
 		);
 		this.dimension = dimension;
-		// this.gridCells = {};
 		const arraySize = dimension * dimension * Cell.numBytes;
 		const plantGridCells = new ArrayBuffer(arraySize);
 		this.dataView = new DataView(plantGridCells);
+		this.cellFuncs = new Cell(this.dataView, scene);
 
 		this.initializeGrid();
 		scene.events.on("newDay", (event) => {
@@ -119,10 +126,10 @@ class Grid extends Phaser.GameObjects.Grid {
 		const index =
 			(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes;
 		console.log(index);
-		this.dataView.setUint8(index + 2, plant.type);
-		this.dataView.setUint8(index + 3, plant.gridX);
-		this.dataView.setUint8(index + 4, plant.gridY);
-		this.dataView.setUint8(index + 5, plant.growthLevel);
+		this.dataView.setUint8(index + GRID_TYPE_OFFSET, plant.type);
+		this.dataView.setUint8(index + GRID_X_OFFSET, plant.gridX);
+		this.dataView.setUint8(index + GRID_Y_OFFSET, plant.gridY);
+		this.dataView.setUint8(index + GRID_GROWTH_OFFSET, plant.growthLevel);
 		this.scene.plantSpriteArray[
 			`${(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes}`
 		] = plant;
@@ -131,16 +138,16 @@ class Grid extends Phaser.GameObjects.Grid {
 
 	removePlant(x, y) {
 		const index = (x * this.dimension + y) * Cell.numBytes;
-		const plantType = this.dataView.getUint8(index + 2);
-		const growthLevel = this.dataView.getUint8(index + 5);
+		const plantType = this.dataView.getUint8(index + GRID_TYPE_OFFSET);
+		const growthLevel = this.dataView.getUint8(index + GRID_GROWTH_OFFSET);
 		if (plantType == 0) {
 			return null;
 		}
 		let removedPlantData = [names[plantType - 1], growthLevel];
-		this.dataView.setUint8(index + 2, 0);
-		this.dataView.setUint8(index + 3, 0);
-		this.dataView.setUint8(index + 4, 0);
-		this.dataView.setUint8(index + 5, 0);
+		this.dataView.setUint8(index + GRID_TYPE_OFFSET, 0);
+		this.dataView.setUint8(index + GRID_X_OFFSET, 0);
+		this.dataView.setUint8(index + GRID_Y_OFFSET, 0);
+		this.dataView.setUint8(index + GRID_GROWTH_OFFSET, 0);
 		this.scene.plantSpriteArray[
 			`${(x * this.dimension + y) * Cell.numBytes}`
 		].deletePlant();
@@ -157,10 +164,10 @@ class Grid extends Phaser.GameObjects.Grid {
 
 	getCellInfo(x, y) {
 		const index = (x * this.dimension + y) * Cell.numBytes;
-		const water = this.dataView.getUint8(index);
-		const sunlight = this.dataView.getUint8(index + 1);
-		const plantType = this.dataView.getUint8(index + 2);
-		const growthLevel = this.dataView.getUint8(index + 5);
+		const water = this.dataView.getUint8(index + GRID_WATER_OFFSET);
+		const sunlight = this.dataView.getUint8(index + GRID_SUN_OFFSET);
+		const plantType = this.dataView.getUint8(index + GRID_TYPE_OFFSET);
+		const growthLevel = this.dataView.getUint8(index + GRID_GROWTH_OFFSET);
 		if (growthLevel !== 0) {
 			return (
 				"Level " +
@@ -180,21 +187,32 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	getNearCells(x, y) {
-		let nearCells = [];
-		const nearCellKeys = this.getNearCellKeys(x, y);
-		nearCellKeys.forEach((key) => {
-			nearCells.push(this.gridCells[key]);
+		const points = [
+			{ x: x, y: y },
+			{ x: x, y: y - 1 },
+			{ x: x, y: y + 1 },
+			{ x: x - 1, y: y },
+			{ x: x + 1, y: y },
+		];
+		const nearCellsIndex = [];
+		points.forEach((point) => {
+			const index = (point.x * this.dimension + point.y) * Cell.numBytes;
+			if (0 <= index && index < this.dataView.byteLength) {
+				nearCellsIndex.push(index);
+			}
 		});
-		return nearCells;
+		return nearCellsIndex;
 	}
 
 	growCells() {
-		//this function is kinda ugly but we can refactor later
-		for (let key in this.gridCells) {
-			if (this.gridCells[key].plant) {
-				let [plantX, plantY] = key.split(",").map(Number);
-				this.gridCells[key].plant.growPlant(
-					this.getNearCells(plantX, plantY)
+		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
+			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
+			if (plantType != 0) {
+				const plantX = this.dataView.getUint8(i + GRID_X_OFFSET);
+				const plantY = this.dataView.getUint8(i + GRID_Y_OFFSET);
+				this.cellFuncs.growPlants(
+					this.getNearCells(plantX, plantY),
+					plantType
 				);
 			}
 		}
@@ -213,28 +231,7 @@ class Grid extends Phaser.GameObjects.Grid {
 		return [leftMostX + x * this.cellWidth, topMostY + y * this.cellHeight];
 	}
 
-	getKey(x, y) {
-		return x + "," + y;
-	}
-
-	getNearCellKeys(x, y) {
-		const points = [
-			{ x: x, y: y },
-			{ x: x, y: y - 1 },
-			{ x: x, y: y + 1 },
-			{ x: x - 1, y: y },
-			{ x: x + 1, y: y },
-		];
-		const keys = [];
-		points.forEach((point) => {
-			keys.push(this.getKey(point.x, point.y));
-		});
-		return keys;
-	}
-
 	pointInBounds(x, y) {
 		return x >= 0 && x < this.dimension && y >= 0 && y < this.dimension;
 	}
-
-	update() {}
 }
