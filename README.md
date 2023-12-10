@@ -53,7 +53,7 @@ The implementation for requirement has by creating a prefab, Grid.js, which gene
 Each plant on the grid still has a type and growth level, but now they are stored in a way that adheres storage of each plant's data (growth and type) to a byte array for every cell on the grid.  
 
 ### [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
-The spatial rules have remained the same with alterations made to the prefab as to adhere.
+The spatial rules have remained the same.
 
 ### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
 We made no major changes for this requirement, an inventory system is still around for the player to show the plants that they've collected, as well as a conditional that checks whether they have collected a total of 5 plants for their inventory at growth level 3. 
@@ -86,10 +86,10 @@ We satisfied this requirement by setting a time interval of about 50 seconds, as
 ## Reflection
 
 ### How has your team’s plan changed? 
-
+Our teams plan changed in how we wanted to approach the requirements for F1. At first, we thought that we would tackle each of the requirements in a modular manner. We would assign one part of each of the requirements to a team member, and complete them separately or in order based on the dependencies of each requirement (Saving req before auto-saving req, undoing req before saving req). One of the requirements in particular, (F1.a) was particularly difficult to implement so we had to come together as a team and discuss the best way to integrate the contiguous byte array into the system we'd already created.
 
 ### Did you reconsider any of the choices you previously described for Tools and Materials or your Roles? 
-
+We have not considered changing any of the tools, materials, or roles at this point in the project. Professor Adam called out our group for being the one that stuck to JavaScript rather than TypeScript, and losing an opportunity for type checking. However, at this point we're fairly deep into development to the point where switching over to TS would be more trouble than it seems worth for.
 
 ### Has your game design evolved now that you've started to think about giving the player more feedback?
-
+Our design has somewhat evolved through the recent requirement changes, as creating systems for players to undo their changes makes it a game where they don't need to think about consequences (although they didn't need to in the first place). Creating a lose condition could be interesting despite not being part of future requirements, but for now we will invest in providing feedback with the game's current restraints.
