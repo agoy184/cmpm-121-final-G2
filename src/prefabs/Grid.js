@@ -39,14 +39,21 @@ class Grid extends Phaser.GameObjects.Grid {
 	loadData(data) {
 		for (let i = 0; i < this.dimension; i++) {
 			for (let j = 0; j < this.dimension; j++) {
+				const index = (i * this.dimension + j) * Cell.numBytes;
+				const plantType = this.dataView.getUint8(index + 2);
 				//load back all the values from each cell in the dataview (use math to determine the right index)
-				/*if (plantType !== 3) {
-                    const loadedPlant = this.createPlant(i, j, plantType);
-                    loadedPlant.growthLevel = this.dataView.getUint8(index + 1);
-                    this.addPlant(loadedPlant);
-                } else if (cell.plant) {
-                    this.removePlant(i, j);
-                }*/
+				console.log(plantType);
+				if (plantType !== 0) {
+					const loadedPlant = this.createPlant(
+						i,
+						j,
+						names[plantType - 1]
+					);
+					loadedPlant.growthLevel = this.dataView.getUint8(index + 5);
+					this.addPlant(loadedPlant);
+				} else if (plantType == 0) {
+					this.removePlant(i, j);
+				}
 			}
 		}
 
@@ -84,7 +91,6 @@ class Grid extends Phaser.GameObjects.Grid {
 				randomWater = 0;
 			}
 			this.dataView.setUint8(index, randomWater);
-
 			this.dataView.setUint8(index + 1, randomSunlight);
 		}
 	}
@@ -99,20 +105,15 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	createPlant(x, y, name) {
-		switch (name) {
-			case "Tomato":
-				return new Tomato(this.scene, x, y);
-			case "Potato":
-				return new Potato(this.scene, x, y);
-			case "Carrot":
-				return new Carrot(this.scene, x, y);
-			default:
-				return null;
+		if (name) {
+			return new Plant(this.scene, x, y, name);
 		}
+		return null;
 	}
 
 	addPlant(plant) {
 		console.log(plant);
+		this.removePlant(plant.gridX, plant.gridY);
 		// get the index of the cell in the dataview
 		console.log(plant.type, plant.gridX, plant.gridY);
 		const index =
@@ -125,6 +126,7 @@ class Grid extends Phaser.GameObjects.Grid {
 		this.scene.plantSpriteArray[
 			`${(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes}`
 		] = plant;
+		console.log(this.scene.plantSpriteArray);
 	}
 
 	removePlant(x, y) {
@@ -134,16 +136,11 @@ class Grid extends Phaser.GameObjects.Grid {
 		if (plantType == 0) {
 			return null;
 		}
-		// console.log(this.dataView);
-		if (this.plantType == 0) {
-			//no plant
-			return null;
-		}
 		let removedPlantData = [names[plantType - 1], growthLevel];
-		this.dataView.getUint8(index + 2, 0);
+		this.dataView.setUint8(index + 2, 0);
 		this.dataView.setUint8(index + 3, 0);
 		this.dataView.setUint8(index + 4, 0);
-		this.dataView.getUint8(index + 5, 0);
+		this.dataView.setUint8(index + 5, 0);
 		this.scene.plantSpriteArray[
 			`${(x * this.dimension + y) * Cell.numBytes}`
 		].deletePlant();
@@ -159,27 +156,17 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	getCellInfo(x, y) {
-		// console.log(x, y);
 		const index = (x * this.dimension + y) * Cell.numBytes;
-		// console.log("index " + index);
 		const water = this.dataView.getUint8(index);
-		// console.log("water " + water);
 		const sunlight = this.dataView.getUint8(index + 1);
-		// console.log("sun " + sunlight);
-		const pX = this.dataView.getUint8(index + 3);
-		// console.log("pX " + pX);
-		const pY = this.dataView.getUint8(index + 4);
-		// console.log("pY " + pY);
 		const plantType = this.dataView.getUint8(index + 2);
-		// console.log("plant " + plantType);
 		const growthLevel = this.dataView.getUint8(index + 5);
-		// console.log("growth " + growthLevel);
 		if (growthLevel !== 0) {
 			return (
 				"Level " +
 				growthLevel +
 				" " +
-				plantType +
+				names[plantType - 1] +
 				" has " +
 				sunlight +
 				" sunlight and " +
