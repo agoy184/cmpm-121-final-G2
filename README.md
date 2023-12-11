@@ -146,25 +146,30 @@ The previous F0 and F1 requirements remain satisfied in the latest version. Ther
 
 ### [F2.a] External DSL for Scenario Design
 
-Our external DSL is based on YAML. A scenario can be defined by first having a name and a key-value pair of starting_conditions. This can affect the player's inventory by having them start with plants in their inventory. This also affects the farm grid by allowed scenarios to place plants when the game starts.
+Our external DSL is based on YAML. A scenario can be defined by first having a name and a key-value pair with a key called start. This can affect the player's inventory by having them start with plants in their inventory. This also affects the farm grid by allowed scenarios to place plants when the game starts.
 
 ```yaml
 - name: "Random Farm"
-  starting_conditions:
-      player_inventory:               # add plants to player's inventory
-          - item: "banana"            # add 3 bananas to inventory
-            quantity: 3
-          - item: "tomato"            # add 1 tomato to inventory
-            quantity: 1
-      farm_grid:                      # place plants on the farm grid
-          - crop:                     # place a potato plant at growth level 1 at 0,0 in the grid 
-                type: "potato"
-                growth_level: 1
-            position: [0, 0]
-          - crop:                     # place a carrot plant at growth level 3 at 4,2 in the grid 
-                type: "carrot"
-                growth_level: 3
-            position: [4, 2]
+  start:
+      player:                         # spawn player at 1,1 on the grid with an empty inventory
+          x: 1
+          y: 1
+          inventory:
+      grid:                           # place plants on the farm grid
+          - plant:                    # place a carrot plant with growth level 1 at position 0,1 on the grid
+                name: "Carrot"
+                level: 1
+                x: 0
+                y: 1
+          - plant:                    # place a banana plant with growth level 3 at position 3,2 on the grid
+                name: "Banana" 
+                level: 3
+                x: 3
+                y: 2
+      environment:                    # set the starting time to 2 and day to 3, as well as set a crop failure event to happen on the start of day 8
+          time: 2
+          day: 3
+          event: 8
 
 ```
 
