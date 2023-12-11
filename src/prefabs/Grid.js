@@ -49,15 +49,18 @@ class Grid extends Phaser.GameObjects.Grid {
 				plantData[i].plant.name = names[plantType - 1];
 				plantData[i].plant.x = this.dataView.getUint8(i + GRID_X_OFFSET);
 				plantData[i].plant.y = this.dataView.getUint8(i + GRID_Y_OFFSET);
-				plantData[i].plant.growthLevel = this.dataView.getUint8(
+				plantData[i].plant.level = this.dataView.getUint8(
 					i + GRID_GROWTH_OFFSET
 				);
 			}
 		}
+
+		console.log("plantData", plantData);
 		return plantData;
 	}
 
 	loadData(data) {
+		console.log("data", data);
 		for (let i = 0; i < this.dimension; i++) {
 			for (let j = 0; j < this.dimension; j++) {
 				const index = (i * this.dimension + j) * Cell.numBytes;
@@ -69,7 +72,7 @@ class Grid extends Phaser.GameObjects.Grid {
 						j,
 						names[plantType - 1]
 					);
-					loadedPlant.growthLevel = this.dataView.getUint8(index + 5);
+					loadedPlant.level = this.dataView.getUint8(index + 5);
 					this.addPlant(loadedPlant);
 				} else if (plantType == 0) {
 					this.removePlant(i, j);
@@ -81,12 +84,13 @@ class Grid extends Phaser.GameObjects.Grid {
 		for (let index in data) {
 			const plant = data[index].plant;
 			if (plant) {
+				console.log("plant being loaded", plant);
 				const loadedPlant = this.createPlant(
 					plant.x,
 					plant.y,
 					plant.name
 				);
-				loadedPlant.growthLevel = plant.growthLevel;
+				loadedPlant.level = plant.level;
 				this.addPlant(loadedPlant);
 			} else {
 				let x = Math.floor(index / (this.dimension * Cell.numBytes));
@@ -142,7 +146,7 @@ class Grid extends Phaser.GameObjects.Grid {
 		this.dataView.setUint8(index + GRID_TYPE_OFFSET, plant.type);
 		this.dataView.setUint8(index + GRID_X_OFFSET, plant.gridX);
 		this.dataView.setUint8(index + GRID_Y_OFFSET, plant.gridY);
-		this.dataView.setUint8(index + GRID_GROWTH_OFFSET, plant.growthLevel);
+		this.dataView.setUint8(index + GRID_GROWTH_OFFSET, plant.level);
 		this.scene.plantSpriteArray[
 			`${(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes}`
 		] = plant;

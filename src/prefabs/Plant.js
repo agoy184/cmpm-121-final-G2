@@ -1,5 +1,5 @@
 class PlantFunctions {
-	static growPlant(nearCells, plantType, scene, dataView) {
+	static growPlant(nearCells, plantType, scene, dataView) {//still need to like actually add the functionality for
 		console.log(dataView);
 		if (plantType == 1) this.growCarrot(nearCells, scene, dataView);
 		if (plantType == 2) this.growTomato(nearCells, scene, dataView);
@@ -110,38 +110,26 @@ class PlantFunctions {
 }
 
 class Plant extends Phaser.GameObjects.Sprite {
-	constructor(scene, x, y, name) {
+	constructor(scene, x, y, internalPlantType) {
 		let gridPoint = scene.grid.getPoint(x, y);
 		const nameIndex = names.indexOf(name) + 1;
-		super(scene, gridPoint[0], gridPoint[1], textures[nameIndex - 1]);
+		super(scene, gridPoint[0], gridPoint[1], internalPlantType.image);
 		this.gridX = x;
 		this.gridY = y;
-		this.name = name;
-		this.type = nameIndex;
-		this.growthLevel = 1;
-		switch (name) {
-			case "Carrot":
-				this.rules =
-					"Carrot growing rules:\n- if water level is positive\n- and the sunlight level is greater than 0\n- and there are no nearby plants";
-				break;
-			case "Tomato":
-				this.rules =
-					"Tomato growing rules:\n- if water level is greater than 25\n- and the sunlight level is greater than 4\n- and there is at least one nearby plant";
-				break;
-			case "Potato":
-				this.rules =
-					"Potato growing rules:\n- if water level is greater than 10\n- and the sunlight level is less than 5\n- and there are no nearby plants (except for Potato)";
-				break;
-			default:
-				this.rules = "No rules";
-				break;
-		}
-		if (nameIndex < 3) {
-			this.setScale(0.05);
-		} else {
-			this.setScale(0.1);
-		}
+		this.name = internalPlantType.name;
+		this.type = internalPlantType.type;
+		this.rules = internalPlantType.rulesDisplay;
+		this.level = 1;
+		this.setScale(0.05);
 		scene.add.existing(this);
+	}
+
+
+
+	nextLevel = (rules) => false;
+
+	levelUp(rules) {
+		if (this.nextLevel(rules)) this.level++;
 	}
 
 	saveData() {
@@ -149,7 +137,7 @@ class Plant extends Phaser.GameObjects.Sprite {
 			x: this.gridX,
 			y: this.gridY,
 			name: this.name,
-			growthLevel: this.growthLevel,
+			growthLevel: this.level,
 		};
 	}
 
@@ -157,10 +145,9 @@ class Plant extends Phaser.GameObjects.Sprite {
 		this.gridX = data.x;
 		this.gridY = data.y;
 		this.name = data.name;
-		this.growthLevel = data.growthLevel;
-		if (this.name != "Potato") this.setScale(this.growthLevel * 0.05);
-		else if (this.growthLevel == 1) this.setScale(0.1);
-		else this.setScale(this.growthLevel * 0.07);
+		this.level = data.growthLevel;
+		if (this.level == 1) this.setScale(0.1);
+		else this.setScale(this.level * 0.07);
 		let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
 		this.x = gridPoint[0];
 		this.y = gridPoint[1];
@@ -173,4 +160,29 @@ class Plant extends Phaser.GameObjects.Sprite {
 	deletePlant() {
 		this.destroy();
 	}
+}
+
+function internalPlantTypeCompiler(program) {
+	const internalPlantType = new InternalPlantType();
+	const dsl = {
+		name(name) {
+			internalPlantType.name = name;
+		},
+		type(type) {
+			internalPlantType.type = type;
+		},
+		image(image) {
+			internalPlantType.image = image;
+		},
+		rulesDisplay(rulesDisplay) {
+			internalPlantType.rulesDisplay = rulesDisplay;
+		},
+		growsWhen(growsWhen) {
+			internalPlantType.nextLevel = (rules) => {
+				return growsWhen(rules);
+			};
+		},
+	};
+	program(dsl);
+	return internalPlantType;
 }
