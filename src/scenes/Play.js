@@ -189,9 +189,10 @@ export default class Play extends Phaser.Scene {
 			this.autosave();
 		};
 
-		// use yamljs to parse yaml file
-		let yamlData = this.cache.text.get("../src/scenarios.yaml");
-		let data = yaml.parse(yamlData);
+		this.load.text("yamlData", "../src/scenarios.yaml");
+		let yamlData = this.cache.text.get("yamlData");
+		let data = YAML.parse(yamlData);
+		console.log(data);
 
 	}
 
