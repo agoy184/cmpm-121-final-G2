@@ -1,10 +1,12 @@
+import { MOVE, TIME, PLANT } from "../scenes/Play.js";
+
 class Action {
 	constructor() {
 		this.type;
 	}
 }
 
-class MoveAction extends Action {
+export default class MoveAction extends Action {
 	constructor(x, y) {
 		super();
 		this.type = MOVE;
@@ -13,7 +15,7 @@ class MoveAction extends Action {
 	}
 }
 
-class TimeAction extends Action {
+export class TimeAction extends Action {
 	constructor(dayChange = false) {
 		super();
 		this.type = TIME;
@@ -21,7 +23,7 @@ class TimeAction extends Action {
 	}
 }
 
-class PlantAction extends Action {
+export class PlantAction extends Action {
 	constructor(inventory, grid) {
 		super();
 		this.type = PLANT;

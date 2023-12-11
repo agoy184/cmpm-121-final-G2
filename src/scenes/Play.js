@@ -3,14 +3,30 @@ import Grid from "../prefabs/Grid.js";
 import Player from "../prefabs/Player.js";
 import Environment from "../prefabs/Environment.js";
 import SaveFile from "../prefabs/SaveFile.js";
+import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
+import { allPlantDefs } from "../prefabs/plantDef.js";
+import MoveAction, { PlantAction } from "../prefabs/Action.js";
 
-const KEYBOARD = Phaser.Input.Keyboard;
-const MOVE = "move";
-const TIME = "time";
-const PLANT = "plant";
-const ACTION = "action";
-const REFRESH_REDO = "refresh_redo";
-const MAX_TIME = 3;
+
+
+export const KEYBOARD = Phaser.Input.Keyboard;
+export const controls =
+	"Keys:\n" +
+	"1: Plant Carrot\n" +
+	"2: Plant Tomato\n" +
+	"3: Plant Potato\n" +
+	"4: Plant Banana\n" +
+	"Q: Pick Up Plant\n" +
+	"WASD: Move\n" +
+	"E: Get Cell Info\n" +
+	"R (on a plant): Get Plant Rules\n" +
+	"T: Advance Time\n";
+export const MOVE = "move";
+export const TIME = "time";
+export const PLANT = "plant";
+export const ACTION = "action";
+export const REFRESH_REDO = "refresh_redo";
+export const MAX_TIME = 3;
 
 export default class Play extends Phaser.Scene {
 	constructor() {
@@ -157,21 +173,6 @@ export default class Play extends Phaser.Scene {
 		this.grid.addPlant(new Plant(this, 0, 1, internalPlantTypeCompiler(allPlantDefs[0])));
 		this.grid.addPlant(new Plant(this, 4, 3, internalPlantTypeCompiler(allPlantDefs[1])));
 		this.grid.addPlant(new Plant(this, 1, 4, internalPlantTypeCompiler(allPlantDefs[2])));
-
-		keys = this.input.keyboard.addKeys(
-			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
-		);
-		controls =
-			"Keys:\n" +
-			"1: Plant Carrot\n" +
-			"2: Plant Tomato\n" +
-			"3: Plant Potato\n" +
-			"4: Plant Banana\n" +
-			"Q: Pick Up Plant\n" +
-			"WASD: Move\n" +
-			"E: Get Cell Info\n" +
-			"R (on a plant): Get Plant Rules\n" +
-			"T: Advance Time\n";
 
 		this.startTime = this.time.now;
 		if (localStorage.getItem("autosave")) {

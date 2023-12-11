@@ -22,11 +22,7 @@ let config = {
 
 let game = new Phaser.Game(config);
 
-let keys = {};
-let controls = "";
-let names = [];
-
 let w = game.config.width;
 let h = game.config.height;
 
-export { keys, controls, names, w, h };
+export { w, h };

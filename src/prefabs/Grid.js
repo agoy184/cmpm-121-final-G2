@@ -1,4 +1,6 @@
 import Cell from "../prefabs/Cell.js";
+import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
+import { allPlantDefs } from "../prefabs/plantDef.js";
 
 const GRID_WATER_OFFSET = 0;
 const GRID_SUN_OFFSET = 1;
@@ -144,7 +146,6 @@ export default class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	addPlant(plant) {
-		//console.log(plant);
 		this.removePlant(plant.gridX, plant.gridY);
 		// get the index of the cell in the dataview
 		//console.log(plant.type, plant.gridX, plant.gridY);

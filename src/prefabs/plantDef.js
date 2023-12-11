@@ -7,7 +7,7 @@ class PlantRules {
     }
 }
 
-class InternalPlantType {
+export default class InternalPlantType {
     constructor() {
         this.name;
         this.type;
@@ -17,7 +17,7 @@ class InternalPlantType {
     }
 }
 
-const allPlantDefs = [//this is what you change to add/remove/change plants
+export const allPlantDefs = [//this is what you change to add/remove/change plants
     function carrot($) {
         $.name("Carrot");
         $.type(1);

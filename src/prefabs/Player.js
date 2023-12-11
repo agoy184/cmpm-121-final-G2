@@ -1,3 +1,9 @@
+import { KEYBOARD, controls, ACTION, REFRESH_REDO } from "../scenes/Play.js";
+import MoveAction from "./Action.js";
+import PlantAction from "./Action.js";
+import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
+import { allPlantDefs } from "../prefabs/plantDef.js";
+
 export default class Player extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, texture, frame) {
 		let gridPoint = scene.grid.getPoint(x, y);
@@ -8,6 +14,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.removingPlantAlready = false;
 		this.plantInventory = {};
 		this.growthThreePlants = 0;
+		this.keys = this.scene.input.keyboard.addKeys(
+			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
+		);
 		scene.add.existing(this);
 	}
 
@@ -75,17 +84,17 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(keys.W)) {
+		if (KEYBOARD.JustDown(this.keys.W)) {
 			this.moveCharacter(0, -1);
-		} else if (KEYBOARD.JustDown(keys.A)) {
+		} else if (KEYBOARD.JustDown(this.keys.A)) {
 			this.moveCharacter(-1, 0);
-		} else if (KEYBOARD.JustDown(keys.S)) {
+		} else if (KEYBOARD.JustDown(this.keys.S)) {
 			this.moveCharacter(0, 1);
-		} else if (KEYBOARD.JustDown(keys.D)) {
+		} else if (KEYBOARD.JustDown(this.keys.D)) {
 			this.moveCharacter(1, 0);
 		}
 
-		if (KEYBOARD.JustDown(keys.R)) {
+		if (KEYBOARD.JustDown(this.keys.R)) {
 			let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
 			if (plant) {
 				alert(plant.rules);
@@ -94,11 +103,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			}
 		}
 
-		if (KEYBOARD.JustDown(keys.E)) {
+		if (KEYBOARD.JustDown(this.keys.E)) {
 			let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
 			alert(info);
 		}
-		if (!this.removingPlantAlready && KEYBOARD.JustDown(keys.Q)) {
+		if (!this.removingPlantAlready && KEYBOARD.JustDown(this.keys.Q)) {
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -115,12 +124,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				}
 			}
 			this.plantInventory[plant] = (this.plantInventory[plant] || 0) + 1;
-		} else if (this.removingPlantAlready && keys.Q.isUp) {
+		} else if (this.removingPlantAlready && this.keys.Q.isUp) {
 			this.removingPlantAlready = false;
 		}
 
 		// gotta refactor this later
-		if (KEYBOARD.JustDown(keys.ONE)) {
+		if (KEYBOARD.JustDown(this.keys.ONE)) {
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -129,7 +138,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[0]))
 			);
 		}
-		if (KEYBOARD.JustDown(keys.TWO)) {
+		if (KEYBOARD.JustDown(this.keys.TWO)) {
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -138,7 +147,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[1]))
 			);
 		}
-		if (KEYBOARD.JustDown(keys.THREE)) {
+		if (KEYBOARD.JustDown(this.keys.THREE)) {
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -148,7 +157,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			);
 		}
 
-		if (KEYBOARD.JustDown(keys.FOUR)) {
+		if (KEYBOARD.JustDown(this.keys.FOUR)) {
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});

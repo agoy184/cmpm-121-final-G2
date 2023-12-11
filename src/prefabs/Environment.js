@@ -1,4 +1,5 @@
-import { h, w } from "../main.js";
+import { w } from "../main.js";
+import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME } from "../scenes/Play.js";
 
 export default class Environment extends Phaser.GameObjects.GameObject {
 	constructor(scene, x, y) {
@@ -20,6 +21,9 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 			w - 140,
 			10,
 			"Press 'R'\nfor controls"
+		);
+		this.keys = this.scene.input.keyboard.addKeys(
+			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
 		);
 		scene.add.existing(this);
 	}
@@ -51,7 +55,7 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(keys.T)) {
+		if (KEYBOARD.JustDown(this.keys.T)) {
 			this.currentTime += 1;
 			this.scene.events.emit(REFRESH_REDO);
 			if (this.currentTime > MAX_TIME) {
