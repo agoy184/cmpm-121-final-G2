@@ -1,3 +1,6 @@
+import Load from "./scenes/Load.js";
+import Play from "./scenes/Play.js";
+
 let config = {
 	type: Phaser.WEBGL,
 	width: 960,
@@ -19,10 +22,7 @@ let config = {
 
 let game = new Phaser.Game(config);
 
-let keys = {};
-let controls = "";
-let names = [];
-let textures = [];
-
 let w = game.config.width;
 let h = game.config.height;
+
+export { w, h };

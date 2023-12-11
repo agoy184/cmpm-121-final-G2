@@ -1,0 +1,26 @@
+- name: "Starting Farm"
+  start:
+      player:
+          x: 1
+          y: 1
+          inventory:
+      grid:
+          - plant:
+                name: "Carrot"
+                level: 1
+                x: 0
+                y: 1
+          - plant:
+                name: "Tomato"
+                level: 1
+                x: 4
+                y: 3
+          - plant:
+                name: "Potato"
+                level: 1
+                x: 1
+                y: 4
+      environment:
+          time: 0
+          day: 0
+          event: 1

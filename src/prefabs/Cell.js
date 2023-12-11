@@ -1,4 +1,6 @@
-class Cell {
+import { PlantFunctions } from "./Plant.js";
+
+export default class Cell {
 	static numBytes = 6;
 
 	constructor(dataView, scene) {

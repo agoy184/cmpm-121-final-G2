@@ -1,4 +1,8 @@
-class Environment extends Phaser.GameObjects.GameObject {
+import { w } from "../main.js";
+import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME } from "../scenes/Play.js";
+import TimeAction from "./Action.js";
+
+export default class Environment extends Phaser.GameObjects.GameObject {
 	constructor(scene, x, y) {
 		super(scene, x, y);
 		this.currentTime = 0;
@@ -19,6 +23,10 @@ class Environment extends Phaser.GameObjects.GameObject {
 			10,
 			"Press 'R'\nfor controls"
 		);
+		this.keys = this.scene.input.keyboard.addKeys(
+			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
+		);
+		this.event = 0;
 		scene.add.existing(this);
 	}
 
@@ -26,12 +34,14 @@ class Environment extends Phaser.GameObjects.GameObject {
 		return {
 			time: this.currentTime,
 			day: this.day,
+			event: this.event,
 		};
 	}
 
 	loadData(data) {
 		this.currentTime = data.time;
 		this.day = data.day;
+		this.event = data.event;
 		this.updateTimeDisplay();
 	}
 
@@ -49,7 +59,7 @@ class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(keys.T)) {
+		if (KEYBOARD.JustDown(this.keys.T)) {
 			this.currentTime += 1;
 			this.scene.events.emit(REFRESH_REDO);
 			if (this.currentTime > MAX_TIME) {
@@ -63,5 +73,13 @@ class Environment extends Phaser.GameObjects.GameObject {
 			this.updateTimeDisplay();
 		}
 		this.displayPlayerInventory(this.scene.player.plantInventory);
+
+		if (this.event != 0) {
+			if (this.day == this.event) {
+				// destroy all plants
+				this.scene.grid.destroyAllPlants();
+				this.event = 0;
+			}
+		}
 	}
 }
