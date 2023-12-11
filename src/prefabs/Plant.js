@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 // class PlantData {
 // 	numBytes = 4;
 // 	constructor(scene, dataView) {}
@@ -146,7 +148,7 @@ class PlantFunctions {
 	}
 }
 
-class Plant extends Phaser.GameObjects.Sprite {
+export default class Plant extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, name) {
 		let gridPoint = scene.grid.getPoint(x, y);
 		const nameIndex = names.indexOf(name) + 1;

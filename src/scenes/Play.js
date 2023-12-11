@@ -1,4 +1,15 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+import { w, h, names, textures } from "../main.js";
+import Grid from "../prefabs/Grid.js";
+import Player from "../prefabs/Player.js";
+import Environment from "../prefabs/Environment.js";
+import SaveFile from "../prefabs/SaveFile.js";
+
+//export keyboard
 const KEYBOARD = Phaser.Input.Keyboard;
+export { KEYBOARD };
+
 const MOVE = "move";
 const TIME = "time";
 const PLANT = "plant";
@@ -6,7 +17,7 @@ const ACTION = "action";
 const REFRESH_REDO = "refresh_redo";
 const MAX_TIME = 3;
 
-class Play extends Phaser.Scene {
+export default class Play extends Phaser.Scene {
 	constructor() {
 		super("playScene");
 	}
@@ -143,6 +154,7 @@ class Play extends Phaser.Scene {
 		);
 
 		// this.saveButtons = [this.saveBtn1, this.saveBtn2, this.saveBtn3];
+		
 		names = ["Carrot", "Tomato", "Potato", "null"];
 		textures = ["carrot", "tomato", "potato", "null"];
 

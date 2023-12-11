@@ -1,4 +1,4 @@
-class Cell {
+export default class Cell {
 	static numBytes = 6;
 
 	constructor(dataView, scene) {

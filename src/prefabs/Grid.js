@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 const GRID_WATER_OFFSET = 0;
 const GRID_SUN_OFFSET = 1;
 const GRID_TYPE_OFFSET = 2;
@@ -5,7 +7,10 @@ const GRID_X_OFFSET = 3;
 const GRID_Y_OFFSET = 4;
 const GRID_GROWTH_OFFSET = 5;
 
-class Grid extends Phaser.GameObjects.Grid {
+import Cell from "./Cell.js";
+import Plant from "./Plant.js";
+
+export default class Grid extends Phaser.GameObjects.Grid {
 	constructor(scene, x, y, width, height, dimension) {
 		super(
 			scene,

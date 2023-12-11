@@ -1,4 +1,4 @@
-class SaveFile {
+export default class SaveFile {
 	constructor(scene, x, y, label, style, fileName) {
 		this.scene = scene;
 		this.color = style.color;

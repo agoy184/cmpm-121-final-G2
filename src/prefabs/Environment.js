@@ -1,4 +1,8 @@
-class Environment extends Phaser.GameObjects.GameObject {
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+import { w, h } from "../main.js";
+
+export default class Environment extends Phaser.GameObjects.GameObject {
 	constructor(scene, x, y) {
 		super(scene, x, y);
 		this.currentTime = 0;
