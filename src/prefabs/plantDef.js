@@ -40,6 +40,7 @@ const allPlantDefs = [//this is what you change to add/remove/change plants
             if (rules.sunLevel <= 4) return false;
             if (rules.waterLevel <= 25) return false;
             if (rules.nearDiffPlants <= 0 && rules.nearSamePlants <= 0) return false;
+            return true;
         });
     },
 
@@ -52,6 +53,7 @@ const allPlantDefs = [//this is what you change to add/remove/change plants
             if (rules.sunLevel >= 5) return false;
             if (rules.waterLevel <= 10) return false;
             if (rules.nearDiffPlants > 0) return false;
+            return true;
         });
     }
 ];

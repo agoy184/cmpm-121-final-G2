@@ -1,11 +1,41 @@
 class PlantFunctions {
-	static growPlant(nearCells, plantType, scene, dataView) {//still need to like actually add the functionality for
+	/*static growPlant(nearCells, plantType, scene, dataView) {
 		console.log(dataView);
 		if (plantType == 1) this.growCarrot(nearCells, scene, dataView);
 		if (plantType == 2) this.growTomato(nearCells, scene, dataView);
 		if (plantType == 3) this.growPotato(nearCells, scene, dataView);
+	}*/
+
+	static growPlant(nearCells, plantType, scene, dataView) {
+		const plant = internalPlantTypeCompiler(allPlantDefs[plantType - 1])
+		console.log(allPlantDefs);
+		console.log(plantType);
+		console.log(plant.rulesDisplay);
+		if (plant.nextLevel(plant.rulesDisplay)) {
+			console.log("growing: " + plantType);
+			let growthLevel = dataView.getUint8(
+				nearCells[0] + GRID_GROWTH_OFFSET
+			);
+			if (growthLevel < 3) {
+				dataView.setUint8(
+					nearCells[0] + GRID_GROWTH_OFFSET,
+					growthLevel + 1
+				);
+				// update growthLevel since it was increased in the dataview
+				// without this the plant size wouldn't update along with the growth level
+				growthLevel = dataView.getUint8(
+					nearCells[0] + GRID_GROWTH_OFFSET
+				);
+				const plantX = dataView.getUint8(nearCells[0] + GRID_X_OFFSET);
+				const plantY = dataView.getUint8(nearCells[0] + GRID_Y_OFFSET);
+				scene.plantSpriteArray[
+					`${(plantX * 5 + plantY) * Cell.numBytes}`
+				].setScale(growthLevel * 0.05);
+			}
+		}
 	}
 
+	/*
 	// we will probably need to rewrite these for like f2 or f3
 	static growCarrot(nearCells, scene, dataView) {
 		if (
@@ -106,7 +136,7 @@ class PlantFunctions {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 class Plant extends Phaser.GameObjects.Sprite {
