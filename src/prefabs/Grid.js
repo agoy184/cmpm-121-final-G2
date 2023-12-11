@@ -55,12 +55,10 @@ class Grid extends Phaser.GameObjects.Grid {
 			}
 		}
 
-		console.log("plantData", plantData);
 		return plantData;
 	}
 
 	loadData(data) {
-		console.log("data", data);
 		for (let i = 0; i < this.dimension; i++) {
 			for (let j = 0; j < this.dimension; j++) {
 				const index = (i * this.dimension + j) * Cell.numBytes;
@@ -84,7 +82,6 @@ class Grid extends Phaser.GameObjects.Grid {
 		for (let index in data) {
 			const plant = data[index].plant;
 			if (plant) {
-				console.log("plant being loaded", plant);
 				const loadedPlant = this.createPlant(
 					plant.x,
 					plant.y,
@@ -129,10 +126,16 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	createPlant(x, y, name) {
-		if (name) {
-			return new Plant(this.scene, x, y, name);
+		switch (name) {
+			case "Carrot":
+				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[0]));
+			case "Tomato":
+				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[1]));
+			case "Potato":
+				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[2]));
+			default:
+				return null;
 		}
-		return null;
 	}
 
 	addPlant(plant) {

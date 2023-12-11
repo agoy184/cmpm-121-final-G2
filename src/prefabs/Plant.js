@@ -116,6 +116,7 @@ class Plant extends Phaser.GameObjects.Sprite {
 		super(scene, gridPoint[0], gridPoint[1], internalPlantType.image);
 		this.gridX = x;
 		this.gridY = y;
+		console.log(internalPlantType);
 		this.name = internalPlantType.name;
 		this.type = internalPlantType.type;
 		this.rules = internalPlantType.rulesDisplay;
