@@ -1,5 +1,9 @@
 # CMPM121 Final Project: Group 2
-# Devlog Entry - [11/20/2023]
+<details>
+<summary>
+ 
+# Devlog Entry - [11/20/2023]</summary>
+<br>
 
 ## Introducing the team
 ### Tools Lead 
@@ -35,8 +39,56 @@ We anticipate that the hardest part of the project will be having to change our 
 ### Hoping to learn
 We are hoping to learn how to quickly refactor our code to make future code changes easier to perform, which will be made significantly easier with the tools we chose, since we are already familiar with them. For us, the challenge won’t be learning the tools we use, but the actual core of the project and its changing requirements.
 
-# Devlog Entry - [11/28/2023]
+</details>
+
+<details>
+<summary>
+ 
+# Devlog Entry - [11/28/2023]</summary>
+<br>
+
 ## (F0) How we satisfied the software requirements
+
+### [F0.a] You control a character moving on a 2D grid.
+We satisfied this requirement by creating a player prefab and adding listeners for the keys W, S, A, and D as directions for controlling the character.
+
+### [F0.b] You advance time in the turn-based simulation manually.
+We satisfied this requirement by creating a listener for player input on key T so that each time a player presses that key, a UI indicator in the top left shows that what time has passed and what day the player is on according to the time.
+
+### [F0.c] You can reap (gather) or sow (plant) plants on the grid when your character is near them.
+We satisfied this requirement by creating plant classes with seperate growth levels/requirements in Plant.js, as well as allowing the player to reap the plants with key Q and sow new plants with keys 1, 2, or 3, sowing carrots, tomatoes, and potatoes respectively.
+
+### [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
+We fulfilled this requirement by creating a prefab, Grid.js, which generated a random amount of sunlight and water for each cell on the grid. Each grid cell has a sun and water level that is viewable by pressing the key E, which will display through text both variables pertaining the water and sunlight information.
+
+### [F0.e] Each plant on the grid has a type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
+We fulfilled this requirement through creating plant classes in the Plant.js prefab specifying each plants type and growth levels. Each plant starts at growth level 1, and setting the sprite scale to increase in size once it's growth levels have been reached.
+
+### [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
+We fulfilled this requirement by first creating a function in our grid prefab known as getNearCells, which creates and returns an array of data and based on what cells are around a plant that has been sown. Once the plant has been sown, conditionals read by using the nearCells array will be used to determine whether the plant is able to ascend to the next level or not by the next day.
+
+### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+
+## Reflection
+
+### How has the team’s plan changed?
+So far the team's plan hasn't necessarily changed, as we are laying a base foundation for our game's mechanics. We have not yet reached a point where our team has had to change course for what our finished game will look like.
+
+### Did you reconsider any of the choices you previously described for Tools and Materials or your Roles?
+We have not reconsidered our choices regarding tools or materials, as all of the currently established tools and materials are satisfactory with all of the current requirements.
+
+### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
+We fulfilled this requirement by creating an inventory system for the player to show the plants that they've collected, as well as a conditional that checks whether they have collected a total of 5 plants for their inventory at growth level 3.
+</details>
+
+<details>
+<summary>
+
+# Devlog Entry - [12/04/2023]</summary>
+<br>
+
+## (F0) How we satisfied the software requirements
+
 ### [F0.a] You control a character moving on a 2D grid.
 There were no major changes made for this requirement. A player prefab and listeners are still used for the keys W, S, A, and D as directions for controlling the character.
 
@@ -58,15 +110,6 @@ The spatial rules have remained the same.
 ### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
 We made no major changes for this requirement, an inventory system is still around for the player to show the plants that they've collected, as well as a conditional that checks whether they have collected a total of 5 plants for their inventory at growth level 3. 
 
-## Reflection
-
-### How has the team’s plan changed?
-So far the team's plan hasn't necessarily changed, as we are laying a base foundation for our game's mechanics. We have not yet reached a point where our team has had to change course for what our finished game will look like.
-
-### Did you reconsider any of the choices you previously described for Tools and Materials or your Roles?
-We have not reconsidered our choices regarding tools or materials, as all of the currently established tools and materials are satisfactory with all of the current requirements.
-
-# Devlog Entry - [12/04/2023]
 ## (F1) How we satisfied the software requirements
 ### [F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.
 We satisfied this requirement by making the grid a byte array using the Array of Structures format. The grid is split up between all 25 cells. Within each cell, it's split up between the data about the cell and the actual plant data. However, it is all accessible and theoretically capable of being changed from anywhere. 
@@ -93,12 +136,19 @@ We have not considered changing any of the tools, materials, or roles at this po
 
 ### Has your game design evolved now that you've started to think about giving the player more feedback?
 Our design has somewhat evolved through the recent requirement changes, as creating systems for players to undo their changes makes it a game where they don't need to think about consequences (although they didn't need to in the first place). Creating a lose condition could be interesting despite not being part of future requirements, but for now we will invest in providing feedback with the game's current restraints.
+</details>
 
-# Devlog Entry - [12/11/2023]
+<details>
+<summary>
+
+ # Devlog Entry - [12/11/2023]
+</summary>
+<br>
+
 ## (F2) How we satisfied the software requirements
 ### (F0+F1)
-
 The previous F0 and F1 requirements remain satisfied in the latest version. There are no major changes for F0 and most of F1. The only major change from F1 is F1.a, where we rewrote the plant data byte array to deal with some bugs relating to plant sprites.
+
 ##### [F0.a] You control a character moving on a 2D grid.
 
  - There were no major changes made for this requirement.
@@ -150,27 +200,26 @@ Our external DSL is based on YAML. A scenario can be defined by first having a n
 
 ```yaml
 - name: "Random Farm"
-  start:
-      player:                         # spawn player at 1,1 on the grid with an empty inventory
-          x: 1
-          y: 1
-          inventory:
-      grid:                           # place plants on the farm grid
-          - plant:                    # place a carrot plant with growth level 1 at position 0,1 on the grid
-                name: "Carrot"
-                level: 1
-                x: 0
-                y: 1
-          - plant:                    # place a banana plant with growth level 3 at position 3,2 on the grid
-                name: "Banana" 
-                level: 3
-                x: 3
-                y: 2
-      environment:                    # set the starting time to 2 and day to 3, as well as set a crop failure event to happen on the start of day 8
-          time: 2
-          day: 3
-          event: 8
-
+  start:
+      player:                         # spawn player at 1,1 on the grid with an empty inventory
+          x: 1
+          y: 1
+          inventory:
+      grid:                           # place plants on the farm grid
+          - plant:                    # place a carrot plant with growth level 1 at position 0,1 on the grid
+                name: "Carrot"
+                level: 1
+                x: 0
+                y: 1
+          - plant:                    # place a banana plant with growth level 3 at position 3,2 on the grid
+                name: "Banana" 
+                level: 3
+                x: 3
+                y: 2
+      environment:                    # set the starting time to 2 and day to 3, as well as set a crop failure event to happen on the start of day 8
+          time: 2
+          day: 3
+          event: 8
 ```
 
 ### [F2.b] Internal DSL for Plants and Growth Conditions
@@ -201,3 +250,4 @@ The "growsWhen" function allows our internal DSL to use JavaScript features to c
 
 ## Reflection
 Our team's plan has changed a little. Our roles don't really mean anything since we all work on various parts of the game (we each volunteer to do tasks). We did reconsider our use of JavaScript instead of TypeScript. However, it will take too much time for us to figure out how to switch languages due to it being finals week. Our game design has not really evolved from before. We still have plants that increase size with their growth level and info popups if the player presses E or R on a plant. Something we could add if we have extra time is like tinting the grid tiles a certain color to help visually display their sun and water level.
+</details>
