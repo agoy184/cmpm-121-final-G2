@@ -1,3 +1,4 @@
+import * as yaml from "../../node_modules/yamljs/dist/yaml.js";
 import { h, w } from "../main.js";
 import Grid from "../prefabs/Grid.js";
 import Player from "../prefabs/Player.js";
@@ -6,7 +7,6 @@ import SaveFile from "../prefabs/SaveFile.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 import MoveAction, { PlantAction } from "../prefabs/Action.js";
-import * as yaml from '../../node_modules/js-yaml/dist/js-yaml.js';
 
 export const KEYBOARD = Phaser.Input.Keyboard;
 export const controls =
@@ -30,6 +30,10 @@ export const MAX_TIME = 3;
 export default class Play extends Phaser.Scene {
 	constructor() {
 		super("playScene");
+	}
+
+	preload() {
+		this.load.text("yamlData", "../src/scenarios.yaml");
 	}
 
 	undo() {
@@ -184,6 +188,11 @@ export default class Play extends Phaser.Scene {
 		window.onbeforeunload = () => {
 			this.autosave();
 		};
+
+		// use yamljs to parse yaml file
+		let yamlData = this.cache.text.get("../src/scenarios.yaml");
+		let data = yaml.parse(yamlData);
+
 	}
 
 	update() {
