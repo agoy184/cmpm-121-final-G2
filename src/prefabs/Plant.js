@@ -5,11 +5,14 @@ class PlantFunctions {
 		let samePlants = 0;
 		let diffPlants = 0;
 
-		for(let i = 0; i < nearCells.length; i++) {
-			if (nearCells.plant) {
-				if (nearCells.plantType == plantType) {
+		for (let i = 1; i < nearCells.length; i++) {
+			const nearPlantType = dataView.getUint8(
+				nearCells[i] + GRID_TYPE_OFFSET
+			);
+			if (nearPlantType > 0) {
+				if (plantType == nearPlantType) {
 					samePlants++;
-				}else {
+				} else {
 					diffPlants++;
 				}
 			}
@@ -18,8 +21,8 @@ class PlantFunctions {
 		const data = {
 			sunLevel: dataView.getUint8(nearCells[0] + GRID_SUN_OFFSET),
 			waterLevel: dataView.getUint8(nearCells[0] + GRID_WATER_OFFSET),
-			nearDiffPlants: samePlants,
-			nearSamePlants: diffPlants,
+			nearDiffPlants: diffPlants,
+			nearSamePlants: samePlants,
 		};
 
 		console.log(data);
@@ -51,7 +54,7 @@ class PlantFunctions {
 
 class Plant extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, internalPlantType) {
-		let gridPoint = scene.grid.getPoint(x, y);;
+		let gridPoint = scene.grid.getPoint(x, y);
 		super(scene, gridPoint[0], gridPoint[1], internalPlantType.image);
 		this.gridX = x;
 		this.gridY = y;
@@ -63,8 +66,6 @@ class Plant extends Phaser.GameObjects.Sprite {
 		this.setScale(0.05);
 		scene.add.existing(this);
 	}
-
-
 
 	nextLevel = (rules) => false;
 
