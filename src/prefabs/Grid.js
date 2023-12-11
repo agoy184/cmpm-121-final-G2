@@ -29,18 +29,32 @@ class Grid extends Phaser.GameObjects.Grid {
 		this.initializeGrid();
 		scene.events.on("newDay", (event) => {
 			this.initializeGrid();
-			console.log("day " + event.day);
+			//console.log("day " + event.day);
 		});
 		scene.add.existing(this);
 	}
 
 	saveData() {
-		return this.plantGridCells; //or maybe the dataview im not too sure
-		/*let data = {};
-		for (let key in this.gridCells) {
-			data[key] = this.gridCells[key].saveData();
+		// store all of the plant data from the dataview
+		const plantData = {};
+
+		console.log("Saving data");
+
+		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
+			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
+			plantData[i] = {};
+
+			if (plantType != 0) {
+				plantData[i].plant = {};
+				plantData[i].plant.name = names[plantType - 1];
+				plantData[i].plant.x = this.dataView.getUint8(i + GRID_X_OFFSET);
+				plantData[i].plant.y = this.dataView.getUint8(i + GRID_Y_OFFSET);
+				plantData[i].plant.growthLevel = this.dataView.getUint8(
+					i + GRID_GROWTH_OFFSET
+				);
+			}
 		}
-		return data;*/
+		return plantData;
 	}
 
 	loadData(data) {
@@ -64,23 +78,22 @@ class Grid extends Phaser.GameObjects.Grid {
 			}
 		}
 
-		for (let key in data) {
-			const cell = this.gridCells[key];
-			const plantData = data[key].plant;
-
-			cell.loadData(data[key]);
-
-			if (plantData) {
+		// load plant data from the data object into their respective cells
+		for (let index in data) {
+			const plant = data[index].plant;
+			if (plant) {
 				const loadedPlant = this.createPlant(
-					plantData.x,
-					plantData.y,
-					plantData.name
+					plant.x,
+					plant.y,
+					plant.name
 				);
-				loadedPlant.loadData(plantData);
+				loadedPlant.growthLevel = plant.growthLevel;
 				this.addPlant(loadedPlant);
-			} else if (cell.plant) {
-				// if there's no plant, but there used to be one, remove it from the scene
-				this.removePlant(cell.plant.gridX, cell.plant.gridY);
+			} else {
+				if (this.scene.plantSpriteArray[index]) {
+					this.scene.plantSpriteArray[index].deletePlant();
+					this.scene.plantSpriteArray[index] = null;
+				}
 			}
 		}
 	}
@@ -89,7 +102,7 @@ class Grid extends Phaser.GameObjects.Grid {
 		let randomWater = Math.floor(Math.random() * 10 - 3); //-3-6
 		let randomSunlight = Math.floor(Math.random() * 10); // 0-9
 		if (this.pointInBounds(x, y)) {
-			console.log(x, y);
+			//console.log(x, y);
 			const index = (x * this.dimension + y) * Cell.numBytes;
 			const currentWater = this.dataView.getUint8(index);
 			// since waterlevel is an unsigned int, subtracting values that would normally make a negative number wraps around to 255
@@ -119,13 +132,13 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	addPlant(plant) {
-		console.log(plant);
+		//console.log(plant);
 		this.removePlant(plant.gridX, plant.gridY);
 		// get the index of the cell in the dataview
-		console.log(plant.type, plant.gridX, plant.gridY);
+		//console.log(plant.type, plant.gridX, plant.gridY);
 		const index =
 			(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes;
-		console.log(index);
+		//console.log(index);
 		this.dataView.setUint8(index + GRID_TYPE_OFFSET, plant.type);
 		this.dataView.setUint8(index + GRID_X_OFFSET, plant.gridX);
 		this.dataView.setUint8(index + GRID_Y_OFFSET, plant.gridY);
@@ -133,7 +146,7 @@ class Grid extends Phaser.GameObjects.Grid {
 		this.scene.plantSpriteArray[
 			`${(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes}`
 		] = plant;
-		console.log(this.scene.plantSpriteArray);
+		//console.log(this.scene.plantSpriteArray);
 	}
 
 	removePlant(x, y) {
