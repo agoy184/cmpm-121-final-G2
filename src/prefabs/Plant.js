@@ -1,12 +1,31 @@
 import InternalPlantType from "./plantDef.js";
 import { allPlantDefs } from "./plantDef.js";
 
-export default class PlantFunctions {
+export class PlantFunctions {
 	static growPlant(nearCells, plantType, scene, dataView) {
-		const plant = internalPlantTypeCompiler(allPlantDefs[plantType - 1])
+		const plant = internalPlantTypeCompiler(allPlantDefs[plantType - 1]);
 
-		if (plant.nextLevel(plant.rulesDisplay)) {
-			console.log("growing: " + plantType);
+		let samePlants = 0;
+		let diffPlants = 0;
+
+		for(let i = 0; i < nearCells.length; i++) {
+			if (nearCells.plant) {
+				if (nearCells.plantType == plantType) {
+					samePlants++;
+				}else {
+					diffPlants++;
+				}
+			}
+		}
+
+		const data = {
+			sunLevel: dataView.getUint8(nearCells[0] + GRID_SUN_OFFSET),
+			waterLevel: dataView.getUint8(nearCells[0] + GRID_WATER_OFFSET),
+			nearDiffPlants: samePlants,
+			nearSamePlants: diffPlants,
+		};
+
+		if (plant.nextLevel(data)) {
 			let growthLevel = dataView.getUint8(
 				nearCells[0] + GRID_GROWTH_OFFSET
 			);
@@ -30,7 +49,7 @@ export default class PlantFunctions {
 	}
 }
 
-export class Plant extends Phaser.GameObjects.Sprite {
+export default class Plant extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, internalPlantType) {
 		let gridPoint = scene.grid.getPoint(x, y);;
 		super(scene, gridPoint[0], gridPoint[1], internalPlantType.image);

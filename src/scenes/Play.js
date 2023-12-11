@@ -6,8 +6,7 @@ import SaveFile from "../prefabs/SaveFile.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 import MoveAction, { PlantAction } from "../prefabs/Action.js";
-
-
+import * as yaml from '../../node_modules/js-yaml/dist/js-yaml.js';
 
 export const KEYBOARD = Phaser.Input.Keyboard;
 export const controls =
@@ -164,10 +163,6 @@ export default class Play extends Phaser.Scene {
 			"save3"
 		);
 
-		// this.saveButtons = [this.saveBtn1, this.saveBtn2, this.saveBtn3];
-		//names = ["Carrot", "Tomato", "Potato", "Banana", null];
-		// textures = ["carrot", "tomato", "potato", "null"];
-
 		this.plantSpriteArray = {};
 
 		this.grid.addPlant(new Plant(this, 0, 1, internalPlantTypeCompiler(allPlantDefs[0])));
@@ -196,8 +191,6 @@ export default class Play extends Phaser.Scene {
 		this.environment.update();
 
 		let elapsed = this.time.now - this.startTime;
-		// console.log(elapsed);
-		// 300000 ms = 5 mins
 		if (elapsed > 10000) {
 			this.startTime = this.time.now;
 			this.autosave();

@@ -9,8 +9,6 @@ export default class Cell {
 	}
 	
 	growPlants(nearCellsIndex, plantType) {
-		// PlantFunctions.dataView = this.dataView;
-		// PlantFunctions.scene = this.scene;
 		console.log(this.dataView);
 		PlantFunctions.growPlant(
 			nearCellsIndex,
