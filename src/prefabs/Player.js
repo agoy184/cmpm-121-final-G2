@@ -126,7 +126,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Carrot(this.scene, this.gridX, this.gridY)
+				new Plant(this.scene, this.gridX, this.gridY, "Carrot")
 			);
 		}
 		if (KEYBOARD.JustDown(keys.TWO)) {
@@ -135,7 +135,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Tomato(this.scene, this.gridX, this.gridY)
+				new Plant(this.scene, this.gridX, this.gridY, "Tomato")
 			);
 		}
 		if (KEYBOARD.JustDown(keys.THREE)) {
@@ -144,7 +144,7 @@ class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Potato(this.scene, this.gridX, this.gridY)
+				new Plant(this.scene, this.gridX, this.gridY, "Potato")
 			);
 		}
 	}

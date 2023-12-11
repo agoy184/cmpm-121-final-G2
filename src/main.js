@@ -21,6 +21,8 @@ let game = new Phaser.Game(config);
 
 let keys = {};
 let controls = "";
+let names = [];
+let textures = [];
 
 let w = game.config.width;
 let h = game.config.height;

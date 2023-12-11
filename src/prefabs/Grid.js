@@ -1,3 +1,10 @@
+const GRID_WATER_OFFSET = 0;
+const GRID_SUN_OFFSET = 1;
+const GRID_TYPE_OFFSET = 2;
+const GRID_X_OFFSET = 3;
+const GRID_Y_OFFSET = 4;
+const GRID_GROWTH_OFFSET = 5;
+
 class Grid extends Phaser.GameObjects.Grid {
 	constructor(scene, x, y, width, height, dimension) {
 		super(
@@ -14,56 +21,98 @@ class Grid extends Phaser.GameObjects.Grid {
 			0.5
 		);
 		this.dimension = dimension;
-		this.gridCells = {};
+		const arraySize = dimension * dimension * Cell.numBytes;
+		const plantGridCells = new ArrayBuffer(arraySize);
+		this.dataView = new DataView(plantGridCells);
+		this.cellFuncs = new Cell(this.dataView, scene);
+
 		this.initializeGrid();
 		scene.events.on("newDay", (event) => {
 			this.initializeGrid();
-			console.log("day " + event.day);
+			//console.log("day " + event.day);
 		});
 		scene.add.existing(this);
 	}
 
 	saveData() {
-		let data = {};
-		for (let key in this.gridCells) {
-			data[key] = this.gridCells[key].saveData();
+		// store all of the plant data from the dataview
+		const plantData = {};
+
+		console.log("Saving data");
+
+		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
+			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
+			plantData[i] = {};
+
+			if (plantType != 0) {
+				plantData[i].plant = {};
+				plantData[i].plant.name = names[plantType - 1];
+				plantData[i].plant.x = this.dataView.getUint8(i + GRID_X_OFFSET);
+				plantData[i].plant.y = this.dataView.getUint8(i + GRID_Y_OFFSET);
+				plantData[i].plant.growthLevel = this.dataView.getUint8(
+					i + GRID_GROWTH_OFFSET
+				);
+			}
 		}
-		return data;
+		return plantData;
 	}
 
 	loadData(data) {
-		for (let key in data) {
-			const cell = this.gridCells[key];
-			const plantData = data[key].plant;
+		for (let i = 0; i < this.dimension; i++) {
+			for (let j = 0; j < this.dimension; j++) {
+				const index = (i * this.dimension + j) * Cell.numBytes;
+				const plantType = this.dataView.getUint8(index + 2);
+				//load back all the values from each cell in the dataview (use math to determine the right index)
+				if (plantType !== 0) {
+					const loadedPlant = this.createPlant(
+						i,
+						j,
+						names[plantType - 1]
+					);
+					loadedPlant.growthLevel = this.dataView.getUint8(index + 5);
+					this.addPlant(loadedPlant);
+				} else if (plantType == 0) {
+					this.removePlant(i, j);
+				}
+			}
+		}
 
-			cell.loadData(data[key]);
-
-			if (plantData) {
+		// load plant data from the data object into their respective cells
+		for (let index in data) {
+			const plant = data[index].plant;
+			if (plant) {
 				const loadedPlant = this.createPlant(
-					plantData.x,
-					plantData.y,
-					plantData.name
+					plant.x,
+					plant.y,
+					plant.name
 				);
-				loadedPlant.loadData(plantData);
+				loadedPlant.growthLevel = plant.growthLevel;
 				this.addPlant(loadedPlant);
-			} else if (cell.plant) {
-				// if there's no plant, but there used to be one, remove it from the scene
-				this.removePlant(cell.plant.gridX, cell.plant.gridY);
+			} else {
+				let x = Math.floor(index / (this.dimension * Cell.numBytes));
+				let y = Math.floor(
+					(index / Cell.numBytes) % this.dimension
+				);
+				this.removePlant(x, y);
 			}
 		}
 	}
 
 	initializeCell(x, y) {
-		let key = this.getKey(x, y);
 		let randomWater = Math.floor(Math.random() * 10 - 3); //-3-6
 		let randomSunlight = Math.floor(Math.random() * 10); // 0-9
-		if (this.gridCells[key]) {
-			// modify the water level in a range of -3 to 7 (i think) i think its 6 ngl but idk
-			this.gridCells[key].addWaterLevel(randomWater);
-			this.gridCells[key].setSunlightLevel(randomSunlight);
-			return;
+		if (this.pointInBounds(x, y)) {
+			//console.log(x, y);
+			const index = (x * this.dimension + y) * Cell.numBytes;
+			const currentWater = this.dataView.getUint8(index);
+			// since waterlevel is an unsigned int, subtracting values that would normally make a negative number wraps around to 255
+			// guess we can't have negative water values unless we change the data type
+			if (currentWater + randomWater < 0) {
+				randomWater = 0;
+			}
+			this.dataView.setUint8(index, randomWater);
+			this.dataView.setUint8(index + 1, randomSunlight);
 		}
-		this.gridCells[key] = new Cell(randomWater, randomSunlight);
 	}
 
 	initializeGrid() {
@@ -76,44 +125,75 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	createPlant(x, y, name) {
-		switch (name) {
-			case "Tomato":
-				return new Tomato(this.scene, x, y);
-			case "Potato":
-				return new Potato(this.scene, x, y);
-			case "Carrot":
-				return new Carrot(this.scene, x, y);
-			default:
-				return null;
+		if (name) {
+			return new Plant(this.scene, x, y, name);
 		}
+		return null;
 	}
 
 	addPlant(plant) {
-		let key = this.getKey(plant.gridX, plant.gridY);
-		this.gridCells[key].addPlant(plant);
+		//console.log(plant);
+		this.removePlant(plant.gridX, plant.gridY);
+		// get the index of the cell in the dataview
+		//console.log(plant.type, plant.gridX, plant.gridY);
+		const index =
+			(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes;
+		//console.log(index);
+		this.dataView.setUint8(index + GRID_TYPE_OFFSET, plant.type);
+		this.dataView.setUint8(index + GRID_X_OFFSET, plant.gridX);
+		this.dataView.setUint8(index + GRID_Y_OFFSET, plant.gridY);
+		this.dataView.setUint8(index + GRID_GROWTH_OFFSET, plant.growthLevel);
+		this.scene.plantSpriteArray[
+			`${(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes}`
+		] = plant;
+		//console.log(this.scene.plantSpriteArray);
 	}
 
 	removePlant(x, y) {
-		let key = this.getKey(x, y);
-		return this.gridCells[key].removePlant();
+		const index = (x * this.dimension + y) * Cell.numBytes;
+		const plantType = this.dataView.getUint8(index + GRID_TYPE_OFFSET);
+		const growthLevel = this.dataView.getUint8(index + GRID_GROWTH_OFFSET);
+		if (plantType == 0) {
+			return null;
+		}
+		let removedPlantData = [names[plantType - 1], growthLevel];
+		this.dataView.setUint8(index + GRID_TYPE_OFFSET, 0);
+		this.dataView.setUint8(index + GRID_X_OFFSET, 0);
+		this.dataView.setUint8(index + GRID_Y_OFFSET, 0);
+		this.dataView.setUint8(index + GRID_GROWTH_OFFSET, 0);
+		this.scene.plantSpriteArray[
+			`${(x * this.dimension + y) * Cell.numBytes}`
+		].deletePlant();
+		this.scene.plantSpriteArray[
+			`${(x * this.dimension + y) * Cell.numBytes}`
+		] = null;
+		return removedPlantData;
 	}
 
 	getPlant(x, y) {
-		let key = this.getKey(x, y);
-		return this.gridCells[key].plant;
+		// returns the plant object at the given coordinates
+		const index = (x * this.dimension + y) * Cell.numBytes;
+		const plantType = this.dataView.getUint8(index + GRID_TYPE_OFFSET);
+		if (plantType == 0) {
+			return null;
+		}
+		return this.scene.plantSpriteArray[
+			`${(x * this.dimension + y) * Cell.numBytes}`
+		];
 	}
 
 	getCellInfo(x, y) {
-		let key = this.getKey(x, y);
-		let cell = this.gridCells[key];
-		let sunlight = cell.sunlightLevel;
-		let water = cell.waterLevel;
-		if (cell.plant) {
+		const index = (x * this.dimension + y) * Cell.numBytes;
+		const water = this.dataView.getUint8(index + GRID_WATER_OFFSET);
+		const sunlight = this.dataView.getUint8(index + GRID_SUN_OFFSET);
+		const plantType = this.dataView.getUint8(index + GRID_TYPE_OFFSET);
+		const growthLevel = this.dataView.getUint8(index + GRID_GROWTH_OFFSET);
+		if (growthLevel !== 0) {
 			return (
 				"Level " +
-				cell.plant.growthLevel +
+				growthLevel +
 				" " +
-				cell.plant +
+				names[plantType - 1] +
 				" has " +
 				sunlight +
 				" sunlight and " +
@@ -122,26 +202,37 @@ class Grid extends Phaser.GameObjects.Grid {
 			);
 		}
 		return (
-			"empty plot has " + sunlight + " sunlight and " + water + " water"
+			"Empty plot has " + sunlight + " sunlight and " + water + " water"
 		);
 	}
 
 	getNearCells(x, y) {
-		let nearCells = [];
-		const nearCellKeys = this.getNearCellKeys(x, y);
-		nearCellKeys.forEach((key) => {
-			nearCells.push(this.gridCells[key]);
+		const points = [
+			{ x: x, y: y },
+			{ x: x, y: y - 1 },
+			{ x: x, y: y + 1 },
+			{ x: x - 1, y: y },
+			{ x: x + 1, y: y },
+		];
+		const nearCellsIndex = [];
+		points.forEach((point) => {
+			const index = (point.x * this.dimension + point.y) * Cell.numBytes;
+			if (0 <= index && index < this.dataView.byteLength) {
+				nearCellsIndex.push(index);
+			}
 		});
-		return nearCells;
+		return nearCellsIndex;
 	}
 
 	growCells() {
-		//this function is kinda ugly but we can refactor later
-		for (let key in this.gridCells) {
-			if (this.gridCells[key].plant) {
-				let [plantX, plantY] = key.split(",").map(Number);
-				this.gridCells[key].plant.growPlant(
-					this.getNearCells(plantX, plantY)
+		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
+			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
+			if (plantType != 0) {
+				const plantX = this.dataView.getUint8(i + GRID_X_OFFSET);
+				const plantY = this.dataView.getUint8(i + GRID_Y_OFFSET);
+				this.cellFuncs.growPlants(
+					this.getNearCells(plantX, plantY),
+					plantType
 				);
 			}
 		}
@@ -160,28 +251,7 @@ class Grid extends Phaser.GameObjects.Grid {
 		return [leftMostX + x * this.cellWidth, topMostY + y * this.cellHeight];
 	}
 
-	getKey(x, y) {
-		return x + "," + y;
-	}
-
-	getNearCellKeys(x, y) {
-		const points = [
-			{ x: x, y: y },
-			{ x: x, y: y - 1 },
-			{ x: x, y: y + 1 },
-			{ x: x - 1, y: y },
-			{ x: x + 1, y: y },
-		];
-		const keys = [];
-		points.forEach((point) => {
-			keys.push(this.getKey(point.x, point.y));
-		});
-		return keys;
-	}
-
 	pointInBounds(x, y) {
 		return x >= 0 && x < this.dimension && y >= 0 && y < this.dimension;
 	}
-
-	update() {}
 }

@@ -143,10 +143,14 @@ class Play extends Phaser.Scene {
 		);
 
 		// this.saveButtons = [this.saveBtn1, this.saveBtn2, this.saveBtn3];
+		names = ["Carrot", "Tomato", "Potato", "null"];
+		textures = ["carrot", "tomato", "potato", "null"];
 
-		this.grid.addPlant(new Carrot(this, 0, 1));
-		this.grid.addPlant(new Tomato(this, 4, 3));
-		this.grid.addPlant(new Potato(this, 1, 4));
+		this.plantSpriteArray = {};
+
+		this.grid.addPlant(new Plant(this, 0, 1, "Carrot"));
+		this.grid.addPlant(new Plant(this, 4, 3, "Tomato"));
+		this.grid.addPlant(new Plant(this, 1, 4, "Potato"));
 
 		keys = this.input.keyboard.addKeys(
 			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE"
