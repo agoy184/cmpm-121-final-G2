@@ -1,10 +1,30 @@
 class PlantFunctions {
 	static growPlant(nearCells, plantType, scene, dataView) {
-		const plant = internalPlantTypeCompiler(allPlantDefs[plantType - 1])
-		console.log(allPlantDefs);
-		console.log(plantType);
-		console.log(plant.rulesDisplay);
-		if (plant.nextLevel(plant.rulesDisplay)) {
+		const plant = internalPlantTypeCompiler(allPlantDefs[plantType - 1]);
+
+		let samePlants = 0;
+		let diffPlants = 0;
+
+		for(let i = 0; i < nearCells.length; i++) {
+			if (nearCells.plant) {
+				if (nearCells.plantType == plantType) {
+					samePlants++;
+				}else {
+					diffPlants++;
+				}
+			}
+		}
+
+		const data = {
+			sunLevel: dataView.getUint8(nearCells[0] + GRID_SUN_OFFSET),
+			waterLevel: dataView.getUint8(nearCells[0] + GRID_WATER_OFFSET),
+			nearDiffPlants: samePlants,
+			nearSamePlants: diffPlants,
+		};
+
+		console.log(data);
+
+		if (plant.nextLevel(data)) {
 			console.log("growing: " + plantType);
 			let growthLevel = dataView.getUint8(
 				nearCells[0] + GRID_GROWTH_OFFSET
