@@ -31,8 +31,7 @@ class PlantFunctions {
 
 export default class Plant extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, internalPlantType) {
-		let gridPoint = scene.grid.getPoint(x, y);
-		const nameIndex = names.indexOf(name) + 1;
+		let gridPoint = scene.grid.getPoint(x, y);;
 		super(scene, gridPoint[0], gridPoint[1], internalPlantType.image);
 		this.gridX = x;
 		this.gridY = y;

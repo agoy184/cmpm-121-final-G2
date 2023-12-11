@@ -27,6 +27,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		const plantGridCells = new ArrayBuffer(arraySize);
 		this.dataView = new DataView(plantGridCells);
 		this.cellFuncs = new Cell(this.dataView, scene);
+		this.names = ["Carrot", "Tomato", "Potato", "Banana", null];
 
 		this.initializeGrid();
 		scene.events.on("newDay", (event) => {
@@ -48,7 +49,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 
 			if (plantType != 0) {
 				plantData[i].plant = {};
-				plantData[i].plant.name = names[plantType - 1];
+				plantData[i].plant.name = this.names[plantType - 1];
 				plantData[i].plant.x = this.dataView.getUint8(i + GRID_X_OFFSET);
 				plantData[i].plant.y = this.dataView.getUint8(i + GRID_Y_OFFSET);
 				plantData[i].plant.level = this.dataView.getUint8(
@@ -70,7 +71,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 					const loadedPlant = this.createPlant(
 						i,
 						j,
-						names[plantType - 1]
+						this.names[plantType - 1]
 					);
 					loadedPlant.level = this.dataView.getUint8(index + 5);
 					this.addPlant(loadedPlant);
@@ -167,7 +168,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		if (plantType == 0) {
 			return null;
 		}
-		let removedPlantData = [names[plantType - 1], growthLevel];
+		let removedPlantData = [this.names[plantType - 1], growthLevel];
 		this.dataView.setUint8(index + GRID_TYPE_OFFSET, 0);
 		this.dataView.setUint8(index + GRID_X_OFFSET, 0);
 		this.dataView.setUint8(index + GRID_Y_OFFSET, 0);
@@ -204,7 +205,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 				"Level " +
 				growthLevel +
 				" " +
-				names[plantType - 1] +
+				this.names[plantType - 1] +
 				" has " +
 				sunlight +
 				" sunlight and " +
