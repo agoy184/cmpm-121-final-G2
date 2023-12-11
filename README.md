@@ -93,3 +93,62 @@ We have not considered changing any of the tools, materials, or roles at this po
 
 ### Has your game design evolved now that you've started to think about giving the player more feedback?
 Our design has somewhat evolved through the recent requirement changes, as creating systems for players to undo their changes makes it a game where they don't need to think about consequences (although they didn't need to in the first place). Creating a lose condition could be interesting despite not being part of future requirements, but for now we will invest in providing feedback with the game's current restraints.
+
+# Devlog Entry - [12/11/2023]
+## (F2) How we satisfied the software requirements
+### F0+F1
+
+The previous F0 and F1 requirements remain satisfied in the latest version. There are no major changes for F0 and most of F1. The only major change from F1 is F1.a, where we rewrote the plant data byte array to deal with some bugs relating to plant sprites.
+
+### [F2.a] External DSL for Scenario Design
+
+Our external DSL is based on YAML. A scenario can be defined by first having a name and a key-value pair of starting_conditions. This can affect the player's inventory by having them start with plants in their inventory. This also affects the farm grid by allowed scenarios to place plants when the game starts.
+
+```yaml
+- name: "Random Farm"
+  starting_conditions:
+      player_inventory:               # add plants to player's inventory
+          - item: "banana"            # add 3 bananas to inventory
+            quantity: 3
+          - item: "tomato"            # add 1 tomato to inventory
+            quantity: 1
+      farm_grid:                      # place plants on the farm grid
+          - crop:                     # place a potato plant at growth level 1 at 0,0 in the grid 
+                type: "potato"
+                growth_level: 1
+            position: [0, 0]
+          - crop:                     # place a carrot plant at growth level 3 at 4,2 in the grid 
+                type: "carrot"
+                growth_level: 3
+            position: [4, 2]
+
+```
+
+### [F2.b] Internal DSL for Plants and Growth Conditions
+
+```javascript
+    function tomato($) {
+        $.name("Tomato");
+        $.type(2);
+        $.image("tomato");
+        $.rulesDisplay("Tomato growing rules:\n- if water level is greater than 25\n- and the sunlight level is greater than 4\n- and there is at least one nearby plant");
+        $.growsWhen((rules) => {
+            if (rules.sunLevel <= 4) return false;
+            if (rules.waterLevel <= 25) return false;
+            if (rules.nearDiffPlants <= 0 && rules.nearSamePlants <= 0) return false;
+            return true;
+        });
+    }
+```
+The language we use for our internal DSL is JavaScript. 
+This function in our internal DSL defines a tomato plant that the game can use. It initializes many properties: 
+ - The display name is set to "Tomato"
+ - The plant type is set to 2 (used for the dataview)
+ - The image path is set to "tomato"
+ - Sets the rules display to text that the player can read to understand how the plant grows
+ - Creates a callback function that returns true if the plant growth rules are satisfied, else otherwise
+
+The "growsWhen" function allows our internal DSL to use JavaScript features to check the conditions of the plant to decide whether it can grow or not. Since it is a callback function, it allows us to use many features of JavaScript to define how a plant could grow. We could probably add a new condition that checks if the player is a certain distance away from the plant before it can grow, which would be hard to define in an external DSL.
+
+## Reflection
+Our team's plan has changed a little. Our roles don't really mean anything since we all work on various parts of the game (we each volunteer to do tasks). We did reconsider our use of JavaScript instead of TypeScript. However, it will take too much time for us to figure out how to switch languages due to it being finals week. Our game design has not really evolved from before. We still have plants that increase size with their growth level and info popups if the player presses E or R on a plant. Something we could add if we have extra time is like tinting the grid tiles a certain color to help visually display their sun and water level.
