@@ -1,4 +1,4 @@
-class Player extends Phaser.GameObjects.Sprite {
+export default class Player extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, texture, frame) {
 		let gridPoint = scene.grid.getPoint(x, y);
 		super(scene, gridPoint[0], gridPoint[1], texture, frame);

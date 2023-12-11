@@ -1,4 +1,6 @@
-class Load extends Phaser.Scene {
+import { h, w } from "../main.js";
+
+export default class Load extends Phaser.Scene {
 	constructor() {
 		super("loadScene");
 	}

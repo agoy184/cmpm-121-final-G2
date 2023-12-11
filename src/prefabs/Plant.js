@@ -29,7 +29,7 @@ class PlantFunctions {
 	}
 }
 
-class Plant extends Phaser.GameObjects.Sprite {
+export default class Plant extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, internalPlantType) {
 		let gridPoint = scene.grid.getPoint(x, y);
 		const nameIndex = names.indexOf(name) + 1;

@@ -1,3 +1,9 @@
+import { h, w } from "../main.js";
+import Grid from "../prefabs/Grid.js";
+import Player from "../prefabs/Player.js";
+import Environment from "../prefabs/Environment.js";
+import SaveFile from "../prefabs/SaveFile.js";
+
 const KEYBOARD = Phaser.Input.Keyboard;
 const MOVE = "move";
 const TIME = "time";
@@ -6,7 +12,7 @@ const ACTION = "action";
 const REFRESH_REDO = "refresh_redo";
 const MAX_TIME = 3;
 
-class Play extends Phaser.Scene {
+export default class Play extends Phaser.Scene {
 	constructor() {
 		super("playScene");
 	}

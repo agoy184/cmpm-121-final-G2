@@ -1,4 +1,6 @@
-class Environment extends Phaser.GameObjects.GameObject {
+import { h, w } from "../main.js";
+
+export default class Environment extends Phaser.GameObjects.GameObject {
 	constructor(scene, x, y) {
 		super(scene, x, y);
 		this.currentTime = 0;
