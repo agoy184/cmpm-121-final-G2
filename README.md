@@ -146,7 +146,7 @@ The previous F0 and F1 requirements remain satisfied in the latest version. Ther
 
 ### [F2.a] External DSL for Scenario Design
 
-Our external DSL is based on YAML. A scenario can be defined by first having a name and a key-value pair with a key called start. This can affect the player's inventory by having them start with plants in their inventory. This also affects the farm grid by allowed scenarios to place plants when the game starts.
+Our external DSL is based on YAML. A scenario can be defined by first having a name and a key-value pair with a key called start. This can affect the player's inventory by having them start with plants in their inventory. This also affects the farm grid by allowed scenarios to place plants when the game starts. The external DSL also allows users to set the time and day when the game starts, as well as set a day for an crop failure event to happen where all plants die.
 
 ```yaml
 - name: "Random Farm"
