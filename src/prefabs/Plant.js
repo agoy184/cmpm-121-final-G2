@@ -1,6 +1,6 @@
 import InternalPlantType from "./plantDef.js";
 import { allPlantDefs } from "./plantDef.js";
-import { GRID_GROWTH_OFFSET, GRID_SUN_OFFSET, GRID_WATER_OFFSET, GRID_X_OFFSET, GRID_Y_OFFSET } from "./Grid.js";
+import { GRID_GROWTH_OFFSET, GRID_SUN_OFFSET, GRID_WATER_OFFSET, GRID_X_OFFSET, GRID_Y_OFFSET, GRID_TYPE_OFFSET } from "./Grid.js";
 import Cell from "./Cell.js";
 
 export class PlantFunctions {
@@ -84,7 +84,6 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 	}
 
 	loadData(data) {
-		console.log("LOADING PLANT DATA", data);
 		this.gridX = data.x;
 		this.gridY = data.y;
 		this.name = data.name;

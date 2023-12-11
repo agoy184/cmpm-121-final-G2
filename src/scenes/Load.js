@@ -6,7 +6,6 @@ export default class Load extends Phaser.Scene {
 	}
 
 	preload() {
-		// Assets
 		this.load.path = "assets/";
 		this.load.image("farmer", "farmer.png");
 		this.load.image("grid", "redGrid.png");

@@ -41,13 +41,11 @@ export default class Play extends Phaser.Scene {
 		const action = this.undoStack.pop();
 		switch (action.type) {
 			case MOVE:
-				console.log(MOVE);
 				this.player.moveCharacter(action.x, action.y, true);
 				this.redoStack.push(new MoveAction(action.x, action.y));
 				break;
 
 			case TIME:
-				console.log(TIME);
 				if (action.dayChange) {
 					this.environment.currentTime = MAX_TIME;
 					this.environment.day -= 1;
@@ -57,7 +55,6 @@ export default class Play extends Phaser.Scene {
 				break;
 
 			case PLANT:
-				console.log(PLANT);
 				this.redoStack.push(
 					new PlantAction(this.player.copyInventory(), this.grid)
 				);
@@ -73,12 +70,10 @@ export default class Play extends Phaser.Scene {
 		const action = this.redoStack.pop();
 		switch (action.type) {
 			case MOVE:
-				console.log(MOVE);
 				this.player.moveCharacter(action.x, action.y);
 				break;
 
 			case TIME:
-				console.log(TIME);
 				if (action.dayChange) {
 					this.environment.currentTime = 0;
 					this.environment.day += 1;
@@ -87,7 +82,6 @@ export default class Play extends Phaser.Scene {
 				break;
 
 			case PLANT:
-				console.log(PLANT);
 				this.undoStack.push(
 					new PlantAction(this.player.copyInventory(), this.grid)
 				);
@@ -140,8 +134,6 @@ export default class Play extends Phaser.Scene {
 		this.events.on(ACTION, (event) => this.undoStack.push(event.action));
 		this.events.on(REFRESH_REDO, () => (this.redoStack = []));
 
-		// Add save/load buttons
-
 		this.saveBtn1 = new SaveFile(
 			this,
 			w - 100,
@@ -171,12 +163,10 @@ export default class Play extends Phaser.Scene {
 
 		this.startTime = this.time.now;
 		if (localStorage.getItem("autosave")) {
-			// question box that checks whether player wants to load autosave
 			let loadAutosave = confirm("Do you want to load autosave?");
 			if (loadAutosave) {
 				this.loadFile("autosave");
 			} else {
-				// remove autosave from local storage so that if player refreshes, they dont get an old autosave
 				localStorage.removeItem("autosave");
 			}
 		}
@@ -214,11 +204,9 @@ export default class Play extends Phaser.Scene {
 	}
 
 	autosave() {
-		// if statement so there is no autosave if the player does nothing at all
 		if (this.undoStack.length > 0) {
 			console.log("Autosaved");
-			// autosave with current date and time
-			this.saveFile("autosave"); // + new Date().toISOString());
+			this.saveFile("autosave"); 
 		}
 	}
 
@@ -240,6 +228,5 @@ export default class Play extends Phaser.Scene {
 		this.grid.loadData(save.grid);
 		this.undoStack = save.undoStack;
 		this.redoStack = save.redoStack;
-		console.log(this.undoStack);
 	}
 }

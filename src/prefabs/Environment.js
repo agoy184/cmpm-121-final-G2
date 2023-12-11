@@ -76,7 +76,6 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 
 		if (this.event != 0) {
 			if (this.day == this.event) {
-				// destroy all plants
 				this.scene.grid.destroyAllPlants();
 				this.event = 0;
 			}

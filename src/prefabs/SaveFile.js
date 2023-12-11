@@ -19,7 +19,6 @@ export default class SaveFile {
 	pointerDown() {
 		this.pointerOut();
 		if (!this.saved) {
-			// prompt user for file name
 			let promptName = prompt("Enter save file name: ", this.fileName);
 
 			this.scene.saveFile(this.fileName);
