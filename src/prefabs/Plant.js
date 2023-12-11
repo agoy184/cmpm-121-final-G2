@@ -156,7 +156,23 @@ class Plant extends Phaser.GameObjects.Sprite {
 		this.name = name;
 		this.type = nameIndex;
 		this.growthLevel = 1;
-		this.rules = "";
+		switch (name) {
+			case "Carrot":
+				this.rules =
+					"Carrot growing rules:\n- if water level is positive\n- and the sunlight level is greater than 0\n- and there are no nearby plants";
+				break;
+			case "Tomato":
+				this.rules =
+					"Tomato growing rules:\n- if water level is greater than 25\n- and the sunlight level is greater than 4\n- and there is at least one nearby plant";
+				break;
+			case "Potato":
+				this.rules =
+					"Potato growing rules:\n- if water level is greater than 10\n- and the sunlight level is less than 5\n- and there are no nearby plants (except for Potato)";
+				break;
+			default:
+				this.rules = "No rules";
+				break;
+		}
 		if (nameIndex < 3) {
 			this.setScale(0.05);
 		} else {

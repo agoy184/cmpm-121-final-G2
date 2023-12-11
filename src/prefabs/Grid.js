@@ -63,7 +63,6 @@ class Grid extends Phaser.GameObjects.Grid {
 				const index = (i * this.dimension + j) * Cell.numBytes;
 				const plantType = this.dataView.getUint8(index + 2);
 				//load back all the values from each cell in the dataview (use math to determine the right index)
-				console.log(plantType);
 				if (plantType !== 0) {
 					const loadedPlant = this.createPlant(
 						i,
@@ -90,10 +89,11 @@ class Grid extends Phaser.GameObjects.Grid {
 				loadedPlant.growthLevel = plant.growthLevel;
 				this.addPlant(loadedPlant);
 			} else {
-				if (this.scene.plantSpriteArray[index]) {
-					this.scene.plantSpriteArray[index].deletePlant();
-					this.scene.plantSpriteArray[index] = null;
-				}
+				let x = Math.floor(index / (this.dimension * Cell.numBytes));
+				let y = Math.floor(
+					(index / Cell.numBytes) % this.dimension
+				);
+				this.removePlant(x, y);
 			}
 		}
 	}
@@ -171,8 +171,15 @@ class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	getPlant(x, y) {
-		let key = this.getKey(x, y);
-		return this.gridCells[key].plant;
+		// returns the plant object at the given coordinates
+		const index = (x * this.dimension + y) * Cell.numBytes;
+		const plantType = this.dataView.getUint8(index + GRID_TYPE_OFFSET);
+		if (plantType == 0) {
+			return null;
+		}
+		return this.scene.plantSpriteArray[
+			`${(x * this.dimension + y) * Cell.numBytes}`
+		];
 	}
 
 	getCellInfo(x, y) {
