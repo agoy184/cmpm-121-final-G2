@@ -143,7 +143,7 @@ class Play extends Phaser.Scene {
 		);
 
 		// this.saveButtons = [this.saveBtn1, this.saveBtn2, this.saveBtn3];
-		names = ["Carrot", "Tomato", "Potato", "Banana", null];
+		//names = ["Carrot", "Tomato", "Potato", "Banana", null];
 		// textures = ["carrot", "tomato", "potato", "null"];
 
 		this.plantSpriteArray = {};
