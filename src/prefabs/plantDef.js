@@ -55,5 +55,18 @@ const allPlantDefs = [//this is what you change to add/remove/change plants
             if (rules.nearDiffPlants > 0) return false;
             return true;
         });
+    },
+
+    function banana($) {
+        $.name("Banana");
+        $.type(4);
+        $.image("banana");
+        $.rulesDisplay("Banana growing rules:\n- if water level is greater than 10\n- and the sunlight level is less than 5\n- and there is at least one nearby plant");
+        $.growsWhen((rules) => {
+            if (rules.sunLevel >= 5) return false;
+            if (rules.waterLevel <= 10) return false;
+            if (rules.nearDiffPlants <= 0 && rules.nearSamePlants <= 0) return false;
+            return true;
+        });
     }
 ];

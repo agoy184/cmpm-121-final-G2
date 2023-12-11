@@ -147,5 +147,15 @@ class Player extends Phaser.GameObjects.Sprite {
 				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[2]))
 			);
 		}
+
+		if (KEYBOARD.JustDown(keys.FOUR)) {
+			this.scene.events.emit(ACTION, {
+				action: new PlantAction(this.copyInventory(), this.scene.grid),
+			});
+			this.scene.events.emit(REFRESH_REDO);
+			this.scene.grid.addPlant(
+				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[3]))
+			);
+		}
 	}
 }

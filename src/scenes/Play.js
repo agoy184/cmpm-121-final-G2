@@ -143,7 +143,7 @@ class Play extends Phaser.Scene {
 		);
 
 		// this.saveButtons = [this.saveBtn1, this.saveBtn2, this.saveBtn3];
-		names = ["Carrot", "Tomato", "Potato", "null"];
+		names = ["Carrot", "Tomato", "Potato", "Banana", null];
 		// textures = ["carrot", "tomato", "potato", "null"];
 
 		this.plantSpriteArray = {};
@@ -153,13 +153,14 @@ class Play extends Phaser.Scene {
 		this.grid.addPlant(new Plant(this, 1, 4, internalPlantTypeCompiler(allPlantDefs[2])));
 
 		keys = this.input.keyboard.addKeys(
-			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE"
+			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
 		);
 		controls =
 			"Keys:\n" +
 			"1: Plant Carrot\n" +
 			"2: Plant Tomato\n" +
 			"3: Plant Potato\n" +
+			"4: Plant Banana\n" +
 			"Q: Pick Up Plant\n" +
 			"WASD: Move\n" +
 			"E: Get Cell Info\n" +

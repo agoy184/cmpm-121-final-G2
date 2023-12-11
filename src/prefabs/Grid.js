@@ -133,6 +133,8 @@ class Grid extends Phaser.GameObjects.Grid {
 				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[1]));
 			case "Potato":
 				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[2]));
+			case "Banana":
+				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[3]));
 			default:
 				return null;
 		}
