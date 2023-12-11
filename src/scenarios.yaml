@@ -1,24 +1,26 @@
 - name: "Starting Farm"
-  starting_conditions:
-      player_inventory:
-          - item: "carrot"
-            quantity: 1
-          - item: "tomato"
-            quantity: 1
-      farm_grid:
-          - crop:
-                type: "potato"
-                growth_level: 1
-            position: [0, 0]
-          - crop:
-                type: "potato"
-                growth_level: 2
-            position: [0, 4]
-          - crop:
-                type: "potato"
-                growth_level: 3
-            position: [4, 0]
-          - crop:
-                type: "potato"
-                growth_level: 1
-            position: [4, 4]
+  start:
+      player:
+          x: 1
+          y: 1
+          inventory:
+      grid:
+          - plant:
+                name: "Carrot"
+                level: 1
+                x: 0
+                y: 1
+          - plant:
+                name: "Tomato"
+                level: 1
+                x: 4
+                y: 3
+          - plant:
+                name: "Potato"
+                level: 1
+                x: 1
+                y: 4
+      environment:
+          time: 0
+          day: 0
+          event: 1

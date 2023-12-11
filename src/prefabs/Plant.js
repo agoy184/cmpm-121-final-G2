@@ -1,5 +1,7 @@
 import InternalPlantType from "./plantDef.js";
 import { allPlantDefs } from "./plantDef.js";
+import { GRID_GROWTH_OFFSET, GRID_SUN_OFFSET, GRID_WATER_OFFSET, GRID_X_OFFSET, GRID_Y_OFFSET } from "./Grid.js";
+import Cell from "./Cell.js";
 
 export class PlantFunctions {
 	static growPlant(nearCells, plantType, scene, dataView) {
@@ -55,7 +57,6 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 		super(scene, gridPoint[0], gridPoint[1], internalPlantType.image);
 		this.gridX = x;
 		this.gridY = y;
-		console.log(internalPlantType);
 		this.name = internalPlantType.name;
 		this.type = internalPlantType.type;
 		this.rules = internalPlantType.rulesDisplay;
@@ -82,12 +83,12 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 	}
 
 	loadData(data) {
+		console.log("LOADING PLANT DATA", data);
 		this.gridX = data.x;
 		this.gridY = data.y;
 		this.name = data.name;
 		this.level = data.growthLevel;
-		if (this.level == 1) this.setScale(0.1);
-		else this.setScale(this.level * 0.07);
+		this.setScale(this.level * 0.05);
 		let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
 		this.x = gridPoint[0];
 		this.y = gridPoint[1];

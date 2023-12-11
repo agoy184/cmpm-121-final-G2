@@ -1,5 +1,6 @@
 import { w } from "../main.js";
 import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME } from "../scenes/Play.js";
+import TimeAction from "./Action.js";
 
 export default class Environment extends Phaser.GameObjects.GameObject {
 	constructor(scene, x, y) {
@@ -25,6 +26,7 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 		this.keys = this.scene.input.keyboard.addKeys(
 			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
 		);
+		this.event = 0;
 		scene.add.existing(this);
 	}
 
@@ -32,12 +34,14 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 		return {
 			time: this.currentTime,
 			day: this.day,
+			event: this.event,
 		};
 	}
 
 	loadData(data) {
 		this.currentTime = data.time;
 		this.day = data.day;
+		this.event = data.event;
 		this.updateTimeDisplay();
 	}
 
@@ -69,5 +73,13 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 			this.updateTimeDisplay();
 		}
 		this.displayPlayerInventory(this.scene.player.plantInventory);
+
+		if (this.event != 0) {
+			if (this.day == this.event) {
+				// destroy all plants
+				this.scene.grid.destroyAllPlants();
+				this.event = 0;
+			}
+		}
 	}
 }

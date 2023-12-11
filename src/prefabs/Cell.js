@@ -1,4 +1,4 @@
-import PlantFunctions from "./Plant.js";
+import { PlantFunctions } from "./Plant.js";
 
 export default class Cell {
 	static numBytes = 6;

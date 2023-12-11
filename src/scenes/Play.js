@@ -169,10 +169,6 @@ export default class Play extends Phaser.Scene {
 
 		this.plantSpriteArray = {};
 
-		this.grid.addPlant(new Plant(this, 0, 1, internalPlantTypeCompiler(allPlantDefs[0])));
-		this.grid.addPlant(new Plant(this, 4, 3, internalPlantTypeCompiler(allPlantDefs[1])));
-		this.grid.addPlant(new Plant(this, 1, 4, internalPlantTypeCompiler(allPlantDefs[2])));
-
 		this.startTime = this.time.now;
 		if (localStorage.getItem("autosave")) {
 			// question box that checks whether player wants to load autosave
@@ -192,7 +188,17 @@ export default class Play extends Phaser.Scene {
 		this.load.text("yamlData", "../src/scenarios.yaml");
 		let yamlData = this.cache.text.get("yamlData");
 		let data = YAML.parse(yamlData);
-		console.log(data);
+
+
+		if (data) {
+			this.player.loadData(data[0].start.player);
+			this.grid.loadData(data[0].start.grid);
+			this.environment.loadData(data[0].start.environment);
+		} else {
+			this.grid.addPlant(new Plant(this, 0, 1, internalPlantTypeCompiler(allPlantDefs[0])));
+			this.grid.addPlant(new Plant(this, 4, 3, internalPlantTypeCompiler(allPlantDefs[1])));
+			this.grid.addPlant(new Plant(this, 1, 4, internalPlantTypeCompiler(allPlantDefs[2])));
+		}
 
 	}
 

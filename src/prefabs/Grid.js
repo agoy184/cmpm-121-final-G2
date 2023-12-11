@@ -2,12 +2,12 @@ import Cell from "../prefabs/Cell.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 
-const GRID_WATER_OFFSET = 0;
-const GRID_SUN_OFFSET = 1;
-const GRID_TYPE_OFFSET = 2;
-const GRID_X_OFFSET = 3;
-const GRID_Y_OFFSET = 4;
-const GRID_GROWTH_OFFSET = 5;
+export const GRID_WATER_OFFSET = 0;
+export const GRID_SUN_OFFSET = 1;
+export const GRID_TYPE_OFFSET = 2;
+export const GRID_X_OFFSET = 3;
+export const GRID_Y_OFFSET = 4;
+export const GRID_GROWTH_OFFSET = 5;
 
 export default class Grid extends Phaser.GameObjects.Grid {
 	constructor(scene, x, y, width, height, dimension) {
@@ -42,8 +42,6 @@ export default class Grid extends Phaser.GameObjects.Grid {
 	saveData() {
 		// store all of the plant data from the dataview
 		const plantData = {};
-
-		console.log("Saving data");
 
 		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
 			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
@@ -93,6 +91,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 					plant.name
 				);
 				loadedPlant.level = plant.level;
+				loadedPlant.setScale(loadedPlant.level * 0.05);
 				this.addPlant(loadedPlant);
 			} else {
 				let x = Math.floor(index / (this.dimension * Cell.numBytes));
@@ -265,5 +264,16 @@ export default class Grid extends Phaser.GameObjects.Grid {
 
 	pointInBounds(x, y) {
 		return x >= 0 && x < this.dimension && y >= 0 && y < this.dimension;
+	}
+
+	destroyAllPlants() {
+		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
+			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
+			if (plantType != 0) {
+				const plantX = this.dataView.getUint8(i + GRID_X_OFFSET);
+				const plantY = this.dataView.getUint8(i + GRID_Y_OFFSET);
+				this.removePlant(plantX, plantY);
+			}
+		}
 	}
 }
