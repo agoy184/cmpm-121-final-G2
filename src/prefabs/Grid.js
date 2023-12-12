@@ -85,6 +85,9 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		for (let index in data) {
 			const plant = data[index].plant;
 			if (plant) {
+				if (plant.name == null || plant.x == null || plant.y == null) {
+					continue;
+				}
 				const loadedPlant = this.createPlant(
 					plant.x,
 					plant.y,

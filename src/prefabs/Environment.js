@@ -39,9 +39,9 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	loadData(data) {
-		this.currentTime = data.time;
-		this.day = data.day;
-		this.event = data.event;
+		this.currentTime = data.time ?? this.currentTime;
+		this.day = data.day ?? this.day;
+		this.event = data.event ?? this.event;
 		this.updateTimeDisplay();
 	}
 

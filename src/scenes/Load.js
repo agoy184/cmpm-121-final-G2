@@ -26,6 +26,8 @@ export default class Load extends Phaser.Scene {
 		this.load.on("complete", () => {
 			loadingBar.destroy();
 		});
+
+		this.load.text("yamlData", "../src/scenarios.yaml");
 	}
 
 	create() {

@@ -368,10 +368,13 @@ export default class Play extends Phaser.Scene {
 			this.autosave();
 		};
 
-		this.load.text("yamlData", "../src/scenarios.yaml");
+		this.uploadFromYaml();
+
+	}
+
+	uploadFromYaml() {
 		let yamlData = this.cache.text.get("yamlData");
 		let data = YAML.parse(yamlData);
-
 
 		if (data) {
 			this.player.loadData(data[0].start.player);
@@ -382,7 +385,6 @@ export default class Play extends Phaser.Scene {
 			this.grid.addPlant(new Plant(this, 4, 3, internalPlantTypeCompiler(allPlantDefs[1])));
 			this.grid.addPlant(new Plant(this, 1, 4, internalPlantTypeCompiler(allPlantDefs[2])));
 		}
-
 	}
 
 	update() {

@@ -39,13 +39,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	loadData(data) {
-		this.gridX = data.x;
-		this.gridY = data.y;
-		this.plantInventory = data.inventory;
-		this.growthThreePlants = data.growthThreePlants;
+		this.gridX = data.x ?? this.gridX;
+		this.gridY = data.y ?? this.gridY;
+		this.plantInventory = data.inventory ?? this.plantInventory;
+		this.growthThreePlants = data.growthThreePlants ?? this.growthThreePlants;
 		let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
-		this.x = gridPoint[0];
-		this.y = gridPoint[1];
+		[this.x, this.y] = gridPoint;
 	}
 
 	tweenToPoint(x, y) {
