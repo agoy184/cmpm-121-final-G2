@@ -1,5 +1,5 @@
 import { w } from "../main.js";
-import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME } from "../scenes/Play.js";
+import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME} from "../scenes/Play.js";
 import TimeAction from "./Action.js";
 
 export default class Environment extends Phaser.GameObjects.GameObject {
@@ -59,7 +59,8 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(this.keys.T)) {
+		if (KEYBOARD.JustDown(this.keys.T) || this.scene.tProc) {
+			this.scene.tProc = false;
 			this.currentTime += 1;
 			this.scene.events.emit(REFRESH_REDO);
 			if (this.currentTime > MAX_TIME) {

@@ -1,4 +1,5 @@
-import { KEYBOARD, controls, ACTION, REFRESH_REDO } from "../scenes/Play.js";
+import {
+	KEYBOARD, controls, ACTION, REFRESH_REDO } from "../scenes/Play.js";
 import MoveAction from "./Action.js";
 import PlantAction from "./Action.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
@@ -84,18 +85,23 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(this.keys.W)) {
+		if (KEYBOARD.JustDown(this.keys.W) || this.scene.wProc) {
 			this.moveCharacter(0, -1);
-		} else if (KEYBOARD.JustDown(this.keys.A)) {
+			this.scene.wProc = false;
+		} else if (KEYBOARD.JustDown(this.keys.A) || this.scene.aProc) {
 			this.moveCharacter(-1, 0);
-		} else if (KEYBOARD.JustDown(this.keys.S)) {
+			this.scene.aProc = false;
+		} else if (KEYBOARD.JustDown(this.keys.S) || this.scene.sProc) {
 			this.moveCharacter(0, 1);
-		} else if (KEYBOARD.JustDown(this.keys.D)) {
+			this.scene.sProc = false;
+		} else if (KEYBOARD.JustDown(this.keys.D) || this.scene.dProc) {
 			this.moveCharacter(1, 0);
+			this.scene.dProc = false;
 		}
 
-		if (KEYBOARD.JustDown(this.keys.R)) {
+		if (KEYBOARD.JustDown(this.keys.R) || this.scene.rProc) {
 			let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
+			this.scene.rProc = false;
 			if (plant) {
 				alert(plant.rules);
 			} else {
@@ -103,11 +109,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			}
 		}
 
-		if (KEYBOARD.JustDown(this.keys.E)) {
+		if (KEYBOARD.JustDown(this.keys.E) || this.scene.eProc) {
 			let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
+			this.scene.eProc = false;
 			alert(info);
 		}
-		if (!this.removingPlantAlready && KEYBOARD.JustDown(this.keys.Q)) {
+		if (!this.removingPlantAlready && (KEYBOARD.JustDown(this.keys.Q) || this.scene.qProc)) {
+			this.scene.qProc = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -129,7 +137,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		// gotta refactor this later
-		if (KEYBOARD.JustDown(this.keys.ONE)) {
+		if (KEYBOARD.JustDown(this.keys.ONE) || this.scene.oneProc) {
+			this.scene.oneProc = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -138,7 +147,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[0]))
 			);
 		}
-		if (KEYBOARD.JustDown(this.keys.TWO)) {
+		if (KEYBOARD.JustDown(this.keys.TWO) || this.scene.twoProc) {
+			this.scene.twoProc = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -147,7 +157,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[1]))
 			);
 		}
-		if (KEYBOARD.JustDown(this.keys.THREE)) {
+		if (KEYBOARD.JustDown(this.keys.THREE) || this.scene.threeProc) {
+			this.scene.threeProc = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -157,7 +168,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			);
 		}
 
-		if (KEYBOARD.JustDown(this.keys.FOUR)) {
+		if (KEYBOARD.JustDown(this.keys.FOUR) || this.scene.fourProc) {
+			this.scene.fourProc = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});

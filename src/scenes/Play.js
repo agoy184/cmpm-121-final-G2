@@ -27,6 +27,8 @@ export const ACTION = "action";
 export const REFRESH_REDO = "refresh_redo";
 export const MAX_TIME = 3;
 
+
+
 export default class Play extends Phaser.Scene {
 	constructor() {
 		super("playScene");
@@ -93,6 +95,12 @@ export default class Play extends Phaser.Scene {
 	}
 
 	create() {
+		this.proc = {
+			wProc: false, aProc: false, sProc: false, dProc: false,
+			qProc: false, eProc: false, rProc: false, tProc: false,
+			oneProc: false, twoProc: false, threeProc: false, fourProc: false
+		};
+
 		this.bgGrid = this.add.image(w / 2, h / 2, "grassbg").setScale(1);
 		this.grid = new Grid(this, w / 2, h / 2, 320 * 2, 268 * 2, 5);
 		this.player = new Player(this, 2, 2, "farmer")
@@ -104,6 +112,7 @@ export default class Play extends Phaser.Scene {
 		let undoProc = false;
 		this.redoStack = [];
 		let redoProc = false;
+		
 
 		this.undoBtn = this.add
 			.text(w - 110, 70, "⬅️")
@@ -158,6 +167,190 @@ export default class Play extends Phaser.Scene {
 			{ fontSize: "15px", color: "#FFFFFF" },
 			"save3"
 		);
+
+		this.upBtn = this.add
+			.text(w - 900, 220, "⬆️")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.wProc) return;
+				this.wProc = true;
+				setTimeout(
+					function () {
+						this.wProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.leftBtn = this.add
+			.text(w - 930, 250, "⬅️")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				this.input.keyboard.emit('keydown-A');
+				if (this.aProc) return;
+				this.aProc = true;
+				setTimeout(
+					function () {
+						this.aProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.downBtn = this.add
+			.text(w - 900, 280, "⬇️")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				this.input.keyboard.emit('keydown-S');
+				if (this.sProc) return;
+				this.sProc = true;
+				setTimeout(
+					function () {
+						this.sProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.rightBtn = this.add
+			.text(w - 870, 250, "➡️")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				this.input.keyboard.emit('keydown-D');
+				if (this.dProc) return;
+				this.dProc = true;
+				setTimeout(
+					function () {
+						this.dProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.qBtn = this.add
+			.text(w - 60, 250, "Q")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.qProc) return;
+				this.qProc = true;
+				setTimeout(
+					function () {
+						this.qProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.eBtn = this.add
+			.text(w - 120, 250, "E")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.eProc) return;
+				this.eProc = true;
+				setTimeout(
+					function () {
+						this.eProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.rBtn = this.add
+			.text(w - 90, 220, "R")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.rProc) return;
+				this.rProc = true;
+				setTimeout(
+					function () {
+						this.rProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.tBtn = this.add
+			.text(w - 90, 280, "T")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.tProc) return;
+				this.tProc = true;
+				setTimeout(
+					function () {
+						this.tProc = false;
+					}.bind(this),
+					175
+        		);
+			});
+		
+		this.oneBtn = this.add
+			.text(w - 145, 450, "1")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.oneProc) return;
+				this.oneProc = true;
+				setTimeout(
+					function () {
+						this.oneProc = false;
+					}.bind(this),
+					175
+				);
+			});
+		
+		this.twoBtn = this.add
+			.text(w - 105, 450, "2")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.twoProc) return;
+				this.twoProc = true;
+				setTimeout(
+					function () {
+						this.twoProc = false;
+					}.bind(this),
+					175
+				);
+			});
+		
+		this.threeBtn = this.add
+			.text(w - 65, 450, "3")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.threeProc) return;
+				this.threeProc = true;
+				setTimeout(
+					function () {
+						this.threeProc = false;
+					}.bind(this),
+					175
+				);
+			});
+		
+		this.fourBtn = this.add
+			.text(w - 25, 450, "4")
+			.setStyle({ fontSize: "25px" })
+			.setInteractive({ useHandCursor: true })
+			.on("pointerdown", () => {
+				if (this.fourProc) return;
+				this.fourProc = true;
+				setTimeout(
+					function () {
+						this.fourProc = false;
+					}.bind(this),
+					175
+				);
+			});
+
 
 		this.plantSpriteArray = {};
 
