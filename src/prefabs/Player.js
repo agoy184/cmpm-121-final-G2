@@ -4,7 +4,12 @@ import PlantAction from "./Action.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 import { language } from "../scenes/Play.js";
-import { plantRulesText, winText, controlsText } from "../translations.js";
+import {
+	plantRulesText,
+	winText,
+	controlsText,
+	plantNamesText,
+} from "../translations.js";
 
 export default class Player extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, texture, frame) {
@@ -28,6 +33,21 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			inventoryData[key] = this.plantInventory[key];
 		}
 		return inventoryData;
+	}
+
+	updateInventory() {
+		for (let key in this.plantInventory) {
+			const plantName = key.split(",")[0];
+			const num = key.split(",")[1];
+			const newKey = plantNamesText[plantName][language] + "," + num;
+			if (key.localeCompare(newKey) != 0) {
+				this.plantInventory[newKey] = this.plantInventory[key];
+				delete this.plantInventory[key];
+				this.scene.environment.displayPlayerInventory(
+					this.plantInventory
+				);
+			}
+		}
 	}
 
 	saveData() {

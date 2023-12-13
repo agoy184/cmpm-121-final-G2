@@ -4,7 +4,12 @@ export const plantNamesText = {
 		中文: "胡萝卜",
 		اللغةالعربية: "جزر",
 	},
-	carrot: {
+	胡萝卜: {
+		English: "Carrot",
+		中文: "胡萝卜",
+		اللغةالعربية: "جزر",
+	},
+	جزر: {
 		English: "Carrot",
 		中文: "胡萝卜",
 		اللغةالعربية: "جزر",
@@ -14,7 +19,12 @@ export const plantNamesText = {
 		中文: "番茄",
 		اللغةالعربية: "طماطم",
 	},
-	tomato: {
+	番茄: {
+		English: "Tomato",
+		中文: "番茄",
+		اللغةالعربية: "طماطم",
+	},
+	طماطم: {
 		English: "Tomato",
 		中文: "番茄",
 		اللغةالعربية: "طماطم",
@@ -24,7 +34,12 @@ export const plantNamesText = {
 		中文: "土豆",
 		اللغةالعربية: "بطاطس",
 	},
-	potato: {
+	土豆: {
+		English: "Potato",
+		中文: "土豆",
+		اللغةالعربية: "بطاطس",
+	},
+	بطاطس: {
 		English: "Potato",
 		中文: "土豆",
 		اللغةالعربية: "بطاطس",
@@ -34,7 +49,12 @@ export const plantNamesText = {
 		中文: "香蕉",
 		اللغةالعربية: "موز",
 	},
-	banana: {
+	香蕉: {
+		English: "Banana",
+		中文: "香蕉",
+		اللغةالعربية: "موز",
+	},
+	موز: {
 		English: "Banana",
 		中文: "香蕉",
 		اللغةالعربية: "موز",

@@ -28,11 +28,6 @@ export default class Play extends Phaser.Scene {
 
 	preload() {
 		this.load.text("yamlData", "../src/scenarios.yaml");
-		this.load.scenePlugin({
-			key: "rexuiplugin",
-			url: "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",
-			sceneKey: "rexUI",
-		});
 	}
 
 	undo() {
@@ -151,6 +146,7 @@ export default class Play extends Phaser.Scene {
 			this.environment.updateTimeDisplay();
 			this.grid.updateNames();
 			this.environment.updateControlsDisplay();
+			this.player.updateInventory();
 			if (!this.saveBtn1.saved)
 				this.saveBtn1.updateText(saveText[language] + "1");
 			if (!this.saveBtn2.saved)
