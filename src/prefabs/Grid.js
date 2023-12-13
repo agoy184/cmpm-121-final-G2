@@ -147,7 +147,6 @@ export default class Grid extends Phaser.GameObjects.Grid {
 			} else if (currentWater + randomWater < 250) {
 				this.dataView.setUint8(index, currentWater + randomWater);
 			}
-			console.log(randomWater);
 			this.dataView.setUint8(index + 1, randomSunlight);
 		}
 	}

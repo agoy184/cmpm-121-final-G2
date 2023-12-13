@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-      "baseUrl": "./",
-      "paths": {
-        "yamljs": ["node_modules/yamljs/index.d.ts"]
-      }
-    }
-  }
-  
