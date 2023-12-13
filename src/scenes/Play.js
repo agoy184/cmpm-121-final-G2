@@ -7,7 +7,6 @@ import SaveFile from "../prefabs/SaveFile.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 import MoveAction, { PlantAction } from "../prefabs/Action.js";
-import { language } from "../main.js";
 import { autosaveMsgText, saveText } from "../translations.js";
 
 export const KEYBOARD = Phaser.Input.Keyboard;
@@ -17,6 +16,10 @@ export const PLANT = "plant";
 export const ACTION = "action";
 export const REFRESH_REDO = "refresh_redo";
 export const MAX_TIME = 3;
+export const LANG_CHANGE = "language-changed";
+
+export const languages = ["English", "temp1", "Chinese", "Vietnamese"];
+export let language = "English";
 
 export default class Play extends Phaser.Scene {
 	constructor() {
@@ -25,6 +28,11 @@ export default class Play extends Phaser.Scene {
 
 	preload() {
 		this.load.text("yamlData", "../src/scenarios.yaml");
+		this.load.scenePlugin({
+			key: "rexuiplugin",
+			url: "https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js",
+			sceneKey: "rexUI",
+		});
 	}
 
 	undo() {
@@ -139,6 +147,17 @@ export default class Play extends Phaser.Scene {
 
 		this.events.on(ACTION, (event) => this.undoStack.push(event.action));
 		this.events.on(REFRESH_REDO, () => (this.redoStack = []));
+		this.events.on(LANG_CHANGE, () => {
+			this.environment.updateTimeDisplay();
+			this.grid.updateNames();
+			this.environment.updateControlsDisplay();
+			if (!this.saveBtn1.saved)
+				this.saveBtn1.updateText(saveText[language] + "1");
+			if (!this.saveBtn2.saved)
+				this.saveBtn2.updateText(saveText[language] + "2");
+			if (!this.saveBtn3.saved)
+				this.saveBtn3.updateText(saveText[language] + "3");
+		});
 
 		this.saveBtn1 = new SaveFile(
 			this,
@@ -348,6 +367,7 @@ export default class Play extends Phaser.Scene {
 				);
 			});
 
+		this.createLangButtons();
 		this.plantSpriteArray = {};
 
 		this.startTime = this.time.now;
@@ -365,6 +385,29 @@ export default class Play extends Phaser.Scene {
 		};
 
 		this.uploadFromYaml();
+	}
+
+	createLangButtons() {
+		let yPos = 330;
+		languages.forEach((lang) => {
+			const btn = this.add
+				.text(10, yPos, lang)
+				.setStyle({ fontSize: "15px" })
+				.setInteractive({ useHandCursor: true })
+				.on("pointerout", () => {
+					btn.setStyle({ fill: "#FFFFFF" });
+					btn.setFontSize(15);
+				})
+				.on("pointerover", () => {
+					btn.setStyle({ fill: "#f39c12" });
+					btn.setFontSize(15 * 1.1);
+				})
+				.on("pointerdown", () => {
+					language = lang;
+					this.events.emit(LANG_CHANGE);
+				});
+			yPos += 20;
+		});
 	}
 
 	uploadFromYaml() {

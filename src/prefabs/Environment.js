@@ -1,7 +1,7 @@
 import { w } from "../main.js";
 import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME } from "../scenes/Play.js";
 import TimeAction from "./Action.js";
-import { language } from "../main.js";
+import { language } from "../scenes/Play.js";
 import {
 	advanceTimeText,
 	pressForControlsText,
@@ -44,6 +44,10 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 			day: this.day,
 			event: this.event,
 		};
+	}
+
+	updateControlsDisplay() {
+		this.controlsDisplay.setText(pressForControlsText[language]);
 	}
 
 	loadData(data) {

@@ -4,7 +4,17 @@ export const plantNamesText = {
 		temp1: "temp1",
 		temp2: "temp2",
 	},
+	carrot: {
+		English: "Carrot",
+		temp1: "temp1",
+		temp2: "temp2",
+	},
 	Tomato: {
+		English: "Tomato",
+		temp1: "temp1",
+		temp2: "temp2",
+	},
+	tomato: {
 		English: "Tomato",
 		temp1: "temp1",
 		temp2: "temp2",
@@ -14,7 +24,17 @@ export const plantNamesText = {
 		temp1: "temp1",
 		temp2: "temp2",
 	},
+	potato: {
+		English: "Potato",
+		temp1: "temp1",
+		temp2: "temp2",
+	},
 	Banana: {
+		English: "Banana",
+		temp1: "temp1",
+		temp2: "temp2",
+	},
+	banana: {
 		English: "Banana",
 		temp1: "temp1",
 		temp2: "temp2",
@@ -146,4 +166,10 @@ export const autosaveMsgText = {
 	English: "Do you want to load autosave?",
 	temp1: "temp1",
 	temp2: "temp2",
+};
+
+export const saveFilePromptText = {
+	English: "Enter save file name: ",
+	temp1: "temp1 ",
+	temp2: "temp2 ",
 };

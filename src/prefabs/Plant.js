@@ -9,7 +9,7 @@ import {
 	GRID_TYPE_OFFSET,
 } from "./Grid.js";
 import Cell from "./Cell.js";
-import { language } from "../main.js";
+import { language } from "../scenes/Play.js";
 import { plantNamesText, atText } from "../translations.js";
 
 export class PlantFunctions {
@@ -104,7 +104,7 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 
 	toString() {
 		return (
-			plantNamesText[this.name[language]] +
+			plantNamesText[this.name][language] +
 			atText[language] +
 			this.gridX +
 			", " +

@@ -3,7 +3,7 @@ import MoveAction from "./Action.js";
 import PlantAction from "./Action.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
-import { language } from "../main.js";
+import { language } from "../scenes/Play.js";
 import { plantRulesText, winText, controlsText } from "../translations.js";
 
 export default class Player extends Phaser.GameObjects.Sprite {
@@ -104,7 +104,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
 			this.scene.rProc = false;
 			if (plant) {
-				alert(plantRulesText[plant.name[language]]);
+				alert(plantRulesText[plant.name][language]);
 			} else {
 				alert(controlsText[language]);
 			}

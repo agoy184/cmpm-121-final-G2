@@ -1,13 +1,14 @@
 import Cell from "../prefabs/Cell.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
-import { language } from "../main.js";
+import { language } from "../scenes/Play.js";
 import {
 	levelText,
 	hasText,
 	sunlightAndText,
 	waterText,
 	emptyPlotText,
+	plantNamesText,
 } from "../translations.js";
 
 export const GRID_WATER_OFFSET = 0;
@@ -37,7 +38,13 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		const plantGridCells = new ArrayBuffer(arraySize);
 		this.dataView = new DataView(plantGridCells);
 		this.cellFuncs = new Cell(this.dataView, scene);
-		this.names = ["Carrot", "Tomato", "Potato", "Banana", null];
+		this.names = [
+			plantNamesText["Carrot"][language],
+			plantNamesText["Tomato"][language],
+			plantNamesText["Potato"][language],
+			plantNamesText["Banana"][language],
+			null,
+		];
 
 		this.initializeGrid();
 		scene.events.on("newDay", (event) => {
@@ -45,6 +52,16 @@ export default class Grid extends Phaser.GameObjects.Grid {
 			//console.log("day " + event.day);
 		});
 		scene.add.existing(this);
+	}
+
+	updateNames() {
+		this.names = [
+			plantNamesText["Carrot"][language],
+			plantNamesText["Tomato"][language],
+			plantNamesText["Potato"][language],
+			plantNamesText["Banana"][language],
+			null,
+		];
 	}
 
 	saveData() {

@@ -1,3 +1,6 @@
+import { language } from "../scenes/Play.js";
+import { saveFilePromptText } from "../translations.js";
+
 export default class SaveFile {
 	constructor(scene, x, y, label, style, fileName) {
 		this.scene = scene;
@@ -19,7 +22,10 @@ export default class SaveFile {
 	pointerDown() {
 		this.pointerOut();
 		if (!this.saved) {
-			let promptName = prompt("Enter save file name: ", this.fileName);
+			let promptName = prompt(
+				saveFilePromptText[language],
+				this.fileName
+			);
 
 			this.scene.saveFile(this.fileName);
 			this.saved = true;
