@@ -18,7 +18,7 @@ export const REFRESH_REDO = "refresh_redo";
 export const MAX_TIME = 3;
 export const LANG_CHANGE = "language-changed";
 
-export const languages = ["English", "temp1", "Chinese", "Vietnamese"];
+export const languages = ["English", "中文", "اللغةالعربية"];
 export let language = "English";
 
 export default class Play extends Phaser.Scene {
