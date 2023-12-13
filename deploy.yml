@@ -19,3 +19,4 @@ jobs:
           folder: .
           clean: false
           single-commit: true
+          run-ons: self-hosted
