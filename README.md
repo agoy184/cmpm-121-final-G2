@@ -251,3 +251,29 @@ The "growsWhen" function allows our internal DSL to use JavaScript features to c
 ## Reflection
 Our team's plan has changed a little. Our roles don't really mean anything since we all work on various parts of the game (we each volunteer to do tasks). We did reconsider our use of JavaScript instead of TypeScript. However, it will take too much time for us to figure out how to switch languages due to it being finals week. Our game design has not really evolved from before. We still have plants that increase size with their growth level and info popups if the player presses E or R on a plant. Something we could add if we have extra time is like tinting the grid tiles a certain color to help visually display their sun and water level.
 </details>
+
+<details>
+<summary>
+ 
+# Devlog Entry - [12/13/2023]</summary>
+<br>
+## How we satisfied the software requirements
+### F0+F1+F2
+
+
+### Internationalization
+
+
+### Localization
+
+
+### Mobile Installation
+
+
+### Mobile Play (Offline)
+
+
+## Reflection
+
+
+</details>
