@@ -375,7 +375,6 @@ export default class Play extends Phaser.Scene {
 				localStorage.removeItem("autosave");
 			}
 		}
-		// autosave when window is closed and every 5 mins below
 		window.onbeforeunload = () => {
 			this.autosave();
 		};
