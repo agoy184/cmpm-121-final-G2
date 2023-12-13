@@ -49,7 +49,6 @@ export class PlantFunctions {
 					growthLevel + 1
 				);
 				// update growthLevel since it was increased in the dataview
-				// without this the plant size wouldn't update along with the growth level
 				growthLevel = dataView.getUint8(
 					nearCells[0] + GRID_GROWTH_OFFSET
 				);
