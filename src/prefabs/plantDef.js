@@ -17,7 +17,6 @@ export default class InternalPlantType {
 }
 
 export const allPlantDefs = [
-	//this is what you change to add/remove/change plants
 	function carrot($) {
 		$.name("Carrot");
 		$.type(1);
