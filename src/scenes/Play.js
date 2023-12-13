@@ -1,4 +1,4 @@
-import * as yaml from "../../yamljs/dist/yaml.js";
+import * as yaml from "../../public/yamljs/dist/yaml.js";
 import { h, w } from "../main.js";
 import Grid from "../prefabs/Grid.js";
 import Player from "../prefabs/Player.js";
