@@ -1,5 +1,6 @@
 import Load from "./scenes/Load.js";
 import Play from "./scenes/Play.js";
+import "./translations.js";
 
 let config = {
 	type: Phaser.WEBGL,
@@ -21,6 +22,8 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
+
+export let language = "English";
 
 let w = game.config.width;
 let h = game.config.height;

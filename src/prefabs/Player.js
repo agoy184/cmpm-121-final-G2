@@ -1,9 +1,10 @@
-import {
-	KEYBOARD, controls, ACTION, REFRESH_REDO } from "../scenes/Play.js";
+import { KEYBOARD, ACTION, REFRESH_REDO } from "../scenes/Play.js";
 import MoveAction from "./Action.js";
 import PlantAction from "./Action.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
+import { language } from "../main.js";
+import { plantRulesText, winText, controlsText } from "../translations.js";
 
 export default class Player extends Phaser.GameObjects.Sprite {
 	constructor(scene, x, y, texture, frame) {
@@ -42,7 +43,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		this.gridX = data.x ?? this.gridX;
 		this.gridY = data.y ?? this.gridY;
 		this.plantInventory = data.inventory ?? this.plantInventory;
-		this.growthThreePlants = data.growthThreePlants ?? this.growthThreePlants;
+		this.growthThreePlants =
+			data.growthThreePlants ?? this.growthThreePlants;
 		let gridPoint = this.scene.grid.getPoint(this.gridX, this.gridY);
 		[this.x, this.y] = gridPoint;
 	}
@@ -102,9 +104,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
 			this.scene.rProc = false;
 			if (plant) {
-				alert(plant.rules);
+				alert(plantRulesText[plant.name[language]]);
 			} else {
-				alert(controls);
+				alert(controlsText[language]);
 			}
 		}
 
@@ -113,7 +115,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			this.scene.eProc = false;
 			alert(info);
 		}
-		if (!this.removingPlantAlready && (KEYBOARD.JustDown(this.keys.Q) || this.scene.qProc)) {
+		if (
+			!this.removingPlantAlready &&
+			(KEYBOARD.JustDown(this.keys.Q) || this.scene.qProc)
+		) {
 			this.scene.qProc = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
@@ -127,7 +132,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			if (plant[1] == 3) {
 				this.growthThreePlants += 1;
 				if (this.growthThreePlants == 5) {
-					alert("You collected 5 level 3 plants! You win!");
+					alert(winText[language]);
 				}
 			}
 			this.plantInventory[plant] = (this.plantInventory[plant] || 0) + 1;
@@ -143,7 +148,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[0]))
+				new Plant(
+					this.scene,
+					this.gridX,
+					this.gridY,
+					internalPlantTypeCompiler(allPlantDefs[0])
+				)
 			);
 		}
 		if (KEYBOARD.JustDown(this.keys.TWO) || this.scene.twoProc) {
@@ -153,7 +163,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[1]))
+				new Plant(
+					this.scene,
+					this.gridX,
+					this.gridY,
+					internalPlantTypeCompiler(allPlantDefs[1])
+				)
 			);
 		}
 		if (KEYBOARD.JustDown(this.keys.THREE) || this.scene.threeProc) {
@@ -163,7 +178,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[2]))
+				new Plant(
+					this.scene,
+					this.gridX,
+					this.gridY,
+					internalPlantTypeCompiler(allPlantDefs[2])
+				)
 			);
 		}
 
@@ -174,7 +194,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			});
 			this.scene.events.emit(REFRESH_REDO);
 			this.scene.grid.addPlant(
-				new Plant(this.scene, this.gridX, this.gridY, internalPlantTypeCompiler(allPlantDefs[3]))
+				new Plant(
+					this.scene,
+					this.gridX,
+					this.gridY,
+					internalPlantTypeCompiler(allPlantDefs[3])
+				)
 			);
 		}
 	}

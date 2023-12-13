@@ -1,6 +1,14 @@
 import Cell from "../prefabs/Cell.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
+import { language } from "../main.js";
+import {
+	levelText,
+	hasText,
+	sunlightAndText,
+	waterText,
+	emptyPlotText,
+} from "../translations.js";
 
 export const GRID_WATER_OFFSET = 0;
 export const GRID_SUN_OFFSET = 1;
@@ -50,8 +58,12 @@ export default class Grid extends Phaser.GameObjects.Grid {
 			if (plantType != 0) {
 				plantData[i].plant = {};
 				plantData[i].plant.name = this.names[plantType - 1];
-				plantData[i].plant.x = this.dataView.getUint8(i + GRID_X_OFFSET);
-				plantData[i].plant.y = this.dataView.getUint8(i + GRID_Y_OFFSET);
+				plantData[i].plant.x = this.dataView.getUint8(
+					i + GRID_X_OFFSET
+				);
+				plantData[i].plant.y = this.dataView.getUint8(
+					i + GRID_Y_OFFSET
+				);
 				plantData[i].plant.level = this.dataView.getUint8(
 					i + GRID_GROWTH_OFFSET
 				);
@@ -98,9 +110,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 				this.addPlant(loadedPlant);
 			} else {
 				let x = Math.floor(index / (this.dimension * Cell.numBytes));
-				let y = Math.floor(
-					(index / Cell.numBytes) % this.dimension
-				);
+				let y = Math.floor((index / Cell.numBytes) % this.dimension);
 				this.removePlant(x, y);
 			}
 		}
@@ -117,7 +127,7 @@ export default class Grid extends Phaser.GameObjects.Grid {
 			// guess we can't have negative water values unless we change the data type
 			if (currentWater + randomWater <= 0) {
 				randomWater = 0;
-			} else if (currentWater + randomWater < 250){
+			} else if (currentWater + randomWater < 250) {
 				this.dataView.setUint8(index, currentWater + randomWater);
 			}
 			console.log(randomWater);
@@ -137,13 +147,33 @@ export default class Grid extends Phaser.GameObjects.Grid {
 	createPlant(x, y, name) {
 		switch (name) {
 			case "Carrot":
-				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[0]));
+				return new Plant(
+					this.scene,
+					x,
+					y,
+					internalPlantTypeCompiler(allPlantDefs[0])
+				);
 			case "Tomato":
-				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[1]));
+				return new Plant(
+					this.scene,
+					x,
+					y,
+					internalPlantTypeCompiler(allPlantDefs[1])
+				);
 			case "Potato":
-				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[2]));
+				return new Plant(
+					this.scene,
+					x,
+					y,
+					internalPlantTypeCompiler(allPlantDefs[2])
+				);
 			case "Banana":
-				return new Plant(this.scene, x, y, internalPlantTypeCompiler(allPlantDefs[3]));
+				return new Plant(
+					this.scene,
+					x,
+					y,
+					internalPlantTypeCompiler(allPlantDefs[3])
+				);
 			default:
 				return null;
 		}
@@ -204,19 +234,23 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		const growthLevel = this.dataView.getUint8(index + GRID_GROWTH_OFFSET);
 		if (growthLevel !== 0) {
 			return (
-				"Level " +
+				levelText[language] +
 				growthLevel +
 				" " +
 				this.names[plantType - 1] +
-				" has " +
+				hasText[language] +
 				sunlight +
-				" sunlight and " +
+				sunlightAndText[language] +
 				water +
-				" water"
+				waterText[language]
 			);
 		}
 		return (
-			"Empty plot has " + sunlight + " sunlight and " + water + " water"
+			emptyPlotText[language] +
+			sunlight +
+			sunlightAndText[language] +
+			water +
+			waterText[language]
 		);
 	}
 

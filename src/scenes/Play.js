@@ -7,27 +7,16 @@ import SaveFile from "../prefabs/SaveFile.js";
 import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 import MoveAction, { PlantAction } from "../prefabs/Action.js";
+import { language } from "../main.js";
+import { autosaveMsgText, saveText } from "../translations.js";
 
 export const KEYBOARD = Phaser.Input.Keyboard;
-export const controls =
-	"Keys:\n" +
-	"1: Plant Carrot\n" +
-	"2: Plant Tomato\n" +
-	"3: Plant Potato\n" +
-	"4: Plant Banana\n" +
-	"Q: Pick Up Plant\n" +
-	"WASD: Move\n" +
-	"E: Get Cell Info\n" +
-	"R (on a plant): Get Plant Rules\n" +
-	"T: Advance Time\n";
 export const MOVE = "move";
 export const TIME = "time";
 export const PLANT = "plant";
 export const ACTION = "action";
 export const REFRESH_REDO = "refresh_redo";
 export const MAX_TIME = 3;
-
-
 
 export default class Play extends Phaser.Scene {
 	constructor() {
@@ -96,9 +85,18 @@ export default class Play extends Phaser.Scene {
 
 	create() {
 		this.proc = {
-			wProc: false, aProc: false, sProc: false, dProc: false,
-			qProc: false, eProc: false, rProc: false, tProc: false,
-			oneProc: false, twoProc: false, threeProc: false, fourProc: false
+			wProc: false,
+			aProc: false,
+			sProc: false,
+			dProc: false,
+			qProc: false,
+			eProc: false,
+			rProc: false,
+			tProc: false,
+			oneProc: false,
+			twoProc: false,
+			threeProc: false,
+			fourProc: false,
 		};
 
 		this.bgGrid = this.add.image(w / 2, h / 2, "grassbg").setScale(1);
@@ -112,10 +110,9 @@ export default class Play extends Phaser.Scene {
 		let undoProc = false;
 		this.redoStack = [];
 		let redoProc = false;
-		
 
 		this.undoBtn = this.add
-			.text(w - 110, 70, "⬅️")
+			.text(w - 110, 70, "↩️")
 			.setStyle({ fontSize: "25px" })
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", () => {
@@ -128,7 +125,7 @@ export default class Play extends Phaser.Scene {
 			});
 
 		this.redoBtn = this.add
-			.text(w - 80, 70, "➡️")
+			.text(w - 80, 70, "↪️")
 			.setStyle({ fontSize: "25px" })
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", () => {
@@ -147,7 +144,7 @@ export default class Play extends Phaser.Scene {
 			this,
 			w - 100,
 			120,
-			"Save 1",
+			saveText[language] + "1",
 			{ fontSize: "15px", color: "#FFFFFF" },
 			"save1"
 		);
@@ -155,7 +152,7 @@ export default class Play extends Phaser.Scene {
 			this,
 			w - 100,
 			150,
-			"Save 2",
+			saveText[language] + "2",
 			{ fontSize: "15px", color: "#FFFFFF" },
 			"save2"
 		);
@@ -163,7 +160,7 @@ export default class Play extends Phaser.Scene {
 			this,
 			w - 100,
 			180,
-			"Save 3",
+			saveText[language] + "3",
 			{ fontSize: "15px", color: "#FFFFFF" },
 			"save3"
 		);
@@ -180,15 +177,15 @@ export default class Play extends Phaser.Scene {
 						this.wProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.leftBtn = this.add
 			.text(w - 930, 250, "⬅️")
 			.setStyle({ fontSize: "25px" })
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", () => {
-				this.input.keyboard.emit('keydown-A');
+				this.input.keyboard.emit("keydown-A");
 				if (this.aProc) return;
 				this.aProc = true;
 				setTimeout(
@@ -196,15 +193,15 @@ export default class Play extends Phaser.Scene {
 						this.aProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.downBtn = this.add
 			.text(w - 900, 280, "⬇️")
 			.setStyle({ fontSize: "25px" })
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", () => {
-				this.input.keyboard.emit('keydown-S');
+				this.input.keyboard.emit("keydown-S");
 				if (this.sProc) return;
 				this.sProc = true;
 				setTimeout(
@@ -212,15 +209,15 @@ export default class Play extends Phaser.Scene {
 						this.sProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.rightBtn = this.add
 			.text(w - 870, 250, "➡️")
 			.setStyle({ fontSize: "25px" })
 			.setInteractive({ useHandCursor: true })
 			.on("pointerdown", () => {
-				this.input.keyboard.emit('keydown-D');
+				this.input.keyboard.emit("keydown-D");
 				if (this.dProc) return;
 				this.dProc = true;
 				setTimeout(
@@ -228,9 +225,9 @@ export default class Play extends Phaser.Scene {
 						this.dProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.qBtn = this.add
 			.text(w - 60, 250, "Q")
 			.setStyle({ fontSize: "25px" })
@@ -243,9 +240,9 @@ export default class Play extends Phaser.Scene {
 						this.qProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.eBtn = this.add
 			.text(w - 120, 250, "E")
 			.setStyle({ fontSize: "25px" })
@@ -258,9 +255,9 @@ export default class Play extends Phaser.Scene {
 						this.eProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.rBtn = this.add
 			.text(w - 90, 220, "R")
 			.setStyle({ fontSize: "25px" })
@@ -273,9 +270,9 @@ export default class Play extends Phaser.Scene {
 						this.rProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.tBtn = this.add
 			.text(w - 90, 280, "T")
 			.setStyle({ fontSize: "25px" })
@@ -288,9 +285,9 @@ export default class Play extends Phaser.Scene {
 						this.tProc = false;
 					}.bind(this),
 					175
-        		);
+				);
 			});
-		
+
 		this.oneBtn = this.add
 			.text(w - 145, 450, "1")
 			.setStyle({ fontSize: "25px" })
@@ -305,7 +302,7 @@ export default class Play extends Phaser.Scene {
 					175
 				);
 			});
-		
+
 		this.twoBtn = this.add
 			.text(w - 105, 450, "2")
 			.setStyle({ fontSize: "25px" })
@@ -320,7 +317,7 @@ export default class Play extends Phaser.Scene {
 					175
 				);
 			});
-		
+
 		this.threeBtn = this.add
 			.text(w - 65, 450, "3")
 			.setStyle({ fontSize: "25px" })
@@ -335,7 +332,7 @@ export default class Play extends Phaser.Scene {
 					175
 				);
 			});
-		
+
 		this.fourBtn = this.add
 			.text(w - 25, 450, "4")
 			.setStyle({ fontSize: "25px" })
@@ -351,12 +348,11 @@ export default class Play extends Phaser.Scene {
 				);
 			});
 
-
 		this.plantSpriteArray = {};
 
 		this.startTime = this.time.now;
 		if (localStorage.getItem("autosave")) {
-			let loadAutosave = confirm("Do you want to load autosave?");
+			let loadAutosave = confirm(autosaveMsgText[language]);
 			if (loadAutosave) {
 				this.loadFile("autosave");
 			} else {
@@ -369,7 +365,6 @@ export default class Play extends Phaser.Scene {
 		};
 
 		this.uploadFromYaml();
-
 	}
 
 	uploadFromYaml() {
@@ -381,9 +376,30 @@ export default class Play extends Phaser.Scene {
 			this.grid.loadData(data[0].start.grid);
 			this.environment.loadData(data[0].start.environment);
 		} else {
-			this.grid.addPlant(new Plant(this, 0, 1, internalPlantTypeCompiler(allPlantDefs[0])));
-			this.grid.addPlant(new Plant(this, 4, 3, internalPlantTypeCompiler(allPlantDefs[1])));
-			this.grid.addPlant(new Plant(this, 1, 4, internalPlantTypeCompiler(allPlantDefs[2])));
+			this.grid.addPlant(
+				new Plant(
+					this,
+					0,
+					1,
+					internalPlantTypeCompiler(allPlantDefs[0])
+				)
+			);
+			this.grid.addPlant(
+				new Plant(
+					this,
+					4,
+					3,
+					internalPlantTypeCompiler(allPlantDefs[1])
+				)
+			);
+			this.grid.addPlant(
+				new Plant(
+					this,
+					1,
+					4,
+					internalPlantTypeCompiler(allPlantDefs[2])
+				)
+			);
 		}
 	}
 
@@ -401,7 +417,7 @@ export default class Play extends Phaser.Scene {
 	autosave() {
 		if (this.undoStack.length > 0) {
 			console.log("Autosaved");
-			this.saveFile("autosave"); 
+			this.saveFile("autosave");
 		}
 	}
 

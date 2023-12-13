@@ -1,6 +1,14 @@
 import { w } from "../main.js";
-import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME} from "../scenes/Play.js";
+import { KEYBOARD, ACTION, REFRESH_REDO, MAX_TIME } from "../scenes/Play.js";
 import TimeAction from "./Action.js";
+import { language } from "../main.js";
+import {
+	advanceTimeText,
+	pressForControlsText,
+	inventoryText,
+	dayText,
+	timeText,
+} from "../translations.js";
 
 export default class Environment extends Phaser.GameObjects.GameObject {
 	constructor(scene, x, y) {
@@ -10,9 +18,9 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 		this.timerDisplay = scene.add.text(
 			10,
 			10,
-			"Press 'T' to advance time: " + this.currentTime
+			advanceTimeText[language] + this.currentTime
 		);
-		this.dayDisplay = scene.add.text(10, 30, "Day: " + this.day);
+		this.dayDisplay = scene.add.text(10, 30, dayText[language] + this.day);
 		this.plantDisplay = scene.add.text(
 			10,
 			50,
@@ -21,7 +29,7 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 		this.controlsDisplay = scene.add.text(
 			w - 140,
 			10,
-			"Press 'R'\nfor controls"
+			pressForControlsText[language]
 		);
 		this.keys = this.scene.input.keyboard.addKeys(
 			"W, A, S, D, Q, E, R, T, ONE, TWO, THREE, FOUR"
@@ -46,7 +54,7 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	displayPlayerInventory(inventory) {
-		let displayString = "Inventory:\n";
+		let displayString = inventoryText[language];
 		for (let key in inventory) {
 			displayString += key + ": " + inventory[key] + "\n";
 		}
@@ -54,8 +62,8 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	updateTimeDisplay() {
-		this.timerDisplay.setText("Time: " + this.currentTime);
-		this.dayDisplay.setText("Day: " + this.day);
+		this.timerDisplay.setText(timeText[language] + this.currentTime);
+		this.dayDisplay.setText(dayText[language] + this.day);
 	}
 
 	update() {

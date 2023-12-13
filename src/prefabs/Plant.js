@@ -1,7 +1,16 @@
 import InternalPlantType from "./plantDef.js";
 import { allPlantDefs } from "./plantDef.js";
-import { GRID_GROWTH_OFFSET, GRID_SUN_OFFSET, GRID_WATER_OFFSET, GRID_X_OFFSET, GRID_Y_OFFSET, GRID_TYPE_OFFSET } from "./Grid.js";
+import {
+	GRID_GROWTH_OFFSET,
+	GRID_SUN_OFFSET,
+	GRID_WATER_OFFSET,
+	GRID_X_OFFSET,
+	GRID_Y_OFFSET,
+	GRID_TYPE_OFFSET,
+} from "./Grid.js";
 import Cell from "./Cell.js";
+import { language } from "../main.js";
+import { plantNamesText, atText } from "../translations.js";
 
 export class PlantFunctions {
 	static growPlant(nearCells, plantType, scene, dataView) {
@@ -62,7 +71,6 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 		this.gridY = y;
 		this.name = internalPlantType.name;
 		this.type = internalPlantType.type;
-		this.rules = internalPlantType.rulesDisplay;
 		this.level = 1;
 		this.setScale(0.05);
 		scene.add.existing(this);
@@ -95,7 +103,14 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 	}
 
 	toString() {
-		return this.name + " at (" + this.gridX + ", " + this.gridY + ")";
+		return (
+			plantNamesText[this.name[language]] +
+			atText[language] +
+			this.gridX +
+			", " +
+			this.gridY +
+			")"
+		);
 	}
 
 	deletePlant() {
@@ -114,9 +129,6 @@ export function internalPlantTypeCompiler(program) {
 		},
 		image(image) {
 			internalPlantType.image = image;
-		},
-		rulesDisplay(rulesDisplay) {
-			internalPlantType.rulesDisplay = rulesDisplay;
 		},
 		growsWhen(growsWhen) {
 			internalPlantType.nextLevel = (rules) => {
