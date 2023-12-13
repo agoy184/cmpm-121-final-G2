@@ -134,14 +134,11 @@ export default class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	initializeCell(x, y) {
-		let randomWater = Math.floor(Math.random() * 10 - 2); //-2-7
-		let randomSunlight = Math.floor(Math.random() * 10); // 0-9
+		let randomWater = Math.floor(Math.random() * 10 - 2);
+		let randomSunlight = Math.floor(Math.random() * 10);
 		if (this.pointInBounds(x, y)) {
-			//console.log(x, y);
 			const index = (x * this.dimension + y) * Cell.numBytes;
 			const currentWater = this.dataView.getUint8(index);
-			// since waterlevel is an unsigned int, subtracting values that would normally make a negative number wraps around to 255
-			// guess we can't have negative water values unless we change the data type
 			if (currentWater + randomWater <= 0) {
 				randomWater = 0;
 			} else if (currentWater + randomWater < 250) {
@@ -197,7 +194,6 @@ export default class Grid extends Phaser.GameObjects.Grid {
 
 	addPlant(plant) {
 		this.removePlant(plant.gridX, plant.gridY);
-		// get the index of the cell in the dataview
 		const index =
 			(plant.gridX * this.dimension + plant.gridY) * Cell.numBytes;
 		this.dataView.setUint8(index + GRID_TYPE_OFFSET, plant.type);
