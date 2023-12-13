@@ -1,4 +1,4 @@
-import * as yaml from "../../node_modules/yamljs/dist/yaml.js";
+import * as yaml from "../../yamljs/dist/yaml.js";
 import { h, w } from "../main.js";
 import Grid from "../prefabs/Grid.js";
 import Player from "../prefabs/Player.js";
@@ -411,6 +411,7 @@ export default class Play extends Phaser.Scene {
 		let data = YAML.parse(yamlData);
 
 		if (data) {
+			console.log("YAML data loaded");
 			this.player.loadData(data[0].start.player);
 			this.grid.loadData(data[0].start.grid);
 			this.environment.loadData(data[0].start.environment);
