@@ -8,6 +8,7 @@ import Plant, { internalPlantTypeCompiler } from "../prefabs/Plant.js";
 import { allPlantDefs } from "../prefabs/plantDef.js";
 import MoveAction, { PlantAction } from "../prefabs/Action.js";
 import { autosaveMsgText, saveText } from "../translations.js";
+import MobileButton from "../prefabs/MobileButton.js";
 
 export const KEYBOARD = Phaser.Input.Keyboard;
 export const MOVE = "move";
@@ -102,6 +103,36 @@ export default class Play extends Phaser.Scene {
 			fourProc: false,
 		};
 
+		const MobileButtons = {
+			up: new MobileButton("⬆️", w - 900, 220, "wProc"),
+			left: new MobileButton("⬅️", w - 930, 250, "aProc"),
+			down: new MobileButton("⬇️", w - 900, 280, "sProc"),
+			right: new MobileButton("➡️", w - 870, 250, "dProc"),
+			Q: new MobileButton("Q", w - 60, 250, "qProc"),
+			E: new MobileButton("E", w - 120, 250, "eProc"),
+			R: new MobileButton("R", w - 90, 220, "rProc"),
+			T: new MobileButton("T", w - 90, 280, "tProc"),
+			one: new MobileButton("1", w - 145, 450, "oneProc"),
+			two: new MobileButton("2", w - 105, 450, "twoProc"),
+			three: new MobileButton("3", w - 65, 450, "threeProc"),
+			four: new MobileButton("4", w - 25, 450, "fourProc"),
+		};
+
+		const ButtonNames = [
+			"up",
+			"left",
+			"down",
+			"right",
+			"Q",
+			"E",
+			"R",
+			"T",
+			"one",
+			"two",
+			"three",
+			"four",
+		];
+
 		this.bgGrid = this.add.image(w / 2, h / 2, "grassbg").setScale(1);
 		this.grid = new Grid(this, w / 2, h / 2, 320 * 2, 268 * 2, 5);
 		this.player = new Player(this, 2, 2, "farmer")
@@ -180,188 +211,23 @@ export default class Play extends Phaser.Scene {
 			"save3"
 		);
 
-		this.upBtn = this.add
-			.text(w - 900, 220, "⬆️")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.wProc) return;
-				this.wProc = true;
-				setTimeout(
-					function () {
-						this.wProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.leftBtn = this.add
-			.text(w - 930, 250, "⬅️")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				this.input.keyboard.emit("keydown-A");
-				if (this.aProc) return;
-				this.aProc = true;
-				setTimeout(
-					function () {
-						this.aProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.downBtn = this.add
-			.text(w - 900, 280, "⬇️")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				this.input.keyboard.emit("keydown-S");
-				if (this.sProc) return;
-				this.sProc = true;
-				setTimeout(
-					function () {
-						this.sProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.rightBtn = this.add
-			.text(w - 870, 250, "➡️")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				this.input.keyboard.emit("keydown-D");
-				if (this.dProc) return;
-				this.dProc = true;
-				setTimeout(
-					function () {
-						this.dProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.qBtn = this.add
-			.text(w - 60, 250, "Q")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.qProc) return;
-				this.qProc = true;
-				setTimeout(
-					function () {
-						this.qProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.eBtn = this.add
-			.text(w - 120, 250, "E")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.eProc) return;
-				this.eProc = true;
-				setTimeout(
-					function () {
-						this.eProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.rBtn = this.add
-			.text(w - 90, 220, "R")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.rProc) return;
-				this.rProc = true;
-				setTimeout(
-					function () {
-						this.rProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.tBtn = this.add
-			.text(w - 90, 280, "T")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.tProc) return;
-				this.tProc = true;
-				setTimeout(
-					function () {
-						this.tProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.oneBtn = this.add
-			.text(w - 145, 450, "1")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.oneProc) return;
-				this.oneProc = true;
-				setTimeout(
-					function () {
-						this.oneProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.twoBtn = this.add
-			.text(w - 105, 450, "2")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.twoProc) return;
-				this.twoProc = true;
-				setTimeout(
-					function () {
-						this.twoProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.threeBtn = this.add
-			.text(w - 65, 450, "3")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.threeProc) return;
-				this.threeProc = true;
-				setTimeout(
-					function () {
-						this.threeProc = false;
-					}.bind(this),
-					175
-				);
-			});
-
-		this.fourBtn = this.add
-			.text(w - 25, 450, "4")
-			.setStyle({ fontSize: "25px" })
-			.setInteractive({ useHandCursor: true })
-			.on("pointerdown", () => {
-				if (this.fourProc) return;
-				this.fourProc = true;
-				setTimeout(
-					function () {
-						this.fourProc = false;
-					}.bind(this),
-					175
-				);
-			});
+		ButtonNames.forEach((button) => {
+			let btn = MobileButtons[button];
+			this.add
+				.text(btn.x, btn.y, btn.icon)
+				.setStyle({ fontSize: "25px" })
+				.setInteractive({ useHandCursor: true })
+				.on("pointerdown", () => {
+					if (this.proc[btn.keyProc]) return;
+					this.proc[btn.keyProc] = true;
+					setTimeout(
+						function () {
+							this.proc[btn.keyProc] = false;
+						}.bind(this),
+						175
+					);
+				});
+		});
 
 		this.createLangButtons();
 		this.plantSpriteArray = {};

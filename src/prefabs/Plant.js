@@ -24,11 +24,8 @@ export class PlantFunctions {
 				nearCells[i] + GRID_TYPE_OFFSET
 			);
 			if (nearPlantType > 0) {
-				if (plantType == nearPlantType) {
-					samePlants++;
-				} else {
-					diffPlants++;
-				}
+				if (plantType == nearPlantType) samePlants++;
+				else diffPlants++;
 			}
 		}
 

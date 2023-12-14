@@ -1,12 +1,3 @@
-class PlantRules {
-	constructor() {
-		this.sunLevel;
-		this.waterLevel;
-		this.nearDiffPlants;
-		this.nearSamePlants;
-	}
-}
-
 export default class InternalPlantType {
 	constructor() {
 		this.name;
