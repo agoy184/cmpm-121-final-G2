@@ -52,16 +52,15 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 	saveData() {
 		return {
-			x: this.gridX,
-			y: this.gridY,
+			location: [this.gridX, this.gridY],
 			inventory: this.plantInventory,
 			growthThreePlants: this.growthThreePlants,
 		};
 	}
 
 	loadData(data) {
-		this.gridX = data.x ?? this.gridX;
-		this.gridY = data.y ?? this.gridY;
+		this.gridX = data.location[0] ?? this.gridX;
+		this.gridY = data.location[1] ?? this.gridY;
 		this.plantInventory = data.inventory ?? this.plantInventory;
 		this.growthThreePlants =
 			data.growthThreePlants ?? this.growthThreePlants;
