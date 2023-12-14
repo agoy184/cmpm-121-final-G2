@@ -1,5 +1,5 @@
 import { language } from "../scenes/Play.js";
-import { saveFilePromptText } from "../translations.js";
+import { saveFilePromptText, loadText } from "../translations.js";
 
 export default class SaveFile {
 	constructor(scene, x, y, label, style, fileName) {
@@ -29,7 +29,7 @@ export default class SaveFile {
 
 			this.scene.saveFile(this.fileName);
 			this.saved = true;
-			this.button.setText("Load " + promptName);
+			this.button.setText(loadText[language] + promptName);
 		} else {
 			this.scene.loadFile(this.fileName);
 		}
