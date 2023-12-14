@@ -217,3 +217,9 @@ export const saveFilePromptText = {
 	中文: "输入保存文件名：",
 	اللغةالعربية: "أدخل اسم ملف الحفظ: ",
 };
+
+export const loadText = {
+	English: "Load ",
+	中文: "加载 ",
+	اللغةالعربية: "تحميل ",
+};

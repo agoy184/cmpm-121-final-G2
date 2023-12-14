@@ -106,23 +106,23 @@ export default class Player extends Phaser.GameObjects.Sprite {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(this.keys.W) || this.scene.wProc) {
+		if (KEYBOARD.JustDown(this.keys.W) || this.scene.proc["wProc"]) {
 			this.moveCharacter(0, -1);
-			this.scene.wProc = false;
-		} else if (KEYBOARD.JustDown(this.keys.A) || this.scene.aProc) {
+			this.scene.proc["wProc"] = false;
+		} else if (KEYBOARD.JustDown(this.keys.A) || this.scene.proc["aProc"]) {
 			this.moveCharacter(-1, 0);
-			this.scene.aProc = false;
-		} else if (KEYBOARD.JustDown(this.keys.S) || this.scene.sProc) {
+			this.scene.proc["aProc"] = false;
+		} else if (KEYBOARD.JustDown(this.keys.S) || this.scene.proc["sProc"]) {
 			this.moveCharacter(0, 1);
-			this.scene.sProc = false;
-		} else if (KEYBOARD.JustDown(this.keys.D) || this.scene.dProc) {
+			this.scene.proc["sProc"] = false;
+		} else if (KEYBOARD.JustDown(this.keys.D) || this.scene.proc["dProc"]) {
 			this.moveCharacter(1, 0);
-			this.scene.dProc = false;
+			this.scene.proc["dProc"] = false;
 		}
 
-		if (KEYBOARD.JustDown(this.keys.R) || this.scene.rProc) {
+		if (KEYBOARD.JustDown(this.keys.R) || this.scene.proc["rProc"]) {
 			let plant = this.scene.grid.getPlant(this.gridX, this.gridY);
-			this.scene.rProc = false;
+			this.scene.proc["rProc"] = false;
 			if (plant) {
 				alert(plantRulesText[plant.name][language]);
 			} else {
@@ -130,16 +130,16 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			}
 		}
 
-		if (KEYBOARD.JustDown(this.keys.E) || this.scene.eProc) {
+		if (KEYBOARD.JustDown(this.keys.E) || this.scene.proc["eProc"]) {
 			let info = this.scene.grid.getCellInfo(this.gridX, this.gridY);
-			this.scene.eProc = false;
+			this.scene.proc["eProc"] = false;
 			alert(info);
 		}
 		if (
 			!this.removingPlantAlready &&
-			(KEYBOARD.JustDown(this.keys.Q) || this.scene.qProc)
+			(KEYBOARD.JustDown(this.keys.Q) || this.scene.proc["qProc"])
 		) {
-			this.scene.qProc = false;
+			this.scene.proc["qProc"] = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -161,8 +161,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 		}
 
 		// gotta refactor this later
-		if (KEYBOARD.JustDown(this.keys.ONE) || this.scene.oneProc) {
-			this.scene.oneProc = false;
+		if (KEYBOARD.JustDown(this.keys.ONE) || this.scene.proc["oneProc"]) {
+			this.scene.proc["oneProc"] = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -176,8 +176,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				)
 			);
 		}
-		if (KEYBOARD.JustDown(this.keys.TWO) || this.scene.twoProc) {
-			this.scene.twoProc = false;
+		if (KEYBOARD.JustDown(this.keys.TWO) || this.scene.proc["twoProc"]) {
+			this.scene.proc["twoProc"] = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -191,8 +191,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
 				)
 			);
 		}
-		if (KEYBOARD.JustDown(this.keys.THREE) || this.scene.threeProc) {
-			this.scene.threeProc = false;
+		if (
+			KEYBOARD.JustDown(this.keys.THREE) ||
+			this.scene.proc["threeProc"]
+		) {
+			this.scene.proc["threeProc"] = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});
@@ -207,8 +210,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
 			);
 		}
 
-		if (KEYBOARD.JustDown(this.keys.FOUR) || this.scene.fourProc) {
-			this.scene.fourProc = false;
+		if (KEYBOARD.JustDown(this.keys.FOUR) || this.scene.proc["fourProc"]) {
+			this.scene.proc["fourProc"] = false;
 			this.scene.events.emit(ACTION, {
 				action: new PlantAction(this.copyInventory(), this.scene.grid),
 			});

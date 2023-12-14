@@ -90,8 +90,8 @@ export default class Environment extends Phaser.GameObjects.GameObject {
 	}
 
 	update() {
-		if (KEYBOARD.JustDown(this.keys.T) || this.scene.tProc) {
-			this.scene.tProc = false;
+		if (KEYBOARD.JustDown(this.keys.T) || this.scene.proc["tProc"]) {
+			this.scene.proc["tProc"] = false;
 			this.currentTime += 1;
 			this.scene.events.emit(REFRESH_REDO);
 			if (this.currentTime > MAX_TIME) {

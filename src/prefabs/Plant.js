@@ -24,11 +24,8 @@ export class PlantFunctions {
 				nearCells[i] + GRID_TYPE_OFFSET
 			);
 			if (nearPlantType > 0) {
-				if (plantType == nearPlantType) {
-					samePlants++;
-				} else {
-					diffPlants++;
-				}
+				if (plantType == nearPlantType) samePlants++;
+				else diffPlants++;
 			}
 		}
 
@@ -49,7 +46,6 @@ export class PlantFunctions {
 					growthLevel + 1
 				);
 				// update growthLevel since it was increased in the dataview
-				// without this the plant size wouldn't update along with the growth level
 				growthLevel = dataView.getUint8(
 					nearCells[0] + GRID_GROWTH_OFFSET
 				);
