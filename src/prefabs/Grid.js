@@ -112,14 +112,11 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		for (let index in data) {
 			const plant = data[index].plant;
 			if (plant) {
-				if (plant.name == null || plant.x == null || plant.y == null) {
+				if (plant.name == null || plant.location == null) {
 					continue;
 				}
-				let x = plant.location[0];
-				let y = plant.location[1];
 				const loadedPlant = this.createPlant(
-					x,
-					y,
+					plant.location,
 					plant.name
 				);
 				loadedPlant.level = plant.level;
@@ -175,7 +172,8 @@ export default class Grid extends Phaser.GameObjects.Grid {
 	newPlant(num, location) {
 		return new Plant(
 			this.scene,
-			location,
+			location[0],
+			location[1],
 			internalPlantTypeCompiler(allPlantDefs[num])
 		);
 	}

@@ -292,6 +292,7 @@ export default class Play extends Phaser.Scene {
 		const yamlPrompt = prompt("Enter YAML data 1 or 2 (or none)");
 	
 		if (yamlPrompt == 1 || yamlPrompt == 2) {
+			console.log(data[yamlPrompt - 1].grid);
 			const index = yamlPrompt - 1;
 			this.grid.loadData(data[index].grid);
 			this.player.loadData(data[index].player);
