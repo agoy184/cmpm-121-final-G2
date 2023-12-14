@@ -81,16 +81,15 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 
 	saveData() {
 		return {
-			x: this.gridX,
-			y: this.gridY,
+			location: [this.gridX, this.gridY],
 			name: this.name,
 			growthLevel: this.level,
 		};
 	}
 
 	loadData(data) {
-		this.gridX = data.x;
-		this.gridY = data.y;
+		this.gridX = data.location[0];
+		this.gridY = data.location[1];
 		this.name = data.name;
 		this.level = data.growthLevel;
 		this.setScale(this.level * 0.05);

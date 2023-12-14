@@ -75,12 +75,10 @@ export default class Grid extends Phaser.GameObjects.Grid {
 			if (plantType != 0) {
 				plantData[i].plant = {};
 				plantData[i].plant.name = this.names[plantType - 1];
-				plantData[i].plant.x = this.dataView.getUint8(
-					i + GRID_X_OFFSET
-				);
-				plantData[i].plant.y = this.dataView.getUint8(
-					i + GRID_Y_OFFSET
-				);
+				plantData[i].plant.location = [
+					this.dataView.getUint8(i + GRID_X_OFFSET),
+					this.dataView.getUint8(i + GRID_Y_OFFSET),
+				];
 				plantData[i].plant.level = this.dataView.getUint8(
 					i + GRID_GROWTH_OFFSET
 				);
@@ -117,9 +115,11 @@ export default class Grid extends Phaser.GameObjects.Grid {
 				if (plant.name == null || plant.x == null || plant.y == null) {
 					continue;
 				}
+				let x = plant.location[0];
+				let y = plant.location[1];
 				const loadedPlant = this.createPlant(
-					plant.x,
-					plant.y,
+					x,
+					y,
 					plant.name
 				);
 				loadedPlant.level = plant.level;
@@ -157,39 +157,27 @@ export default class Grid extends Phaser.GameObjects.Grid {
 		this.growCells();
 	}
 
-	createPlant(x, y, name) {
+	createPlant(location, name) {
 		switch (name) {
 			case "Carrot":
-				return new Plant(
-					this.scene,
-					x,
-					y,
-					internalPlantTypeCompiler(allPlantDefs[0])
-				);
+				return this.newPlant(0, location);
 			case "Tomato":
-				return new Plant(
-					this.scene,
-					x,
-					y,
-					internalPlantTypeCompiler(allPlantDefs[1])
-				);
+				return this.newPlant(1, location);
 			case "Potato":
-				return new Plant(
-					this.scene,
-					x,
-					y,
-					internalPlantTypeCompiler(allPlantDefs[2])
-				);
+				return this.newPlant(2, location);
 			case "Banana":
-				return new Plant(
-					this.scene,
-					x,
-					y,
-					internalPlantTypeCompiler(allPlantDefs[3])
-				);
+				return this.newPlant(3, location);
 			default:
 				return null;
 		}
+	}
+
+	newPlant(num, location) {
+		return new Plant(
+			this.scene,
+			location,
+			internalPlantTypeCompiler(allPlantDefs[num])
+		);
 	}
 
 	addPlant(plant) {

@@ -1,29 +1,24 @@
 - name: Starting Farm
   player:
-      x: 1
-      y: 1
-      inventory:
+      location: [0, 0]
+      inventory: null
   grid:
       - plant:
             name: Carrot
             level: 2
-            x: 0
-            y: 1
+            location: [0, 1]
       - plant:
             name: Tomato
             level: 3
-            x: 4
-            y: 3
+            location: [1, 0]
       - plant:
             name: Potato
             level: 1
-            x: 1
-            y: 4
+            location: [1, 4]
       - plant:
             name: Banana
             level: 1
-            x: 2
-            y: 4
+            location: [2, 2]
   environment:
       time: 0
       day: 0
@@ -31,38 +26,33 @@
           - name: Rain
             day: 2
             duration: 2
-            emoji: "\U0001F327"
+            emoji: 🌧️
+
 - name: Drought and Destruction
   player:
-      x: 1
-      y: 1
+      location: [2, 0]
       inventory: null
   grid:
       - plant:
             name: Carrot
             level: 1
-            x: 0
-            y: 0
+            location: [0, 0]
       - plant:
             name: Carrot
             level: 1
-            x: 1
-            y: 0
+            location: [1, 0]
       - plant:
             name: Carrot
             level: 1
-            x: 2
-            y: 0
+            location: [2, 0]
       - plant:
             name: Carrot
             level: 1
-            x: 3
-            y: 0
+            location: [3, 0]
       - plant:
             name: Carrot
             level: 1
-            x: 4
-            y: 0
+            location: [4, 0]
   environment:
       time: 0
       day: 0
@@ -70,8 +60,8 @@
           - name: Drought
             day: 2
             duration: 2
-            emoji: "\U0001F525"
+            emoji: 🌵
           - name: Destruction
             day: 4
             duration: 1
-            emoji: "\U0001F4A5"
+            emoji: 💥
