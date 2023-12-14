@@ -316,13 +316,70 @@ export default class Grid extends Phaser.GameObjects.Grid {
 	}
 
 	destroyAllPlants() {
+		let plants = this.returnAllExistingPlants();
+		for (let i = 0; i < plants.length; i++) {
+			plants[i].deletePlant();
+		}
+	}
+
+	waterAllPlants() {
+		let plants = this.returnAllExistingPlants();
+		for (let i = 0; i < plants.length; i++) {
+			// increase water level by random amount between 5 and 10
+			const currentWater = this.dataView.getUint8(
+				(plants[i].gridX * this.dimension + plants[i].gridY) *
+					Cell.numBytes
+			);
+			if (currentWater + 10 < 250) {
+				this.dataView.setUint8(
+					(plants[i].gridX * this.dimension + plants[i].gridY) *
+						Cell.numBytes,
+					currentWater + 10
+				);
+			} else {
+				this.dataView.setUint8(
+					(plants[i].gridX * this.dimension + plants[i].gridY) *
+						Cell.numBytes,
+					250
+				);
+			}
+		}
+	}
+
+	dryAllPlants() {
+		let plants = this.returnAllExistingPlants();
+		for (let i = 0; i < plants.length; i++) {
+			// decrease water level by random amount between 5 and 10
+			const currentWater = this.dataView.getUint8(
+				(plants[i].gridX * this.dimension + plants[i].gridY) *
+					Cell.numBytes
+			);
+			if (currentWater - 10 > 0) {
+				this.dataView.setUint8(
+					(plants[i].gridX * this.dimension + plants[i].gridY) *
+						Cell.numBytes,
+					currentWater - 10
+				);
+			} else {
+				this.dataView.setUint8(
+					(plants[i].gridX * this.dimension + plants[i].gridY) *
+						Cell.numBytes,
+					0
+				);
+			}
+		}
+	}
+
+	returnAllExistingPlants() {
+		let plants = [];
 		for (let i = 0; i < this.dataView.byteLength; i += Cell.numBytes) {
 			const plantType = this.dataView.getUint8(i + GRID_TYPE_OFFSET);
 			if (plantType != 0) {
 				const plantX = this.dataView.getUint8(i + GRID_X_OFFSET);
 				const plantY = this.dataView.getUint8(i + GRID_Y_OFFSET);
-				this.removePlant(plantX, plantY);
+				plants.push(this.getPlant(plantX, plantY));
 			}
 		}
+		return plants;
 	}
 }

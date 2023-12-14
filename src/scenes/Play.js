@@ -364,6 +364,9 @@ export default class Play extends Phaser.Scene {
 			});
 
 		this.createLangButtons();
+
+		this.eventEmoji = this.add.text(w - 92.5, 375, "").setFontSize(25);
+
 		this.plantSpriteArray = {};
 
 		this.startTime = this.time.now;
@@ -373,13 +376,14 @@ export default class Play extends Phaser.Scene {
 				this.loadFile("autosave");
 			} else {
 				localStorage.removeItem("autosave");
+				this.uploadFromYaml();
 			}
+		} else {
+			this.uploadFromYaml();
 		}
 		window.onbeforeunload = () => {
 			this.autosave();
 		};
-
-		this.uploadFromYaml();
 	}
 
 	createLangButtons() {
@@ -411,35 +415,50 @@ export default class Play extends Phaser.Scene {
 
 		if (data) {
 			console.log("YAML data loaded");
-			this.player.loadData(data[0].start.player);
-			this.grid.loadData(data[0].start.grid);
-			this.environment.loadData(data[0].start.environment);
+			let yamlPrompt = prompt("Enter YAML data 1 or 2 (or none)");
+			if (yamlPrompt == 1) {
+				this.grid.loadData(data[0].start.grid);
+				this.player.loadData(data[0].start.player);
+				this.environment.loadData(data[0].start.environment);
+			}
+			else if (yamlPrompt == 2) {
+				this.grid.loadData(data[1].start.grid);
+				this.player.loadData(data[1].start.player);
+				this.environment.loadData(data[1].start.environment);
+			} else {
+				this.loadDefault();
+			}
 		} else {
-			this.grid.addPlant(
-				new Plant(
-					this,
-					0,
-					1,
-					internalPlantTypeCompiler(allPlantDefs[0])
-				)
-			);
-			this.grid.addPlant(
-				new Plant(
-					this,
-					4,
-					3,
-					internalPlantTypeCompiler(allPlantDefs[1])
-				)
-			);
-			this.grid.addPlant(
-				new Plant(
-					this,
-					1,
-					4,
-					internalPlantTypeCompiler(allPlantDefs[2])
-				)
-			);
+			console.log("No YAML data found");
+			this.loadDefault();
 		}
+	}
+
+	loadDefault() {
+		this.grid.addPlant(
+			new Plant(
+				this,
+				0,
+				1,
+				internalPlantTypeCompiler(allPlantDefs[0])
+			)
+		);
+		this.grid.addPlant(
+			new Plant(
+				this,
+				4,
+				3,
+				internalPlantTypeCompiler(allPlantDefs[1])
+			)
+		);
+		this.grid.addPlant(
+			new Plant(
+				this,
+				1,
+				4,
+				internalPlantTypeCompiler(allPlantDefs[2])
+			)
+		);
 	}
 
 	update() {

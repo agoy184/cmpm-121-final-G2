@@ -72,6 +72,7 @@ export default class Plant extends Phaser.GameObjects.Sprite {
 		this.name = internalPlantType.name;
 		this.type = internalPlantType.type;
 		this.level = 1;
+		this.sprite = internalPlantType.image;
 		this.setScale(0.05);
 		scene.add.existing(this);
 	}
