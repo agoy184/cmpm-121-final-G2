@@ -276,56 +276,44 @@ export default class Play extends Phaser.Scene {
 	}
 
 	uploadFromYaml() {
-		let yamlData = this.cache.text.get("yamlData");
-		let data = YAML.parse(yamlData);
-
+		const yamlData = this.cache.text.get("yamlData");
+		const data = YAML.parse(yamlData);
+	
 		if (data) {
 			console.log("YAML data loaded");
-			let yamlPrompt = prompt("Enter YAML data 1 or 2 (or none)");
-			if (yamlPrompt == 1) {
-				this.grid.loadData(data[0].start.grid);
-				this.player.loadData(data[0].start.player);
-				this.environment.loadData(data[0].start.environment);
-			}
-			else if (yamlPrompt == 2) {
-				this.grid.loadData(data[1].start.grid);
-				this.player.loadData(data[1].start.player);
-				this.environment.loadData(data[1].start.environment);
-			} else {
-				this.loadDefault();
-			}
+			this.loadFromYamlData(data);
 		} else {
 			console.log("No YAML data found");
 			this.loadDefault();
 		}
 	}
-
-	loadDefault() {
-		this.grid.addPlant(
-			new Plant(
-				this,
-				0,
-				1,
-				internalPlantTypeCompiler(allPlantDefs[0])
-			)
-		);
-		this.grid.addPlant(
-			new Plant(
-				this,
-				4,
-				3,
-				internalPlantTypeCompiler(allPlantDefs[1])
-			)
-		);
-		this.grid.addPlant(
-			new Plant(
-				this,
-				1,
-				4,
-				internalPlantTypeCompiler(allPlantDefs[2])
-			)
-		);
+	
+	loadFromYamlData(data) {
+		const yamlPrompt = prompt("Enter YAML data 1 or 2 (or none)");
+	
+		if (yamlPrompt == 1 || yamlPrompt == 2) {
+			const index = yamlPrompt - 1;
+			this.grid.loadData(data[index].grid);
+			this.player.loadData(data[index].player);
+			this.environment.loadData(data[index].environment);
+		} else {
+			this.loadDefault();
+		}
 	}
+	
+	loadDefault() {
+		const plantConfigs = [
+			{ row: 0, col: 1, plantDefIndex: 0 },
+			{ row: 4, col: 3, plantDefIndex: 1 },
+			{ row: 1, col: 4, plantDefIndex: 2 },
+		];
+	
+		plantConfigs.forEach((config) => {
+			const { row, col, plantDefIndex } = config;
+			const plant = new Plant(this, row, col, internalPlantTypeCompiler(allPlantDefs[plantDefIndex]));
+			this.grid.addPlant(plant);
+		});
+	}	
 
 	update() {
 		this.player.update();
