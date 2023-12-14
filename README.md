@@ -267,54 +267,81 @@ Our team's plan has changed a little. Our roles don't really mean anything since
 
 ##### [F0.b] You advance time in the turn-based simulation manually.
 
+ - There were no major changes made for this requirement.
 
 ##### [F0.c] You can reap (gather) or sow (plant) plants on the grid when your character is near them.
 
+ - There were no major changes made for this requirement.
 
 ##### [F0.d] Grid cells have sun and water levels. The incoming sun and water for each cell is somehow randomly generated each turn. Sun energy cannot be stored in a cell (it is used immediately or lost) while water moisture can be slowly accumulated over several turns.
 
+ - There were no major changes made for this requirement.
 
 ##### [F0.e] Each plant on the grid has a type (e.g. one of 3 species) and a growth level (e.g. “level 1”, “level 2”, “level 3”).
 
+ - There were no major changes made for this requirement.
 
 ##### [F0.f] Simple spatial rules govern plant growth based on sun, water, and nearby plants (growth is unlocked by satisfying conditions).
 
+ - There were no major changes made for this requirement.
 
 ##### [F0.g] A play scenario is completed when some condition is satisfied (e.g. at least X plants at growth level Y or above).
 
-
+ - There were no major changes made for this requirement.
 
 ##### [F1.a] The important state of each cell of your game’s grid must be backed by a single contiguous byte array in AoS or SoA format. Your team must statically allocate memory usage for the whole grid.
 
+ - There were no major changes made for this requirement.
 
 ##### [F1.b] The player must be able to undo every major choice (all the way back to the start of play), even from a saved game. They should be able to redo (undo of undo operations) multiple times.
 
+ - There were no major changes made for this requirement.
 
 ##### [F1.c] The player must be able to manually save their progress in the game in a way that allows them to load that save and continue play another day. The player must be able to manage multiple save files (allowing save scumming).
 
+ - There were no major changes made for this requirement.
 
 ##### [F1.d] The game must implement an implicit auto-save system to support recovery from unexpected quits. (For example, when the game is launched, if an auto-save entry is present, the game might ask the player "do you want to continue where you left off?" The auto-save entry might or might not be visible among the list of manual save entries available for the player to load as part of F1.c.)
 
+ - There were no major changes made for this requirement.
 
-### [F2.a] External DSL for Scenario Design
+#### [F2.a] External DSL for Scenario Design
 
+-We added more capabilities to the external DSL by creating more scenarios and increasing scenario length.
 
-### [F2.b] Internal DSL for Plants and Growth Conditions
+#### [F2.b] Internal DSL for Plants and Growth Conditions
 
+-No changes
 
 ### Internationalization
 
+-Any hardcoded strings that were displayed were removed and replaced with dictionary references.
 
 ### Localization
 
+-Inside the dictionary references we ended up adding translations for Arabic and Chinese, in addition to the default English
+Arabic is our right-to-left language, and Chinese is our Logographic language.
 
 ### Mobile Installation
 
+Got our game installable on Android by using median.co
+In order to do this we had to add configurations to the yaml.js folder.
+It was necessary for the game to be playable from the GitHub page in-browser in order to do this.
+The app runs by having a hidden browser that runs the game.
 
 ### Mobile Play (Offline)
 
+We added buttons to replace keyboard keys and forced the game to launch in landscape mode.
 
 ## Reflection
+### How has your team’s plan changed? 
+Our design changed because we didn't originally intend for scenarios to be in-depth, and planned for just 3 plants but added a fourth. 
+We weren't originally planning to have button UI on the screen, but due to the mobile requirement we ended up creating button UI support.
 
+### Did you reconsider any of the choices you previously described for Tools and Materials or your Roles?
+Our plan almost changed to using TypeScript for easier mobile development, but we found a solution to supporting mobile through JavaScript so we stuck to our current tools without using react or another framework.
+
+### Has your game design evolved now that you've started to think about giving the player more feedback?
+Our design evolved in making the game less frustrating/tedious to play by making time progression easier and making the interface easier to use.
 
 </details>
